@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '@/store/auth.js';
+import { useAuthStore } from '@/stores/auth.js';
 import { useRouter } from 'vue-router';
 
 export default {
