@@ -6,7 +6,7 @@ import axios from 'axios';
 import './assets/main.css';
 
 const $axios = axios.create({
-  baseURL: 'http://localhost/'
+  baseURL: 'https://localhost:8080/'
 });
 
 //Making authtoken globally accessible
