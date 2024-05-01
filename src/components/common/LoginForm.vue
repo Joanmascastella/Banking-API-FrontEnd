@@ -4,21 +4,11 @@
       <fieldset>
         <label>
           Username
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            v-model="username"
-          />
+          <input type="text" name="username" placeholder="Username" v-model="username" />
         </label>
         <label>
           Password
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            v-model="password"
-          />
+          <input type="password" name="password" placeholder="Password" v-model="password" />
         </label>
       </fieldset>
       <input type="submit" value="Log in" />
@@ -49,10 +39,14 @@ export default {
 
       try {
         const response = await this.$axios.post("/login", loginData);
-        if (response && response.data && response.data.authToken) {
+        // Update the way you access the authToken
+        const authToken = response.data.token;  // Updated to match the actual response structure
+
+        if (authToken) {  // Check for authToken directly
           const authStore = useAuthStore();
           authStore.setUser({
-            authToken: response.data.authToken,
+            authToken: authToken,  // Set the authToken
+            // Other details must also be correctly returned and handled here, for now assuming id, email, role are provided
             id: response.data.id,
             email: response.data.email,
             role: response.data.role,
