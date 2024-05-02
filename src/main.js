@@ -6,12 +6,13 @@ import axios from 'axios';
 import './assets/main.css';
 
 const $axios = axios.create({
-  baseURL: 'http://localhost/'
+  baseURL: 'http://localhost:8080/'
 });
 
 //Making authtoken globally accessible
 $axios.interceptors.request.use(function (config) {
-  const authToken = localStorage.getItem('authToken');
+  const authToken = localStorage.getItem('auth');
+  console.log("Auth Token:", authToken); 
   if (authToken) {
       config.headers.Authorization = `Bearer ${authToken}`;
   }
@@ -19,6 +20,7 @@ $axios.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error);
 });
+
 
 const app = createApp(App);
 const pinia = createPinia();
