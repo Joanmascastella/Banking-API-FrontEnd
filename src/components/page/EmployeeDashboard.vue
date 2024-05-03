@@ -1,11 +1,11 @@
 <script setup>
-import AccountsAndTransactions from "../common/AccountsAndTransactions.vue"
+import Dashboard from "../common/Dashboard.vue"
 
 </script>
 
 <template>
  
-<AccountsAndTransactions/>
+<Dashboard/>
 
 </template>
 
