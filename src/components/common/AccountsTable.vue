@@ -4,6 +4,7 @@
         <table>
             <thead>
             <tr>
+                <th>Account type</th>
                 <th>User Id</th>
                 <th>User's name</th>
                 <th>Account</th>
@@ -13,8 +14,10 @@
             </thead>
             <tbody>
               <tr v-for="item in accounts" :key="item.userId">
+                  <td v-if="item.accountType==='SAVINGS'"><img src="../../assets/img/savings-account.png"></td>
+                  <td v-else><img src="../../assets/img/checking-account.png"></td>
                   <td>{{ item.userId }}</td>
-                  <td>firstname lastname</td>
+                  <td>{{ownersOfAccounts.get(item.userId)}}</td>
                   <td><router-link :to="{ path : '#' }">
                       <button>Account details</button>  </router-link></td>
                   <td><router-link :to="{ path : '#' }">
@@ -23,6 +26,7 @@
               </tr>
             </tbody>
         </table>
+        {{map2}}
     </div>
 </template>
 
@@ -30,10 +34,21 @@
 import axios from 'axios'
 import { ref } from 'vue'
 
-const accounts= ref([])
+const accounts=ref([])
+const users = ref([])
+
 
 const { data } = await axios.get('http://localhost:8080/accounts')
 accounts.value = data
+
+const usersList = await axios.get("http://localhost:8080/users")
+
+let ownersOfAccounts = new Map();
+
+data.forEach((item , count) => { if (item.userId == usersList.data[count].id){
+
+ownersOfAccounts.set(item.userId, usersList.data[count].firstName + usersList.data[count].lastName);}});
+
 
 </script>
 
@@ -67,8 +82,8 @@ table {
 }
 
 button{border:none;}
-td:nth-child(3n) button {background-color: #F9970A;}
-td:nth-child(4n) button {background-color:#43A801;}
+td:nth-child(4n) button {background-color: #F9970A;}
+td:nth-child(5n) button {background-color:#43A801;}
 
  table th,
  table td
