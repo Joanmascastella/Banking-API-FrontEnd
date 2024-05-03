@@ -6,8 +6,8 @@
             <tr>
                 <th>User Id</th>
                 <th>User's name</th>
-                <th>Transactions</th>
                 <th>Account</th>
+                <th>Transactions</th>
 
             </tr>
             </thead>
