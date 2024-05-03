@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from "../components/page/LoginPage.vue";
 import Test from "../components/page/Test.vue";
 import EmployeeDashboard from "../components/page/EmployeeDashboard.vue";
+import CustomerAccounts from "../components/page/CustomerAccounts.vue";
+
 
 
 const router = createRouter({
@@ -17,6 +19,11 @@ const router = createRouter({
       path: '/dashboard', 
       name: 'dashboard',
       component: EmployeeDashboard
+    },
+    {
+      path: '/accounts/customers', 
+      name: 'customerAccounts',
+      component: CustomerAccounts
     },
     
   ]

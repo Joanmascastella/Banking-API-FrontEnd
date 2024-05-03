@@ -6,11 +6,16 @@
     <h2> Dashboard</h2>
         <div class="grid">
 
-            <div> <img src="../../assets/img/bank-account.png">
-            <router-link :to="{ path : '/customerAccounts' }">
+        <div><img src="../../assets/img/users.png">
+        <router-link :to="{ path : '/users' }">
+            <button>Users</button>
+            </router-link>
+        </div>
+
+        <div> <img src="../../assets/img/bank-account.png">
+            <router-link :to="{ path : '/accounts/customers' }">
                 <button>Accounts</button>
                 </router-link>
-
          </div>
 
         <div><img src="../../assets/img/transactions.png">
@@ -18,8 +23,8 @@
             <button>Transactions</button>
             </router-link>
         </div>
-
     </div>
+
 </div>
 </template>
 
@@ -33,8 +38,10 @@ min-height:100vh;
 display:flex;
 align-items:center;
 flex-direction:column;
-
 }
+
+.grid {width:70%;}
+
 
 img {border: solid;
 border-bottom:none;
