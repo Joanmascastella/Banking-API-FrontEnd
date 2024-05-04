@@ -35,7 +35,6 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 const accounts=ref([])
-const users = ref([])
 
 
 const { data } = await axios.get('http://localhost:8080/accounts')
