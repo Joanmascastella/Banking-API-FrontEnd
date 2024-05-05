@@ -49,7 +49,8 @@ export default {
           authStore.setUser({
             authToken: authToken,
             id: decoded.sub,
-            role: decoded.auth
+            role: decoded.auth,
+            isApproved: decoded.approved,
           });
 
           this.feedback = "Login successful!";

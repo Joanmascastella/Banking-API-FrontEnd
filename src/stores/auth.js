@@ -21,11 +21,12 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     setUser(userData) {
+      console.log('Setting user data:', userData);
       this.user = {
         id: userData.id,
         role: userData.role,
+        isApproved: userData.approved  
       };
-      this.token = userData.authToken; 
       localStorage.setItem('auth', userData.authToken);
     },
 
@@ -43,8 +44,9 @@ export const useAuthStore = defineStore('auth', {
           const decoded = decodeToken(token);
           if (decoded) {
             this.user = {
-              id: decoded.sub, 
-              role: decoded.auth, 
+              id: decoded.sub,
+              role: decoded.auth,
+              isApproved: decoded.approved
             };
           }
         } catch (error) {
@@ -58,5 +60,9 @@ export const useAuthStore = defineStore('auth', {
     isEmployee: (state) => state.user?.role === 'ROLE_EMPLOYEE',
     isCustomer: (state) => state.user?.role === 'ROLE_CUSTOMER',
     userId: (state) => state.user?.id,
+    isUserApproved: (state) => {
+      console.log('isUserApproved check:', state.user?.isApproved);
+      return state.user?.isApproved === 'true';
+  },
   },
 });
