@@ -1,24 +1,10 @@
 <template>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <br>
-    <br>
-
-    <br>
-    <br>
-
     <div v-if="approved">
-        <h1>user approved</h1>
+        <!-- here call the components that an verfied user can access -->
     </div>
     <div v-else>
-        <h1>user not approved</h1>
+        <!-- here call the components that a non verified user can access -->
     </div>
-
-
 </template>
 
 <script>
