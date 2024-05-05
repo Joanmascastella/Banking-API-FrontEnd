@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h1>Transactions</h1>
+    <h1>Transactions by customers</h1>
 
     <TransactionCategoryLinks />
     <TransactionsTableTemplate :transactions="transactions" />
@@ -35,8 +35,8 @@
         </div>
       </div>
     </div>
-    <b-button v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
-        id="transaction-list" src="../../assets/img/transactions.png"> </b-button>
+    <router-link :to="{ path: '/transactions' }"> <b-button v-b-tooltip.hover title="View all transactions"
+        id="report-link"> <img id="transaction-list" src="../../assets/img/transactions.png"> </b-button></router-link>
     <b-button v-b-tooltip.hover title="View transaction report" id="report-link" @click="viewReport()"> <img
         id="transaction-report" src="../../assets/img/transaction-report-icon.png"> </b-button>
   </div>
@@ -50,16 +50,19 @@ import TransactionCategoryLinks from "../common/TransactionCategoryLinks.vue";
 import TransactionsTableTemplate from "../common/TransactionsTableTemplate.vue";
 import { transactionReport } from "../../stores/transactionReport";
 
+
+
 const transactions = ref([])
 const reportObject = transactionReport();
+
 
 onMounted(() => {
   document.getElementById("report-container").style.display = "none";
 })
 
-const { data } = await axios.get('http://localhost:8080/transactions')
-transactions.value = data
+const { data } = await axios.get('http://localhost:8080/transactions/byCustomers')
 
+transactions.value = data
 
 reportObject.retrieveCount(data);
 reportObject.retrieveMinimumAmount(data);
@@ -70,6 +73,7 @@ const minimumAmount = reportObject.report.get("minimumAmount");
 const maximumAmount = reportObject.report.get("maximumAmount");
 const totalAmount = reportObject.report.get("totalAmount");
 
+
 function viewReport() {
   document.getElementById("report-container").style.display = "flex";
   document.getElementById("report-container").style.justifyContent = "space-around";
@@ -77,11 +81,6 @@ function viewReport() {
 
 }
 
-function viewAllTransactions() {
-  document.getElementById("transactions-table").style.display = "table";
-  document.getElementById("report-container").style.display = "none";
-
-}
 
 
 </script>
