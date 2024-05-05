@@ -28,8 +28,13 @@
 </div>
 </template>
 
-<style scoped>
+<script>
+export default {
+    name: "Dashboard"
+}
+</script>
 
+<style scoped>
 h2 {margin-top: 20vh;
 text-align:center;}
 

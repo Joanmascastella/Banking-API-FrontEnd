@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '@/stores/auth.js';
-
-
+import { useAuthStore, decodeToken } from '@/stores/auth.js';
 export default {
   name: "Login",
   data() {
@@ -39,33 +37,36 @@ export default {
 
       try {
         const response = await this.$axios.post("/login", loginData);
+        const authToken = response.data.token;
 
-        const authToken = response.data.token;  
+        if (authToken) {
+          const decoded = decodeToken(authToken);
+          if (!decoded) {
+            throw new Error("Failed to decode token.");
+          }
 
-        if (authToken) {  
           const authStore = useAuthStore();
           authStore.setUser({
             authToken: authToken,
-            id: response.data.id,
-            email: response.data.email,
-            role: response.data.role,
+            id: decoded.sub,
+            role: decoded.auth
           });
+
           this.feedback = "Login successful!";
           this.isSuccess = true;
           setTimeout(() => {
-            this.$router.push("/dashboard");
-          }, 1000); 
+            this.$router.push("/");
+          }, 1000);
         } else {
           throw new Error("Login failed");
         }
       } catch (error) {
-        this.feedback =
-          error.response && error.response.data && error.response.data.errorMessage
-            ? error.response.data.errorMessage
-            : "Login failed. Please check your credentials.";
+        this.feedback = error.response && error.response.data && error.response.data.errorMessage
+          ? error.response.data.errorMessage
+          : "Login failed. Please check your credentials.";
         this.isSuccess = false;
       }
-    },
+    }
   },
 };
 </script>

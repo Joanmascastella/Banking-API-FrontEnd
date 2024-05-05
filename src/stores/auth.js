@@ -1,14 +1,12 @@
-// auth.js
 import { defineStore } from 'pinia';
 
-function decodeToken(token) {
+export function decodeToken(token) {
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-
     return JSON.parse(jsonPayload);
   } catch (error) {
     console.error("Error decoding token:", error);
@@ -25,7 +23,6 @@ export const useAuthStore = defineStore('auth', {
     setUser(userData) {
       this.user = {
         id: userData.id,
-        email: userData.email,
         role: userData.role,
       };
       this.token = userData.authToken; 
@@ -46,8 +43,8 @@ export const useAuthStore = defineStore('auth', {
           const decoded = decodeToken(token);
           if (decoded) {
             this.user = {
-              id: decoded.userId,
-              role: decoded.auth && decoded.auth.length > 0 ? decoded.auth[0] : null,
+              id: decoded.sub, 
+              role: decoded.auth, 
             };
           }
         } catch (error) {
