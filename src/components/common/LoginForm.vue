@@ -39,14 +39,13 @@ export default {
 
       try {
         const response = await this.$axios.post("/login", loginData);
-        // Update the way you access the authToken
-        const authToken = response.data.token;  // Updated to match the actual response structure
 
-        if (authToken) {  // Check for authToken directly
+        const authToken = response.data.token;  
+
+        if (authToken) {  
           const authStore = useAuthStore();
           authStore.setUser({
-            authToken: authToken,  // Set the authToken
-            // Other details must also be correctly returned and handled here, for now assuming id, email, role are provided
+            authToken: authToken,
             id: response.data.id,
             email: response.data.email,
             role: response.data.role,
@@ -55,7 +54,7 @@ export default {
           this.isSuccess = true;
           setTimeout(() => {
             this.$router.push("/dashboard");
-          }, 1000); // Add a delay of 1000ms
+          }, 1000); 
         } else {
           throw new Error("Login failed");
         }

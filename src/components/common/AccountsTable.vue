@@ -30,26 +30,35 @@
     </div>
 </template>
 
-<script setup>
-import axios from 'axios'
-import { ref } from 'vue'
-
-const accounts=ref([])
-
-
-const { data } = await axios.get('http://localhost:8080/accounts')
-accounts.value = data
-
-const usersList = await axios.get("http://localhost:8080/users")
-
-let ownersOfAccounts = new Map();
-
-data.forEach((item , count) => { if (item.userId == usersList.data[count].id){
-
-ownersOfAccounts.set(item.userId, usersList.data[count].firstName + usersList.data[count].lastName);}});
-
-
+<script>
+export default {
+  data() {
+    return {
+      accounts: [],
+    };
+  },
+  methods: {
+    async fetchAccountsAndUsers() {
+      try {
+        const accountsResponse = await this.$axios.get(`/accounts/customers`);
+        const usersResponse = await this.$axios.get(`/users`);
+        const userMap = new Map(usersResponse.data.map(user => [user.id, `${user.firstName} ${user.lastName}`]));
+        
+        this.accounts = accountsResponse.data.map(account => ({
+          ...account,
+          userName: userMap.get(account.userId) || 'Unknown'
+        }));
+      } catch (error) {
+        console.error("Failed to fetch accounts or users", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchAccountsAndUsers();
+  }
+};
 </script>
+
 
 <style scoped>
 
