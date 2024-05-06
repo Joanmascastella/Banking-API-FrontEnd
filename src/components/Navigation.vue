@@ -5,6 +5,9 @@
       <li><strong>BankAPI</strong></li>
     </ul>
     <ul v-if="authStore.user">
+      <li v-if="authStore.isCustomer">
+        <a href="/account/details" style="color: white;">View Account Details</a>
+      </li>
       <li v-if="authStore.user" class="nav-item">
         <a class="nav-link btn btn-danger" style="color: white;" @click="logout">Logout</a>
       </li>

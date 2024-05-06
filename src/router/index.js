@@ -9,7 +9,7 @@ import ATMTransactions from "../components/page/ATMTransactions.vue";
 import TransactionsByCustomers from "../components/page/TransactionsByCustomers.vue";
 import TransactionsByEmployees from "../components/page/TransactionsByEmployees.vue";
 import OnlineTransactions from "../components/page/OnlineTransactions.vue";
-
+import AccountDetails from "../components/common/customer/AccountDetails.vue"
 
 
 
@@ -64,6 +64,11 @@ const router = createRouter({
       name: 'onlineTransactions',
       component: OnlineTransactions
     },
+    {
+      path: '/account/details',
+      name: 'accountDetails',
+      component: AccountDetails
+    }
     
     
   ]
