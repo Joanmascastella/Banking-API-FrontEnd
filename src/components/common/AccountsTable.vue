@@ -31,18 +31,19 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue';
 
-const accounts = ref([])
+const { proxy } = getCurrentInstance();
+const $axios = proxy.$axios; 
 
+const accounts = ref([]);
+const ownersOfAccounts = new Map();
+const error = ref('');
 
-const { data } = await axios.get('http://localhost:8080/accounts')
+const { data } = await $axios.get('/accounts/customers')
 accounts.value = data
 
-const usersList = await axios.get("http://localhost:8080/users")
-
-let ownersOfAccounts = new Map();
+const usersList = await $axios.get("/users")
 
 data.forEach((item, count) => {
   if (item.userId == usersList.data[count].id) {
@@ -50,10 +51,7 @@ data.forEach((item, count) => {
     ownersOfAccounts.set(item.userId, usersList.data[count].firstName + usersList.data[count].lastName);
   }
 });
-
-
 </script>
-
 
 <style scoped>
 h2 {
