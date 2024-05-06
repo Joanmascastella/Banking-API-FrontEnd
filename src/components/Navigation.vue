@@ -1,7 +1,7 @@
 <template>
   <nav>
     <ul>
-      <li><strong>BankAPI</strong></li>
+      <li><a href="/" style="color: white;"><strong>BankAPI</strong></a></li>
     </ul>
     <ul v-if="authStore.user">
       <li v-if="authStore.isCustomer">
@@ -17,7 +17,7 @@
 <script>
 import { useAuthStore } from '@/stores/auth.js';
 import { useRouter } from 'vue-router';
-import { onMounted } from 'vue'; 
+import { onMounted } from 'vue';
 
 export default {
   name: "Navigation",
@@ -26,7 +26,7 @@ export default {
     const router = useRouter();
 
     onMounted(() => {
-      authStore.checkUser();  
+      authStore.checkUser();
     });
 
     const logout = () => {
