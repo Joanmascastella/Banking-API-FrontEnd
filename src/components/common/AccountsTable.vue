@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in accounts" :key="item.userId">
+        <tr v-for="item in accountsListing" :key="item.userId">
           <td v-if="item.accountType === 'SAVINGS'"><img src="../../assets/img/savings-account.png"></td>
           <td v-else><img src="../../assets/img/checking-account.png"></td>
           <td>{{ item.userId }}</td>
@@ -26,31 +26,34 @@
         </tr>
       </tbody>
     </table>
-    {{ map2 }}
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref } from 'vue';
+import { accounts } from "../../stores/accounts";
+import { users } from "../../stores/users";
 
-const { proxy } = getCurrentInstance();
-const $axios = proxy.$axios; 
 
-const accounts = ref([]);
+
+const accountsListing = ref([]);
+const accountStore = accounts();
+const userStore = users();
+
+const { data } = await accountStore.retrieveAllAccounts();
+accountsListing.value = data
+
+const usersList = await userStore.retrieveAllUsers();
 const ownersOfAccounts = new Map();
-const error = ref('');
 
-const { data } = await $axios.get('/accounts/customers')
-accounts.value = data
-
-const usersList = await $axios.get("/users")
 
 data.forEach((item, count) => {
   if (item.userId == usersList.data[count].id) {
-
     ownersOfAccounts.set(item.userId, usersList.data[count].firstName + usersList.data[count].lastName);
   }
 });
+
+
 </script>
 
 <style scoped>

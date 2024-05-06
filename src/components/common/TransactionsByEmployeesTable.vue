@@ -3,7 +3,7 @@
     <h1>Transactions by employees</h1>
 
     <TransactionCategoryLinks />
-    <TransactionsTableTemplate :transactions="transactions" />
+    <TransactionsTableTemplate :transactions="transactionsListing" />
 
     <div id="report-container">
       <div>
@@ -43,16 +43,16 @@
 </template>
 
 <script setup>
-import axios from 'axios'
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 import TransactionCategoryLinks from "../common/TransactionCategoryLinks.vue";
 import TransactionsTableTemplate from "../common/TransactionsTableTemplate.vue";
 import { transactionReport } from "../../stores/transactionReport";
+import { transactions } from "../../stores/transactions";
 
 
-
-const transactions = ref([])
+const transactionsListing = ref([])
+const transactionStore = transactions();
 const reportObject = transactionReport();
 
 
@@ -60,19 +60,13 @@ onMounted(() => {
   document.getElementById("report-container").style.display = "none";
 })
 
-const { data } = await axios.get('http://localhost:8080/transactions/byEmployees')
+const { data } = await transactionStore.retrieveTransactionsByEmployees()
+transactionsListing.value = data
 
-transactions.value = data
-
-reportObject.retrieveCount(data);
-reportObject.retrieveMinimumAmount(data);
-reportObject.retrieveMaximumAmount(data);
-reportObject.retrieveTotalAmount(data);
-const count = reportObject.report.get("count");
-const minimumAmount = reportObject.report.get("minimumAmount");
-const maximumAmount = reportObject.report.get("maximumAmount");
-const totalAmount = reportObject.report.get("totalAmount");
-
+const count = reportObject.retrieveCount(data);
+const minimumAmount = reportObject.retrieveMinimumAmount(data);
+const maximumAmount = reportObject.retrieveMinimumAmount(data);
+const totalAmount = reportObject.retrieveTotalAmount(data)
 
 
 function viewReport() {

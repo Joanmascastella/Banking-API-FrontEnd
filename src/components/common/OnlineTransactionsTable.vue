@@ -3,7 +3,7 @@
     <h1>Online Transactions</h1>
 
     <TransactionCategoryLinks />
-    <TransactionsTableTemplate :transactions="transactions" />
+    <TransactionsTableTemplate :transactions="transactionsListing" />
 
     <div id="report-container">
       <div>
@@ -11,8 +11,7 @@
         <div class="report-data">
           <h2>{{ count }}</h2>
         </div>
-        <div id="count-by-type" class="report-data"><span><strong>By customers:{{ onlineCustomerTransactions
-              }}</strong></span><span><strong>By employees:{{ onlineEmployeeTransactions }}</strong></span></div>
+        <div id="count-by-type" class="report-data"><span><strong>By customers:{{ onlineCustomerTransactions }}</strong></span><span><strong>By employees:{{ onlineEmployeeTransactions }}</strong></span></div>
       </div>
       <div>
         <h2>Minimum amount</h2>
@@ -48,17 +47,18 @@
 </template>
 
 <script setup>
-import axios from 'axios'
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 import TransactionCategoryLinks from "../common/TransactionCategoryLinks.vue";
 import TransactionsTableTemplate from "../common/TransactionsTableTemplate.vue";
 import { transactionReport } from "../../stores/transactionReport";
+import { transactions } from "../../stores/transactions";
+import { users } from "../../stores/users";
 
 
-
-
-const transactions = ref([])
+const transactionsListing = ref([])
+const transactionStore = transactions();
+const userStore = users();
 const reportObject = transactionReport();
 
 
@@ -66,31 +66,19 @@ onMounted(() => {
   document.getElementById("report-container").style.display = "none";
 })
 
-const { data } = await axios.get('http://localhost:8080/transactions/online')
+const { data } = await transactionStore.retrieveOnlineTransactions();
+transactionsListing.value = data
 
-const usersList = await axios.get("http://localhost:8080/users")
+const usersList = await userStore.retrieveAllUsers();
 
-
-transactions.value = data
-
-reportObject.retrieveCount(data);
-reportObject.retrieveMinimumAmount(data);
-reportObject.retrieveMaximumAmount(data);
-reportObject.retrieveTotalAmount(data);
-reportObject.retrieveOnlineCustomerTransactionCount(data, usersList)
-reportObject.retrieveOnlineEmployeeTransactionCount(data, usersList)
-reportObject.retrieveOnlineCustomerTransactionsAmount(data, usersList)
-reportObject.retrieveOnlineEmployeeTransactionsAmount(data, usersList)
-
-
-const count = reportObject.report.get("count");
-const minimumAmount = reportObject.report.get("minimumAmount");
-const maximumAmount = reportObject.report.get("maximumAmount");
-const totalAmount = reportObject.report.get("totalAmount");
-const onlineCustomerTransactions = reportObject.report.get("onlineCustomerTransactions");
-const onlineEmployeeTransactions = reportObject.report.get("onlineEmployeeTransactions");
-const onlineCustomerTransactionsAmount = reportObject.report.get("onlineCustomerTransactionsAmount");
-const onlineEmployeeTransactionsAmount = reportObject.report.get("onlineEmployeeTransactionsAmount");
+const count = reportObject.retrieveCount(data);
+const minimumAmount = reportObject.retrieveMinimumAmount(data);
+const maximumAmount = reportObject.retrieveMinimumAmount(data);
+const totalAmount = reportObject.retrieveTotalAmount(data)
+const onlineCustomerTransactions = reportObject.retrieveOnlineCustomerTransactionCount(data, usersList);
+const onlineEmployeeTransactions = reportObject.retrieveOnlineEmployeeTransactionCount(data, usersList);
+const onlineCustomerTransactionsAmount = reportObject.retrieveOnlineCustomerTransactionsAmount(data, usersList);
+const onlineEmployeeTransactionsAmount = reportObject.retrieveOnlineEmployeeTransactionsAmount(data, usersList);
 
 function viewReport() {
   document.getElementById("report-container").style.display = "flex";
