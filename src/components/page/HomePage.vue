@@ -1,43 +1,49 @@
 <template>
-    <div v-if="authStore.user">
-        <div v-if="isEmployee">
-            <EmployeeDashboard />
-        </div>
-        <div v-else-if="isCustomer">
-            <CustomerDashboard />
-        </div>
-    </div>
-    <div v-else class="welcome">
-        <div class="centered-container">
-            <h1>Hi, welcome to BankAPI</h1>
-            <h3>We are excited for you to get started. Please login or register to continue.</h3>
-            <a href="/login" class="button primary">Login</a>
-            <a href="/register" class="button">Register</a>
-        </div>
-    </div>
+  <div v-if="authStore.user">
+      <div v-if="isEmployee">
+          <EmployeeDashboard />
+      </div>
+      <div v-else-if="isCustomer">
+          <CustomerDashboard />
+      </div>
+  </div>
+  <div v-else class="welcome">
+      <div class="centered-container">
+          <h1>Hi, welcome to BankAPI</h1>
+          <h3>We are excited for you to get started. Please login or register to continue.</h3>
+          <a href="/login" class="button primary">Login</a>
+          <a href="/register" class="button">Register</a>
+      </div>
+  </div>
 </template>
 
 <script>
 import { useAuthStore } from '@/stores/auth.js';
 import EmployeeDashboard from "./EmployeeDashboard.vue";
 import CustomerDashboard from "./CustomerDashboard.vue";
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue'; 
 
 export default {
-    name: 'Home',
-    components: {
-       EmployeeDashboard,
-       CustomerDashboard
-    },
-    setup() {
-        const authStore = useAuthStore();
-        const isEmployee = computed(() => authStore.isEmployee);
-        const isCustomer = computed(() => authStore.isCustomer);
+  name: 'Home',
+  components: {
+     EmployeeDashboard,
+     CustomerDashboard
+  },
+  setup() {
+      const authStore = useAuthStore();
 
-        return { authStore, isEmployee, isCustomer };
-    },
+      onMounted(() => {
+        authStore.checkUser(); 
+      });
+
+      const isEmployee = computed(() => authStore.isEmployee);
+      const isCustomer = computed(() => authStore.isCustomer);
+
+      return { authStore, isEmployee, isCustomer };
+  },
 }
 </script>
+
 
 <style scoped>
 .welcome {

@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     async onSubmit() {
-      const authStore = useAuthStore(); // Retrieve the store instance here
+      const authStore = useAuthStore();
       const { success, message } = await authStore.login(this.username, this.password);
       this.feedback = message;
       if (success) {

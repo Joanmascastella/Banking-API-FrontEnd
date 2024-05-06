@@ -1,5 +1,4 @@
 <template>
-
   <nav>
     <ul>
       <li><strong>BankAPI</strong></li>
@@ -13,18 +12,22 @@
       </li>
     </ul>
   </nav>
-
 </template>
 
 <script>
 import { useAuthStore } from '@/stores/auth.js';
 import { useRouter } from 'vue-router';
+import { onMounted } from 'vue'; 
 
 export default {
   name: "Navigation",
   setup() {
     const authStore = useAuthStore();
     const router = useRouter();
+
+    onMounted(() => {
+      authStore.checkUser();  
+    });
 
     const logout = () => {
       authStore.logout();
