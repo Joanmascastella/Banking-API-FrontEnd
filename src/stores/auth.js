@@ -1,14 +1,12 @@
-// auth.js
 import { defineStore } from 'pinia';
 
-function decodeToken(token) {
+export function decodeToken(token) {
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-
     return JSON.parse(jsonPayload);
   } catch (error) {
     console.error("Error decoding token:", error);
@@ -23,12 +21,12 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     setUser(userData) {
+      console.log('Setting user data:', userData);
       this.user = {
         id: userData.id,
-        email: userData.email,
         role: userData.role,
+        isApproved: userData.approved  
       };
-      this.token = userData.authToken; 
       localStorage.setItem('auth', userData.authToken);
     },
 
@@ -46,8 +44,9 @@ export const useAuthStore = defineStore('auth', {
           const decoded = decodeToken(token);
           if (decoded) {
             this.user = {
-              id: decoded.userId,
-              role: decoded.auth && decoded.auth.length > 0 ? decoded.auth[0] : null,
+              id: decoded.sub,
+              role: decoded.auth,
+              isApproved: decoded.approved
             };
           }
         } catch (error) {
@@ -61,5 +60,9 @@ export const useAuthStore = defineStore('auth', {
     isEmployee: (state) => state.user?.role === 'ROLE_EMPLOYEE',
     isCustomer: (state) => state.user?.role === 'ROLE_CUSTOMER',
     userId: (state) => state.user?.id,
+    isUserApproved: (state) => {
+      console.log('isUserApproved check:', state.user?.isApproved);
+      return state.user?.isApproved === 'true';
+  },
   },
 });

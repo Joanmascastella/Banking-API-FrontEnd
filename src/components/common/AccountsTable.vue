@@ -54,6 +54,7 @@ data.forEach((item, count) => {
 
 </script>
 
+
 <style scoped>
 h2 {
   text-align: center;

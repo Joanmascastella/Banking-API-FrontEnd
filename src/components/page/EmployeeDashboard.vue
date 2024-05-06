@@ -1,11 +1,15 @@
 <script setup>
-import Dashboard from "../common/Dashboard.vue"
+import { defineComponent } from 'vue';
+import Dashboard from "../common/Dashboard.vue";
 
+defineComponent({
+    name: 'EmployeeDashboard',
+    components: {
+        Dashboard
+    }
+});
 </script>
 
 <template>
- 
-<Dashboard/>
-
+    <Dashboard />
 </template>
-

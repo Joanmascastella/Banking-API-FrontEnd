@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '@/stores/auth.js';
-
-
+import { useAuthStore, decodeToken } from '@/stores/auth.js';
 export default {
   name: "Login",
   data() {
@@ -39,34 +37,37 @@ export default {
 
       try {
         const response = await this.$axios.post("/login", loginData);
-        // Update the way you access the authToken
-        const authToken = response.data.token;  // Updated to match the actual response structure
+        const authToken = response.data.token;
 
-        if (authToken) {  // Check for authToken directly
+        if (authToken) {
+          const decoded = decodeToken(authToken);
+          if (!decoded) {
+            throw new Error("Failed to decode token.");
+          }
+
           const authStore = useAuthStore();
           authStore.setUser({
-            authToken: authToken,  // Set the authToken
-            // Other details must also be correctly returned and handled here, for now assuming id, email, role are provided
-            id: response.data.id,
-            email: response.data.email,
-            role: response.data.role,
+            authToken: authToken,
+            id: decoded.sub,
+            role: decoded.auth,
+            isApproved: decoded.approved,
           });
+
           this.feedback = "Login successful!";
           this.isSuccess = true;
           setTimeout(() => {
-            this.$router.push("/dashboard");
-          }, 1000); // Add a delay of 1000ms
+            this.$router.push("/");
+          }, 1000);
         } else {
           throw new Error("Login failed");
         }
       } catch (error) {
-        this.feedback =
-          error.response && error.response.data && error.response.data.errorMessage
-            ? error.response.data.errorMessage
-            : "Login failed. Please check your credentials.";
+        this.feedback = error.response && error.response.data && error.response.data.errorMessage
+          ? error.response.data.errorMessage
+          : "Login failed. Please check your credentials.";
         this.isSuccess = false;
       }
-    },
+    }
   },
 };
 </script>
