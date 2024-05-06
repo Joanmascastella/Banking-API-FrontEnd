@@ -20,13 +20,40 @@ export const useAuthStore = defineStore('auth', {
     token: null,
   }),
   actions: {
+    async login(username, password) {
+      try {
+        const response = await this.$axios.post("/login", { username, password });
+        const authToken = response.data.token;
+        if (!authToken) {
+          throw new Error("Login failed");
+        }
+
+        const decoded = decodeToken(authToken);
+        if (!decoded) {
+          throw new Error("Failed to decode token.");
+        }
+
+        this.setUser({
+          authToken: authToken,
+          id: decoded.sub,
+          role: decoded.auth,
+          isApproved: decoded.approved,
+        });
+
+        return { success: true, message: "Login successful!" };
+      } catch (error) {
+        console.error("Login Error:", error);
+        return { success: false, message: error.message || "Login failed. Please check your credentials." };
+      }
+    },
+
     setUser(userData) {
-      console.log('Setting user data:', userData);
       this.user = {
         id: userData.id,
         role: userData.role,
-        isApproved: userData.approved  
+        isApproved: userData.approved
       };
+      this.token = userData.authToken;
       localStorage.setItem('auth', userData.authToken);
     },
 

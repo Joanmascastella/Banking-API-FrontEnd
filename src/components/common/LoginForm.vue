@@ -2,22 +2,18 @@
   <div class="loginForm">
     <form @submit.prevent="onSubmit">
       <fieldset>
-        <label>
-          Username
-          <input type="text" name="username" placeholder="Username" v-model="username" />
-        </label>
-        <label>
-          Password
-          <input type="password" name="password" placeholder="Password" v-model="password" />
-        </label>
+        <label style="color: black;">Username<input type="text" name="username" placeholder="Username" v-model="username" /></label>
+        <label style="color: black;">Password<input type="password" name="password" placeholder="Password" v-model="password" /></label>
       </fieldset>
       <input type="submit" value="Log in" />
+      <p v-if="feedback">{{ feedback }}</p>
     </form>
   </div>
 </template>
 
 <script>
-import { useAuthStore, decodeToken } from '@/stores/auth.js';
+import { useAuthStore } from '@/stores/auth.js';
+
 export default {
   name: "Login",
   data() {
@@ -25,47 +21,17 @@ export default {
       username: "",
       password: "",
       feedback: "",
-      isSuccess: false,
     };
   },
   methods: {
     async onSubmit() {
-      const loginData = {
-        username: this.username,
-        password: this.password,
-      };
-
-      try {
-        const response = await this.$axios.post("/login", loginData);
-        const authToken = response.data.token;
-
-        if (authToken) {
-          const decoded = decodeToken(authToken);
-          if (!decoded) {
-            throw new Error("Failed to decode token.");
-          }
-
-          const authStore = useAuthStore();
-          authStore.setUser({
-            authToken: authToken,
-            id: decoded.sub,
-            role: decoded.auth,
-            isApproved: decoded.approved,
-          });
-
-          this.feedback = "Login successful!";
-          this.isSuccess = true;
-          setTimeout(() => {
-            this.$router.push("/");
-          }, 1000);
-        } else {
-          throw new Error("Login failed");
-        }
-      } catch (error) {
-        this.feedback = error.response && error.response.data && error.response.data.errorMessage
-          ? error.response.data.errorMessage
-          : "Login failed. Please check your credentials.";
-        this.isSuccess = false;
+      const authStore = useAuthStore(); // Retrieve the store instance here
+      const { success, message } = await authStore.login(this.username, this.password);
+      this.feedback = message;
+      if (success) {
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 1000);
       }
     }
   },

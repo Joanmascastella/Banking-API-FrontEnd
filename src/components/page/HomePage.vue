@@ -45,7 +45,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f4f4f4; 
 }
 
 .centered-container {
