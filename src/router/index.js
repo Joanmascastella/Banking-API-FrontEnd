@@ -12,11 +12,6 @@ import OnlineTransactions from "../components/page/OnlineTransactions.vue";
 import AccountDetails from "../components/common/customer/AccountDetails.vue"
 import RegisterPage from '@/components/page/RegisterPage.vue';
 
-
-
-
-
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
