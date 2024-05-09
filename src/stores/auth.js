@@ -46,6 +46,7 @@ export const useAuthStore = defineStore('auth', {
         return { success: false, message: error.message || "Login failed. Please check your credentials." };
       }
     },
+    
 
     setUser(userData) {
       this.user = {

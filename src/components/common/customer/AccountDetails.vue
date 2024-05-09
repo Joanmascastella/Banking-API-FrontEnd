@@ -1,22 +1,27 @@
 <template>
+    <br>
     <div class="container">
-        
-        <div v-if="userData.username" class="card" style="color: black;">
-            <p><strong>Username:</strong> {{ userData.username }}</p>
-            <p><strong>Email:</strong> {{ userData.email }}</p>
-            <p><strong>Name:</strong> {{ userData.firstName }} {{ userData.lastName }}</p>
-            <p><strong>BSN:</strong> {{ userData.BSN }}</p>
-            <p><strong>Phone:</strong> {{ userData.phoneNumber }}</p>
-            <p><strong>Birth Date:</strong> {{ userData.birthDate }}</p>
-            <p><strong>IBAN:</strong> {{ userData.IBAN }}</p>
-            <p><strong>Currency:</strong> {{ userData.currency }}</p>
-            <p><strong>Account Type:</strong> {{ userData.accountType }}</p>
-            <p><strong>Balance:</strong> €{{ userData.balance }}</p>
-            <p><strong>Absolute Limit:</strong> €{{ userData.absoluteLimit }}</p>
-            <button @click="goBack" class="back-button">Back</button>
+        <div v-if="userData.length > 0" class="card" style="color: black;">
+            <div class="user-info">
+                <h3 style="color: black;">User Details</h3>
+                <p><strong>Username:</strong> {{ userData[0].username }}</p>
+                <p><strong>Email:</strong> {{ userData[0].email }}</p>
+                <p><strong>Name:</strong> {{ userData[0].firstName }} {{ userData[0].lastName }}</p>
+                <p><strong>BSN:</strong> {{ userData[0].BSN }}</p>
+                <p><strong>Phone:</strong> {{ userData[0].phoneNumber }}</p>
+                <p><strong>Birth Date:</strong> {{ userData[0].birthDate }}</p>
+            </div>
         </div>
-        <div v-else>
-            <p>Loading or no data available...</p>
+    
+        <div v-for="(account, index) in userData" :key="index" class="card" style="color: black;">
+            <div class="account-info">
+                <h3 style="color: black;">{{ account.accountType }} Account</h3>
+                <p><strong>IBAN:</strong> {{ account.IBAN }}</p>
+                <p><strong>Currency:</strong> {{ account.currency }}</p>
+                <p><strong>Account Type:</strong> {{ account.accountType }}</p>
+                <p><strong>Balance:</strong> €{{ account.balance }}</p>
+                <p><strong>Absolute Limit:</strong> €{{ account.absoluteLimit }}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -29,7 +34,7 @@ import { useRouter } from 'vue-router';
 export default {
     name: "AccountDetails",
     setup() {
-        const userData = ref({});
+        const userData = ref([]);
         const customerGetAPICalls = useCustomerGETAPICalls();
         const router = useRouter();
 
@@ -37,7 +42,7 @@ export default {
             const result = await customerGetAPICalls.getUserAccountDetails();
             console.log('API Data:', result);
             if (result.success && result.data) {
-                userData.value = result.data[0];
+                userData.value = result.data;
                 console.log('Set userData:', userData.value);
             } else {
                 console.error("Failed to fetch account details", result.message);
@@ -55,39 +60,46 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .container {
-    max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     display: flex;
-    flex-direction: column; 
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-}
-
-.back-button {
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: #ff0000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    flex-wrap: row; 
 }
 
 .card {
     background-color: #f9f9f9;
+    margin: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    width: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(50% - 40px);
+    max-width: calc(50% - 40px); 
 }
 
-.card p {
-    margin: 10px 0;
+.user-info, .account-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user-info p, .account-info p {
+    width: 100%;
+    margin: 5px 0;
     color: black;
+}
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .card {
+        flex-basis: calc(100% - 40px);
+        max-width: calc(100% - 40px); 
+    }
 }
 </style>
