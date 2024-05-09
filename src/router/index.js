@@ -10,6 +10,7 @@ import TransactionsByCustomers from "../components/page/TransactionsByCustomers.
 import TransactionsByEmployees from "../components/page/TransactionsByEmployees.vue";
 import OnlineTransactions from "../components/page/OnlineTransactions.vue";
 import AccountDetails from "../components/common/customer/AccountDetails.vue"
+import RegisterPage from '@/components/page/RegisterPage.vue';
 
 
 
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterPage
     },
     {
       path: '/dashboard/employee',
