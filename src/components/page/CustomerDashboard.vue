@@ -1,18 +1,24 @@
 <template>
     <div v-if="approved">
-        <!-- here call the components that an verfied user can access -->
+        <VerifiedContainer />
     </div>
     <div v-else>
-        <!-- here call the components that a non verified user can access -->
+        <NotVerifiedContainer />
     </div>
 </template>
 
 <script>
 import { useAuthStore } from '@/stores/auth.js';
 import { computed, onMounted } from 'vue';
+import NotVerifiedContainer from '../../components/container/customerdashboard/NotVerifiedContainer.vue';
+import VerifiedContainer from '../../components/container/customerdashboard/VerifiedContainer.vue';
 
 export default {
     name: "CustomerDashboard",
+    components: {
+        NotVerifiedContainer,
+        VerifiedContainer
+    },
     setup() {
         const authStore = useAuthStore();
         const approved = computed(() => authStore.isUserApproved);
@@ -25,8 +31,6 @@ export default {
     },
 }
 </script>
-
-
 
 <style scoped>
 
