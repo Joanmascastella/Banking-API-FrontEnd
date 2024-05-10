@@ -35,10 +35,10 @@
     },
     methods: {
       goToTransfer() {
-        this.$router.push({ name: 'Transfer' });
+        this.$router.push({ path: '/make/transfer' });
       },
       goToInternalTransfer() {
-        this.$router.push({ name: 'InternalTransfer' });
+        this.$router.push({ path: '/own/transfer' });
       }
     }
   }

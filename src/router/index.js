@@ -11,6 +11,9 @@ import TransactionsByEmployees from "../components/page/TransactionsByEmployees.
 import OnlineTransactions from "../components/page/OnlineTransactions.vue";
 import AccountDetails from "../components/common/customer/AccountDetails.vue"
 import RegisterPage from '@/components/page/RegisterPage.vue';
+import TransferToOwn from '@/components/common/customer/transfer/TransferToOwn.vue';
+import TransferToOthers from '@/components/common/customer/transfer/TransferToOthers.vue';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -69,8 +72,17 @@ const router = createRouter({
       path: '/account/details',
       name: 'accountDetails',
       component: AccountDetails
+    },
+    {
+      path: '/own/transfer',
+      name: 'makeOwnTransfer',
+      component: TransferToOwn
+    },
+    {
+      path: '/make/transfer',
+      name: 'makeTransfer',
+      component: TransferToOthers
     }
-    
     
   ]
 });
