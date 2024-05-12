@@ -1,3 +1,11 @@
+<script setup>
+defineProps({
+  accountListing: Array,
+  ownersOfAccounts: Map,
+});
+</script>
+
+
 <template>
   <div class="content">
     <h2>Accounts</h2>
@@ -13,9 +21,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in accountsListing" :key="item.userId">
-          <td v-if="item.accountType === 'SAVINGS'"><img src="../../assets/img/savings-account.png"></td>
-          <td v-else><img src="../../assets/img/checking-account.png"></td>
+        <tr v-for="item in accountListing" :key="item.userId">
+          <td v-if="item.accountType === 'SAVINGS'"><img src="../../../assets/img/savings-account.png"></td>
+          <td v-else><img src="../../../assets/img/checking-account.png"></td>
           <td>{{ item.userId }}</td>
           <td>{{ ownersOfAccounts.get(item.userId) }}</td>
           <td><router-link :to="{ path: '#' }">
@@ -29,32 +37,7 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { accounts } from "../../stores/accounts";
-import { users } from "../../stores/users";
 
-
-
-const accountsListing = ref([]);
-const accountStore = accounts();
-const userStore = users();
-
-const { data } = await accountStore.retrieveAllAccounts();
-accountsListing.value = data
-
-const usersList = await userStore.retrieveAllUsers();
-const ownersOfAccounts = new Map();
-
-
-data.forEach((item, count) => {
-  if (item.userId == usersList.data[count].id) {
-    ownersOfAccounts.set(item.userId, usersList.data[count].firstName + usersList.data[count].lastName);
-  }
-});
-
-
-</script>
 
 <style scoped>
 h2 {

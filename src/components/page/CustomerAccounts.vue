@@ -1,5 +1,5 @@
 <script setup>
-import AccountsContainer from "../container/AccountsContainer.vue";
+import AccountsContainer from "../container/employeedashboard/AccountsContainer.vue";
 </script>
 
 <template>

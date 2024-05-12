@@ -25,6 +25,12 @@ export const transactions = defineStore('transactions', {
         async retrieveOnlineTransactions() {
             return await this.$axios.get('/transactions/online');
         },
+        async retrieveOnlineTransactionsByEmployees() {
+            return await this.$axios.get('/transactions/online/byEmployees');
+        },
+        async retrieveOnlineTransactionsByCustomers() {
+            return await this.$axios.get('/transactions/online/byCustomers');
+        },
     
     
     
