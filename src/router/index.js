@@ -3,16 +3,18 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from "../components/page/LoginPage.vue";
 import Home from "../components/page/HomePage.vue";
 import EmployeeDashboard from "../components/page/EmployeeDashboard.vue";
-import CustomerAccounts from "../components/page/CustomerAccounts.vue";
-import AllTransactions from "../components/page/AllTransactions.vue";
-import ATMTransactions from "../components/page/ATMTransactions.vue";
-import TransactionsByCustomers from "../components/page/TransactionsByCustomers.vue";
-import TransactionsByEmployees from "../components/page/TransactionsByEmployees.vue";
-import OnlineTransactions from "../components/page/OnlineTransactions.vue";
+import CustomerAccounts from "../components/page/employee/CustomerAccounts.vue";
+import AllTransactions from "../components/page/employee/AllTransactions.vue";
+import ATMTransactions from "../components/page/employee/ATMTransactions.vue";
+import TransactionsByCustomers from "../components/page/employee/TransactionsByCustomers.vue";
+import TransactionsByEmployees from "../components/page/employee/TransactionsByEmployees.vue";
+import OnlineTransactions from "../components/page/employee/OnlineTransactions.vue";
 import AccountDetails from "../components/common/customer/AccountDetails.vue"
 import RegisterPage from '@/components/page/RegisterPage.vue';
 import TransferToOwn from '@/components/common/customer/transfer/TransferToOwn.vue';
 import TransferToOthers from '@/components/common/customer/transfer/TransferToOthers.vue';
+import UserTransactions from "../components/page/employee/UserTransactions.vue";
+
 
 
 const router = createRouter({
@@ -82,7 +84,20 @@ const router = createRouter({
       path: '/make/transfer',
       name: 'makeTransfer',
       component: TransferToOthers
-    }
+    },
+    {
+      path: '/transactions/history/:id',
+      name: 'UserTransactions',
+      component: UserTransactions
+    },
+    {
+      path: '/transactions/history/:id',
+      name: 'UserTransactions',
+      component: UserTransactions
+    },
+
+   
+   
     
   ]
 });

@@ -1,5 +1,5 @@
 <script setup>
-import AllEmployeesTransactionsContainer from "../container/employeedashboard/AllEmployeesTransactionsContainer.vue";
+import AllEmployeesTransactionsContainer from "../../container/employeedashboard/AllEmployeesTransactionsContainer.vue";
 </script>
 
 <template>
@@ -11,6 +11,6 @@ import AllEmployeesTransactionsContainer from "../container/employeedashboard/Al
 
 <style scoped>
 
-@import "../../assets/transactionPage.css"
+@import "../../../assets/transactionPage.css"
 
 </style>
