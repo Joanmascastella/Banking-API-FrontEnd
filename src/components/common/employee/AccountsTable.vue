@@ -28,7 +28,7 @@ defineProps({
           <td>{{ ownersOfAccounts.get(item.userId) }}</td>
           <td><router-link :to="{ path: '#' }">
               <button>Account details</button> </router-link></td>
-          <td><router-link :to="{ path: '#' }">
+          <td><router-link :to="{ name: 'UserTransactions', params:{id: item.userId}}">
               <button>Transactions</button></router-link></td>
 
         </tr>
