@@ -38,7 +38,7 @@ function viewAllTransactions() {
 
 <style scoped>
 
-@import "../../assets/transactionPage.css"
+@import "../../../assets/transactionPage.css"
 
 
 </style>
