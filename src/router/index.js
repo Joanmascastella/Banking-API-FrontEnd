@@ -4,6 +4,7 @@ import LoginPage from "../components/page/LoginPage.vue";
 import Home from "../components/page/HomePage.vue";
 import EmployeeDashboard from "../components/page/EmployeeDashboard.vue";
 import CustomerAccounts from "../components/page/employee/CustomerAccounts.vue";
+import CustomerAccountsWithLimit from "../components/page/employee/CustomerAccountsWithLimit.vue";
 import AllTransactions from "../components/page/employee/AllTransactions.vue";
 import ATMTransactions from "../components/page/employee/ATMTransactions.vue";
 import TransactionsByCustomers from "../components/page/employee/TransactionsByCustomers.vue";
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/accounts/customers',
       name: 'customerAccounts',
       component: CustomerAccounts
+    },
+    {
+      path: '/accounts/byAbsoluteLimit',
+      name: 'customerAccountsWithLimit',
+      component: CustomerAccountsWithLimit
     },
     {
       path: '/transactions',
@@ -90,14 +96,6 @@ const router = createRouter({
       name: 'UserTransactions',
       component: UserTransactions
     },
-    {
-      path: '/transactions/history/:id',
-      name: 'UserTransactions',
-      component: UserTransactions
-    },
-
-   
-   
     
   ]
 });
