@@ -7,9 +7,8 @@ defineProps({
 
 
 <template>
-  <div class="content">
-    <h2>Accounts</h2>
-    <table>
+
+    <table id="accounts-table">
       <thead>
         <tr>
           <th>Account type</th>
@@ -34,26 +33,13 @@ defineProps({
         </tr>
       </tbody>
     </table>
-  </div>
+  
 </template>
 
 
 
 <style scoped>
-h2 {
-  text-align: center;
-  margin-top: 20vh;
-}
 
-
-.content {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-left: 5%;
-  margin-right: 5%;
-}
 
 table th {
   background-color: #FCC26B;
@@ -74,7 +60,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   border-radius: 15px;
-  overflow: hidden
+  overflow: hidden;
 }
 
 button {

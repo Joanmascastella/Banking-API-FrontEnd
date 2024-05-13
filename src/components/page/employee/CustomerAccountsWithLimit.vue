@@ -1,11 +1,11 @@
 <script setup>
-import AccountsContainer from "../../container/employeedashboard/AccountsContainer.vue";
+import AccountsWithLimitContainer from "../../container/employeedashboard/AccountsWithLimitContainer.vue";
 </script>
 
 <template>
     <div class="content">
     <h1>Accounts</h1>
-  <AccountsContainer/>
+  <AccountsWithLimitContainer/>
   </div>
 </template>
 

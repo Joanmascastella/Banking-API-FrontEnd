@@ -2,24 +2,24 @@
         <div class="grid">
         <div>
         <router-link :to="{ path : '/transactions/ATM' }" class="transaction-category-link">
-            <button @click="viewAllTransactions">ATM</button>
+            <button>ATM</button>
             </router-link>
         </div>
         <div> 
             <router-link :to="{ path : '/transactions/byCustomers' }" class="transaction-category-link">
-                <button @click="viewAllTransactions">By customers</button>
+                <button>By customers</button>
                 </router-link>
          </div>
 
              <div> 
             <router-link :to="{ path : '/transactions/byEmployees' }" class="transaction-category-link">
-                <button @click="viewAllTransactions" >By employees</button>
+                <button>By employees</button>
                 </router-link>
          </div>
        
        <div> 
             <router-link :to="{ path : '/transactions/online' }" class="transaction-category-link">
-                <button @click="viewAllTransactions">Online</button>
+                <button>Online</button>
                 </router-link>
          </div>
          </div>
@@ -28,10 +28,23 @@
 
 
 <script setup>
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 function viewAllTransactions() {
-  document.getElementById("transactions-table").style.display = "table";
-  document.getElementById("report-container").style.display = "none";
+if (router.currentRoute.value.name === 'transactions'){
+    router.go(0);
 }
+router.push({ path: '/transactions' });
+
+}
+
+defineExpose({
+  viewAllTransactions
+})
+
 
 </script>
 

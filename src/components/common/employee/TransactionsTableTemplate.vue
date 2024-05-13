@@ -1,8 +1,31 @@
 
 <script setup>
+import { users } from "../../../stores/users";
+const userStore = users();
+
+
+
 defineProps({
   transactions: Array,
+  ownersOfAccounts: Map
 });
+
+async function retrieveUser(transactions, accountOwnerData) {
+
+  const usersList = await userStore.retrieveAllUsers();
+
+  for (let index = 0; index < transactions.length; index++) {
+    let item = transactions[index];
+    let result = usersList.data.filter((user) => user.id === item.userId);
+    accountOwnerData.set(item.userId, result[0].firstName + result[0].lastName);
+  }
+
+}
+
+defineExpose({
+  retrieveUser,
+})
+
 </script>
 
 <template>
@@ -12,6 +35,7 @@ defineProps({
             <tr>
                 <th>Id</th>
                 <th>Date</th>
+                <th v-if="!ownersOfAccounts.has('user')">User initiating transfer</th>
                 <th>From account</th>
                 <th>To account</th>
                 <th>Amount</th>
@@ -21,6 +45,7 @@ defineProps({
               <tr v-for="(item, count) in transactions" :key="item.userId">
                   <td>{{++count}} </td>
                    <td>{{item.date}} </td>
+                   <td v-if="!ownersOfAccounts.has('user')">{{ ownersOfAccounts.get(item.userId) }}</td>
                   <td v-if="item.fromAccount != 'ATM'">{{item.fromAccount}}  <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>
                   <td v-else>{{item.fromAccount}}</td>
                   <td v-if="item.toAccount != 'ATM'">{{item.toAccount}} <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>

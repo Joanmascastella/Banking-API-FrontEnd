@@ -1,6 +1,6 @@
 <template>
 <div id="user"><img src="../../../assets/img/user.png"> <h5>{{ ownerOfAccounts.get("user") }}</h5></div>
-  <TransactionsTableTemplate :transactions="transactionsListing.data"  />
+  <TransactionsTableTemplate :transactions="transactionsListing.data"  :ownersOfAccounts="ownerOfAccounts" ref="user"/>
 
 </template>
 

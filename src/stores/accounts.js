@@ -12,7 +12,12 @@ export const accounts = defineStore('accounts', {
 
         async retrieveAllAccounts() {
             return await this.$axios.get('/accounts/customers');
-        }}
+        },
+        async retrieveAccountsByAbsoluteLimit(absoluteLimit) {
+            return await this.$axios.get('/accounts/byAbsoluteLimit?absoluteLimit='+absoluteLimit);
+        }
+    
+    }
         
         
 });
