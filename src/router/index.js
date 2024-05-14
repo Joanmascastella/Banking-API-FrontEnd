@@ -15,7 +15,7 @@ import RegisterPage from '@/components/page/RegisterPage.vue';
 import TransferToOwn from '@/components/common/customer/transfer/TransferToOwn.vue';
 import TransferToOthers from '@/components/common/customer/transfer/TransferToOthers.vue';
 import UserTransactions from "../components/page/employee/UserTransactions.vue";
-
+import UsersPage from "@/components/page/employee/UsersPage.vue"
 
 
 const router = createRouter({
@@ -96,7 +96,11 @@ const router = createRouter({
       name: 'UserTransactions',
       component: UserTransactions
     },
-    
+    {
+      path: '/users',
+      name: 'UsersPage',
+      component: UsersPage
+    },
   ]
 });
 
