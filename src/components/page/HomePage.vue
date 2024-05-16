@@ -13,6 +13,7 @@
           <h3>We are excited for you to get started. Please login or register to continue.</h3>
           <a href="/login" class="button primary">Login</a>
           <a href="/register" class="button">Register</a>
+          <a href="/atm/login" class="button">ATM</a>
       </div>
   </div>
 </template>

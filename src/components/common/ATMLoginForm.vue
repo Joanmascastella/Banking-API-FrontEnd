@@ -1,0 +1,58 @@
+<template>
+    <div class="loginForm">
+      <form @submit.prevent="onSubmit">
+        <fieldset>
+          <label style="color: black;">Email<input type="text" name="email" placeholder="Email" v-model="email" /></label>
+          <label style="color: black;">Password<input type="password" name="password" placeholder="Password" v-model="password" /></label>
+        </fieldset>
+        <input type="submit" value="Log in" />
+        <p v-if="feedback">{{ feedback }}</p>
+      </form>
+    </div>
+  </template>
+  
+  <script>
+  import { useAuthStore } from '@/stores/auth.js';
+  
+  export default {
+    name: "Login",
+    data() {
+      return {
+        email: "",
+        password: "",
+        feedback: "",
+      };
+    },
+    methods: {
+      async onSubmit() {
+        const authStore = useAuthStore();
+        const { success, message } = await authStore.atmLogin(this.email, this.password);
+        this.feedback = message;
+        if (success) {
+          setTimeout(() => {
+            this.$router.push("/atm/dashboard");
+          }, 1000);
+        }
+      }
+    },
+  };
+  </script>
+  
+  <style scoped>
+  .loginForm {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  form {
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  input[type="submit"] {
+    background-color: #fa6f0e;
+    border: none;
+  }
+  </style>
+  
