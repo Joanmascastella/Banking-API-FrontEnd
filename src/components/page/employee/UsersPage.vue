@@ -13,7 +13,6 @@
 
 <script>
 import UsersContainer from '../../container/employeedashboard/UsersContainer.vue';
-
 export default {
     name: "UsersPage",
     components: {
@@ -29,7 +28,7 @@ export default {
 
 <style scoped>
     .container{
-        margin-top: 10%;
+        padding-top: 10%;
     }
     select{
         background-color: #FCC26B;
@@ -41,4 +40,13 @@ export default {
         text-align: center;
         color: darkslategrey
     }
+    @media screen and (max-width: 1024px) {
+    .container {
+        overflow-x: auto;
+        padding-top: 12%;
+    }
+    select{
+        width:fit-content;
+    }
+}
 </style>

@@ -9,32 +9,28 @@
             <h2 style="color: black;">Make Transfer</h2>
           <label for="fromAccount">From Account (IBAN):</label>
           <div class="account-inputs">
-            <input type="text" v-model="fromAccountPart1" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="fromAccountPart1" @paste="handlePaste($event, 'from')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="fromAccountPart2" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="fromAccountPart2" @paste="handlePaste($event, 'from')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="fromAccountPart3" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="fromAccountPart3" @paste="handlePaste($event, 'from')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="fromAccountPart4" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="fromAccountPart4" @paste="handlePaste($event, 'from')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="fromAccountPart5" @input="restrictLength($event, 4)" required>
-            <span> </span>
-            <input type="text" v-model="fromAccountPart6" @input="restrictLength($event, 2)" required>
+            <input type="text" v-model="fromAccountPart5" @paste="handlePaste($event, 'from')" @input="restrictLength($event, 2)" required>
           </div>
   
           <label for="toAccount">To Account (IBAN):</label>
           <div class="account-inputs">
-            <input type="text" v-model="toAccountPart1" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="toAccountPart1" @paste="handlePaste($event, 'to')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="toAccountPart2" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="toAccountPart2" @paste="handlePaste($event, 'to')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="toAccountPart3" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="toAccountPart3" @paste="handlePaste($event, 'to')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="toAccountPart4" @input="restrictLength($event, 4)" required>
+            <input type="text" v-model="toAccountPart4" @paste="handlePaste($event, 'to')" @input="restrictLength($event, 4)" required>
             <span> </span>
-            <input type="text" v-model="toAccountPart5" @input="restrictLength($event, 4)" required>
-            <span> </span>
-            <input type="text" v-model="toAccountPart6" @input="restrictLength($event, 2)" required>
+            <input type="text" v-model="toAccountPart5" @paste="handlePaste($event, 'to')" @input="restrictLength($event, 2)" required>
           </div>
   
           <label for="amount">Amount (EUR):</label>
@@ -68,19 +64,17 @@
               fromAccountPart3: "",
               fromAccountPart4: "",
               fromAccountPart5: "",
-              fromAccountPart6: "",
               toAccountPart1: "",
               toAccountPart2: "",
               toAccountPart3: "",
               toAccountPart4: "",
               toAccountPart5: "",
-              toAccountPart6: ""
           };
       },
       methods: {
           async MakeTransfer() {
-              this.transaction.fromAccount = `${this.fromAccountPart1}${this.fromAccountPart2}${this.fromAccountPart3}${this.fromAccountPart4}${this.fromAccountPart5}${this.fromAccountPart6}`;
-              this.transaction.toAccount = `${this.toAccountPart1}${this.toAccountPart2}${this.toAccountPart3}${this.toAccountPart4}${this.toAccountPart5}${this.toAccountPart6}`;
+              this.transaction.fromAccount = `${this.fromAccountPart1}${this.fromAccountPart2}${this.fromAccountPart3}${this.fromAccountPart4}${this.fromAccountPart5}`;
+              this.transaction.toAccount = `${this.toAccountPart1}${this.toAccountPart2}${this.toAccountPart3}${this.toAccountPart4}${this.toAccountPart5}`;
   
               const customerStore = useCustomerPOSTAPICalls();
               try {
@@ -106,7 +100,21 @@
               if (event.target.value.length > maxLength) {
                   event.target.value = event.target.value.slice(0, maxLength);
               }
-          }
+          },
+          fillInputs(value, target) {
+            const parts = value.match(/\w{1,4}/g);
+            if (target === 'from') {
+                [this.fromAccountPart1, this.fromAccountPart2, this.fromAccountPart3, this.fromAccountPart4, this.fromAccountPart5] = parts;
+            } else if (target === 'to') {
+                [this.toAccountPart1, this.toAccountPart2, this.toAccountPart3, this.toAccountPart4, this.toAccountPart5] = parts;
+            }
+        },
+        handlePaste(event, target) {
+            const pastedData = (event.clipboardData || window.clipboardData).getData('text');
+            setTimeout(()=> {
+                this.fillInputs(pastedData, target);
+            }, 0);
+        }
       }
   }
   </script>

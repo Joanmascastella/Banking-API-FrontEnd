@@ -25,7 +25,7 @@ export const useCustomerPOSTAPICalls = defineStore('useCustomerPost', {
                 const response = await this.$axios.post('/transactions/transfers', transaction);
                 return response.data;
             } catch (error) {
-                console.error('Error registering user:', error);
+                console.error('Error making transaction:', error);
                 throw error;
             }
         },

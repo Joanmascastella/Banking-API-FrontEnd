@@ -26,4 +26,7 @@ h1 {
   margin-right: 5%;
 }
 
+AccountsContainer{
+  max-width: 100%;
+}
 </style>

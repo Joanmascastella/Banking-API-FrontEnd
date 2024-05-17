@@ -9,23 +9,23 @@
                     <th>BSN</th>
                     <th>Phone number</th>
                     <th>Birth Date</th>
-                    <th>Is approved</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="user in usersData" :key="user.id">
-                    <td>{{ user.username }}</td>
+                    <td class=".hidden-sm">{{ user.username }}</td>
                     <td>{{ user.firstName }} {{ user.lastName }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.BSN }}</td>
-                    <td>{{ user.phoneNumber }}</td>
+                    <td class=".hidden-sm">{{ user.phoneNumber }}</td>
                     <td>{{ user.birthDate }}</td>
-                    <td>{{ user.isApproved }}</td>
+                    <td>{{ user.isApproved ? 'Approved': 'Pending'}}</td>
                     <td>
                         <button id="btn-approve" v-if="!user.isApproved" @click="openPopUp(user, false)">Approve</button>
-                        <button id="btn-cancel" v-if="user.isApproved" @click="cancelAccount(user.id)">Cancel Account</button> 
-                        <button v-if="user.isApproved" @click="openPopUp(user, true)">Edit Limit</button>
+                        <button id="btn-cancel" v-if="user.isApproved" @click="cancelAccount(user.id)">Close Account</button> 
+                        <button v-if="user.isApproved" @click="openPopUp(user, true)">Edit Daily Limit</button>
                     </td>
                 </tr>
             </tbody>
@@ -88,7 +88,7 @@ import TransferLimitsView from './TransferLimitsView.vue';
 </script>
 
 <style scoped>
-    table th {
+table th {
   background-color: #FCC26B;
 }
 
@@ -115,6 +115,7 @@ table {
 button {
     width: 50px;
     height: 50px;
+    margin: 5px;
     font-size: 10px;
     padding:0;
     border: none;
@@ -127,4 +128,11 @@ button {
 #btn-cancel{
     background-color: red;
 }
+
+@media screen and (max-width: 1024px) {
+    .container {
+        overflow-x: auto;
+    }
+}
+
 </style>

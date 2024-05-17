@@ -34,16 +34,16 @@ const formatCurrency = (value) => {
 
 
 <template>
-
+  <div class="table-container">
     <table id="accounts-table">
       <thead>
         <tr>
           <th>Account type</th>
           <th>User Id</th>
           <th>User's name</th>
-          <th>Balance</th>
-          <th>Absolute Limit</th>
-          <th>Status</th>
+          <th class="hide-column">Balance</th>
+          <th class="hide-column">Absolute Limit</th>
+          <th class="hide-column">Status</th>
           <th>Account</th>
           <th>Transactions</th>
 
@@ -55,19 +55,18 @@ const formatCurrency = (value) => {
           <td v-else><img src="../../../assets/img/checking-account.png"></td>
           <td>{{ item.userId }}</td>
           <td>{{ ownersOfAccounts.get(item.userId) }}</td>
-          <td>{{ formatCurrency(item.balance) }}</td>
-          <td>{{ formatCurrency(item.absoluteLimit) }}</td>
-          <td>{{ item.isActive ? 'Active' : 'Closed' }}</td>
-          <td><button @click="openPopup(item)">Edit limit</button></td>
+          <td class="hide-column">{{ formatCurrency(item.balance) }}</td>
+          <td class="hide-column">{{ formatCurrency(item.absoluteLimit) }}</td>
+          <td class="hide-column">{{ item.isActive ? 'Active' : 'Closed' }}</td>
+          <td><button @click="openPopup(item)" :disabled="!item.isActive">Edit limit</button></td>
           <td><router-link :to="{ name: 'UserTransactions', params:{id: item.userId}}">
               <button>Transactions</button></router-link></td>
-
         </tr>
       </tbody>
     </table>
   
     <AbsoluteTransferLimitView v-if="showPopup" :absoluteLimit="selectedAccount?.absoluteLimit" @updateLimit="setLimit" @cancel="closePopup"/>;
-
+  </div>
 </template>
 
 
@@ -94,7 +93,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   border-radius: 15px;
-  overflow: hidden;
+  overflow:hidden;
 }
 
 button {
@@ -113,5 +112,21 @@ table th,
 table td {
   text-align: center;
   vertical-align: middle;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 1024px) {
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        min-width: 1000px;
+    }
 }
 </style>

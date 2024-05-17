@@ -25,7 +25,8 @@ import AccountsTable from '../../common/employee/AccountsTable.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { accounts } from "../../../stores/accounts";
 import { users } from "../../../stores/users";
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
 
 const accountsListing = ref([]);
@@ -74,6 +75,13 @@ function listAccountsByAbsoluteLimit(){
 async function updateTotalLimit(updatedAccount) {
     try {
         await accountStore.updateAccountLimit(updatedAccount);
+        Swal.fire({
+                      title: 'Success!',
+                      text: 'Total limit was updated to ' + updatedAccount.absoluteLimit,
+                      icon: 'success',
+                      timer: 1500,
+                      confirmButtonText: 'OK'
+                  });
     } catch (error) {
         console.error('Error updating total limit:', error);
     }
@@ -138,6 +146,9 @@ button {
 
   #accounts-list {right: 75px;}
 
+  #accounts-table {
+    overflow-x: auto;
+  }
 }
 
 
@@ -150,5 +161,10 @@ button {
 
   #accounts-list {right: 105px;}
 
+  #accounts-table {
+    overflow-x: auto;
+  }
+
+  
 }
 </style>
