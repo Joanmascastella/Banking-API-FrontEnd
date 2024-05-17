@@ -1,8 +1,35 @@
 <script setup>
+import { ref } from 'vue';
+import AbsoluteTransferLimitView from './AbsoluteTransferLimit.vue';
+
 defineProps({
   accountListing: Array,
   ownersOfAccounts: Map,
 });
+
+const emit = defineEmits(['update-totalLimit']);
+
+const showPopup = ref(false);
+const selectedAccount = ref(null);
+
+const openPopup = (account) => {
+    selectedAccount.value = account;
+    showPopup.value = true;
+};
+
+const closePopup = () => {
+    showPopup.value = false;
+};
+
+const setLimit = (limit) => {
+    selectedAccount.value.absoluteLimit = limit;
+    emit('update-totalLimit', selectedAccount.value);
+    closePopup();
+};
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-NL', { style: 'currency', currency: 'EUR' }).format(value);
+};
 </script>
 
 
@@ -14,6 +41,9 @@ defineProps({
           <th>Account type</th>
           <th>User Id</th>
           <th>User's name</th>
+          <th>Balance</th>
+          <th>Absolute Limit</th>
+          <th>Status</th>
           <th>Account</th>
           <th>Transactions</th>
 
@@ -25,8 +55,10 @@ defineProps({
           <td v-else><img src="../../../assets/img/checking-account.png"></td>
           <td>{{ item.userId }}</td>
           <td>{{ ownersOfAccounts.get(item.userId) }}</td>
-          <td><router-link :to="{ path: '#' }">
-              <button>Account details</button> </router-link></td>
+          <td>{{ formatCurrency(item.balance) }}</td>
+          <td>{{ formatCurrency(item.absoluteLimit) }}</td>
+          <td>{{ item.isActive ? 'Active' : 'Closed' }}</td>
+          <td><button @click="openPopup(item)">Edit limit</button></td>
           <td><router-link :to="{ name: 'UserTransactions', params:{id: item.userId}}">
               <button>Transactions</button></router-link></td>
 
@@ -34,6 +66,8 @@ defineProps({
       </tbody>
     </table>
   
+    <AbsoluteTransferLimitView v-if="showPopup" :absoluteLimit="selectedAccount?.absoluteLimit" @updateLimit="setLimit" @cancel="closePopup"/>;
+
 </template>
 
 

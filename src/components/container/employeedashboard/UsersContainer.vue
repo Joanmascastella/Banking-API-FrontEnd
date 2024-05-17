@@ -55,7 +55,7 @@ export default {
             try {
                 const response = await userStore.closeAccount(userId);
                 if (response.success) {
-                    fetchData();
+                    fetchData(); 
                 } else {
                     console.error('Failed to cancel account:', response.message);
                 }
@@ -68,7 +68,10 @@ export default {
             try {
                 const response = await userStore.updateDailyLimit(user);
                 if (response.success) {
-                    fetchData();
+                    const index = usersData.value.findIndex(user => user.id === user.id);
+                    if (index !== -1) {
+                        usersData.value[index] = user;
+                    }
                 } else {
                     console.error('Failed to edit the limit:', response.message);
                 }

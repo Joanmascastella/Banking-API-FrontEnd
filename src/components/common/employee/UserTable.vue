@@ -25,7 +25,7 @@
                     <td>
                         <button id="btn-approve" v-if="!user.isApproved" @click="openPopUp(user, false)">Approve</button>
                         <button id="btn-cancel" v-if="user.isApproved" @click="cancelAccount(user.id)">Cancel Account</button> 
-                        <button v-if="user.isApproved" @click="openPopUp(user, true)">Edit Limits</button>
+                        <button v-if="user.isApproved" @click="openPopUp(user, true)">Edit Limit</button>
                     </td>
                 </tr>
             </tbody>

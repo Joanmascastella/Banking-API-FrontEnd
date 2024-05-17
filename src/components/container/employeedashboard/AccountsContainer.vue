@@ -1,6 +1,6 @@
 <template>
 
-  <AccountsTable :accountListing="accountsListing.data" :ownersOfAccounts="ownersOfAccounts" />
+  <AccountsTable :accountListing="accountsListing.data" :ownersOfAccounts="ownersOfAccounts"  @update-totalLimit="updateTotalLimit"/>
 
   <b-button v-b-tooltip.hover title="List all accounts"  @click="listAllAccounts"> <img
       id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
@@ -69,6 +69,14 @@ function listAccountsByAbsoluteLimit(){
   let limitTemplateRef = limit.value;
   router.push({ path: '/accounts/byAbsoluteLimit', query: { absoluteLimit: limitTemplateRef.value } });
 
+}
+
+async function updateTotalLimit(updatedAccount) {
+    try {
+        await accountStore.updateAccountLimit(updatedAccount);
+    } catch (error) {
+        console.error('Error updating total limit:', error);
+    }
 }
 
 function listAllAccounts() {
