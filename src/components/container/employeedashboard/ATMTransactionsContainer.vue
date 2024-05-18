@@ -1,7 +1,7 @@
 <template>
   <TransactionCategoryLinks ref="child"/>
 
-  <TransactionsTableTemplate :transactions="transactionsListing.data" :ownersOfAccounts="ownersOfAccounts" ref="user"/>
+  <TransactionsTableTemplate :transactions="transactionsListing.data" :ownersOfAccounts="ownersOfAccounts" ref="user" />
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
   :ATMWithdrawalsCount="reportData.get('ATMWithdrawalsCount')" :ATMDepositsCount="reportData.get('ATMDepositsCount')" :ATMWithdrawalsAmount="reportData.get('ATMWithdrawalsAmount')" :ATMDepositsAmount="reportData.get('ATMDepositsAmount')"/>
@@ -35,6 +35,7 @@ const user = ref(null)
 
 async function load() {
 transactionsListing.value = await transactionStore.retrieveATMTransactions();
+user.value.retrieveUser(obj.transactionsListing.data, ownersOfAccounts);
 report.value.loadReport(reportData, obj.transactionsListing.data);
 report.value.loadATMReport(reportData, obj.transactionsListing.data);
 
@@ -64,6 +65,6 @@ child.value.viewAllTransactions();
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+@import "../../../assets/transactionContainer.css"
 
 </style>

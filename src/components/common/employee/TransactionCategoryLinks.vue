@@ -57,7 +57,42 @@ defineExpose({
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+.grid {
+  min-width: 90vw;
+  margin-bottom: 10px;
+}
+
+button {
+  border: none;
+  width: 100%;
+}
+
+
+.grid div:first-child button {
+  background-color: #F9970A;
+}
+
+.grid div:nth-child(2n) button {
+  background-color: #43A801;
+}
+
+.grid div:nth-child(3n) button {
+  background-color: #F9791A;
+}
+
+.grid div:nth-child(4n) button {
+  background-color: #15CA20;
+}
+
+
+@media only screen and (max-width:1280px) {
+
+button{
+ font-size:smaller;
+font-weight:bold;
+height:100%;
+
+}}
 
 
 </style>
