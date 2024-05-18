@@ -11,6 +11,6 @@ import AllCustomersTransactionsContainer from "../../container/employeedashboard
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+@import "../../../assets/transactionPage.css" 
 
 </style>

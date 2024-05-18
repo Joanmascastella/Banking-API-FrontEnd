@@ -1,19 +1,27 @@
 <template>
 
-<h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
-  <AccountsTable :accountListing="accountsListing.data" :ownersOfAccounts="ownersOfAccounts" />
+  <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
 
-  <b-button v-b-tooltip.hover title="List all accounts"  @click="listAllAccounts"> <img
-      id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
+  <div id="pagination-container">
+    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" />
+  </div>
+
+  <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" />
+
+
+  <b-button v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img id="accounts-list"
+      src="../../../assets/img/account-details-icon.png"> </b-button>
 
 </template>
 
 <script setup>
 import AccountsTable from '../../common/employee/AccountsTable.vue'
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { accounts } from "../../../stores/accounts";
 import { users } from "../../../stores/users";
 import { useRoute, useRouter } from 'vue-router'
+import Pagination from '../../common/employee/Pagination.vue';
+
 
 
 const accountsListing = ref([]);
@@ -23,6 +31,16 @@ const ownersOfAccounts = reactive(new Map());
 const obj = reactive({ accountsListing })
 const route = useRoute()
 const router = useRouter()
+let paginatedItems = ref([])
+const accountsCount = ref(null)
+
+const pages = reactive({
+  actualPage: 1,
+  perPage: 2,
+  pagesCount: computed(() =>
+    Math.ceil(accountsCount.value / pages.perPage)
+  ),
+});
 
 
 
@@ -37,9 +55,29 @@ async function load() {
     let result = usersList.data.filter((user) => user.id === item.userId);
     ownersOfAccounts.set(item.userId, result[0].firstName + result[0].lastName);
   }
+
+  paginateItems()
 }
 
 load()
+
+function paginateItems() {
+
+  route.query.page = pages.actualPage;
+  accountsCount.value = obj.accountsListing.data.length;
+  const start = (route.query.page - 1) * pages.perPage;
+  const stop = start + pages.perPage;
+
+  paginatedItems.value = accountsListing.value.data.slice(start, stop);
+
+}
+
+
+function displayNewPage() {
+  router.push({ path: '/accounts/byAbsoluteLimit', query: { absoluteLimit: route.query.absoluteLimit, page: pages.actualPage } });
+  load();
+}
+
 
 
 function listAllAccounts() {
@@ -52,9 +90,9 @@ function listAllAccounts() {
 
 <style scoped>
 #accounts-list {
-  position: fixed;
+  position: absolute;
   right: 0.5%;
-  bottom: 7%;
+  top: 15%;
   border: 5px solid #b9faae;
   background-color: white;
   padding: 5px;
@@ -63,7 +101,11 @@ function listAllAccounts() {
 }
 
 
-h2 {font-weight:initial;}
+h2 {
+  font-weight: initial;
+}
+
+
 /*mobile*/
 
 @media only screen and (max-width:768px) {

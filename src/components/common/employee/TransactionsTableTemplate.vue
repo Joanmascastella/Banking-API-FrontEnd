@@ -35,7 +35,7 @@ defineExpose({
             <tr>
                 <th>Id</th>
                 <th>Date</th>
-                <th v-if="!ownersOfAccounts.has('user')">User initiating transfer</th>
+                <th v-if="!ownersOfAccounts.has('user')">Initiated by</th>
                 <th>From account</th>
                 <th>To account</th>
                 <th>Amount</th>
@@ -46,9 +46,9 @@ defineExpose({
                   <td>{{++count}} </td>
                    <td>{{item.date}} </td>
                    <td v-if="!ownersOfAccounts.has('user')">{{ ownersOfAccounts.get(item.userId) }}</td>
-                  <td v-if="item.fromAccount != 'ATM'">{{item.fromAccount}}  <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>
+                  <td v-if="item.fromAccount != 'ATM'">{{item.fromAccount}}  <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img class="account" src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>
                   <td v-else>{{item.fromAccount}}</td>
-                  <td v-if="item.toAccount != 'ATM'">{{item.toAccount}} <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>
+                  <td v-if="item.toAccount != 'ATM'">{{item.toAccount}} <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img class="account" src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>
                   <td v-else>{{item.toAccount}}</td>
                   <td>€{{item.amount}} </td>
               </tr>
@@ -58,7 +58,51 @@ defineExpose({
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
 
+table th {
+  background-color: #FCC26B;
+}
+
+table td {
+  background-color: white;
+}
+
+table,
+th,
+td {
+  border: transparent;
+}
+
+table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+
+table th,
+table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.link:hover {
+  text-emphasis: none;
+  text-decoration: none;
+  background-color: white;
+}
+
+.account{ width: 35%;}
+
+@media only screen and (max-width:800px) {
+
+table {
+  display: block;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+}
 </style>
 

@@ -43,7 +43,26 @@ load()
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+#user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.5rem;
+  margin: 10px;
+}
+
+#user img {
+  width: 32px;
+  height: 32px;
+}
+
+#user h5 {
+  color: black;
+}
+
+
+
 
 
 

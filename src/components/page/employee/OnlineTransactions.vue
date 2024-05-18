@@ -11,6 +11,6 @@ import OnlineTransactionsContainer from "../../container/employeedashboard/Onlin
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+@import "../../../assets/transactionPage.css" 
 
 </style>

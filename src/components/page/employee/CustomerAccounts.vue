@@ -26,7 +26,11 @@ h1 {
   margin-right: 5%;
 }
 
+
+/* I commented out this line because I added horizontal scrolling to the child component
+
 AccountsContainer{
   max-width: 100%;
-}
+} */
+
 </style>

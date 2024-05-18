@@ -60,7 +60,7 @@ defineExpose({
   loadReport,
   loadATMReport,
   loadOnlineReport,
-  viewReport
+  viewReport,
 })
 
 
@@ -68,6 +68,7 @@ defineExpose({
 
 
 <template>
+
 <div id="report-container">
       <div>
         <h2>Count</h2>
@@ -83,7 +84,7 @@ defineExpose({
         <div class="report-data">
           <h2>€{{ minimumAmount }}</h2>
         </div><router-link :to="{ path: '#' }" class="link-to-transaction"><b-button v-b-tooltip.hover
-            title="View transaction"><img id="transaction"
+            title="View transaction" @click="viewTransaction"><img id="transaction"
               src="../../../assets/img/transactions.png"></b-button></router-link>
       </div>
       <div>
@@ -110,6 +111,187 @@ defineExpose({
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+
+ #report-container {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+#report-container {
+  height: 65vh;
+  position: relative;
+  text-align: center;
+}
+
+
+#report-container h2 {
+  text-align: center;
+  margin-top: 5vh;
+  line-height: 1;
+}
+
+.report-data {
+  border: 5px solid #43A801;
+  background-color: white;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 100px;
+
+}
+
+#transaction {
+  width: 50px;
+  height: 50px;
+  margin-top: 180px;
+}
+
+
+#count-by-type,
+#amount-by-type {
+  margin-top: 160px;
+  border: none;
+  border-radius: 0%;
+  background-color: inherit;
+  width: auto;
+  height: auto;
+}
+
+#count-by-type span,
+#amount-by-type span {
+  background-color: #238402;
+  width: 100%;
+  font-size: large;
+}
+
+.link-to-transaction {
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: transparent;
+}
+
+.link-to-transaction:hover,
+.transaction-category-link:hover {
+  text-emphasis: none;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+
+#report-container div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+#report-container div:first-child:not(.report-data) {
+  background-color: #238402;
+  width: inherit;
+}
+
+#report-container div:nth-child(2n):not(.report-data) {
+  background-color: white;
+  width: inherit;
+}
+
+#report-container div:nth-child(3n):not(.report-data) {
+  background-color: #FAAF23;
+  width: inherit;
+}
+
+#report-container div:nth-child(4n):not(.report-data) {
+  background-color: #238402;
+}
+
+
+
+@media only screen and (max-width:768px) {
+
+
+#report-container {
+  height: 300vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: static;
+}
+
+.report-data {
+
+  position: static;
+
+}
+
+
+#report-container div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#report-container div:first-child:not(.report-data) {
+  height: inherit;
+  width: inherit;
+}
+
+#report-container div:nth-child(2n):not(.report-data) {
+  height: inherit;
+  width: inherit;
+}
+
+#report-container div:nth-child(3n):not(.report-data) {
+  height: inherit;
+  width: inherit;
+}
+
+
+#report-container div:nth-child(4n):not(.report-data) {
+  height: inherit;
+  width: inherit;
+}
+
+#transaction {
+
+  margin-top: 50px;
+}
+
+
+
+#count-by-type,
+#amount-by-type {
+  margin-top: 20px;
+}
+
+#user h5 {
+  font-size: medium;
+
+}
+}
+
+
+
+@media only screen and (min-width:768px) and (max-width:1280px) {
+
+
+#report-container {
+  height: 70vh;
+
+}
+
+#count-by-type,
+#amount-by-type {
+  margin-top: 150px;
+}}
+
 
 </style>

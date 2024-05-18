@@ -65,6 +65,6 @@ child.value.viewAllTransactions();
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+@import "../../../assets/transactionContainer.css"
 
 </style>

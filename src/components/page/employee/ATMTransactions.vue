@@ -11,6 +11,6 @@ import ATMTransactionsContainer from "../../container/employeedashboard/ATMTrans
 
 <style scoped>
 
-@import "../../../assets/transactionPage.css"
+@import "../../../assets/transactionPage.css" 
 
 </style>
