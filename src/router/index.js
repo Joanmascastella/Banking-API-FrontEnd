@@ -20,6 +20,7 @@ import ATMDashboard from "../components/page/ATMDashboard.vue"
 import ATMWithdraw from "@/components/common/atm/transfer/WithdrawViewATM.vue"
 import ATMDeposit from "@/components/common/atm/transfer/DepositViewATM.vue"
 import ATMBalance from "@/components/common/atm/CheckBalanceView.vue"
+import TransactionHistory from "@/components/common/customer/TransactionHistory.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -123,6 +124,12 @@ const router = createRouter({
       path: '/atm/check-balance',
       name: 'atmBalance',
       component: ATMBalance
+    },
+    {
+      path: '/transactions/:userId/history',
+      name: 'TransactionHistory',
+      component: TransactionHistory,
+      props: true
     },
     
   ]
