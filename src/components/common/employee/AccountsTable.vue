@@ -1,13 +1,33 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import AbsoluteTransferLimitView from './AbsoluteTransferLimit.vue';
+import { users } from "../../../stores/users";
+
+const userStore = users();
 
 
-const props = defineProps({
+defineProps({
   accountListing: Array,
   ownersOfAccounts: Map,
   
 });
+
+async function retrieveUser(accounts, accountOwnerData) {
+
+const usersList = await userStore.retrieveAllUsers();
+
+for (let index = 0; index < accounts.length; index++) {
+  let item = accounts[index];
+  let result = usersList.data.filter((user) => user.id === item.userId);
+  accountOwnerData.set(item.userId, result[0].firstName + result[0].lastName);
+}
+
+}
+
+defineExpose({
+retrieveUser,
+})
+
 
 const emit = defineEmits(['update-totalLimit']);
 
