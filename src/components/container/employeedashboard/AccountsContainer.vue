@@ -1,11 +1,9 @@
 <template>
 
   <div id="pagination-container">
-    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" />
+    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
   </div>
-
-  <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
-    @update-totalLimit="updateTotalLimit" />
+  <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" @update-totalLimit="updateTotalLimit" ref="user"/>
 
   <b-button v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img id="accounts-list"
       src="../../../assets/img/account-details-icon.png"> </b-button>
@@ -29,22 +27,22 @@
 import AccountsTable from '../../common/employee/AccountsTable.vue';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { accounts } from "../../../stores/accounts";
-import { users } from "../../../stores/users";
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import Pagination from '../../common/employee/Pagination.vue';
 
 
 const accountsListing = ref([]);
 const accountStore = accounts();
-const userStore = users();
 const ownersOfAccounts = reactive(new Map());
 const obj = reactive({ accountsListing })
 const limit = ref(null)
 const router = useRouter()
 let paginatedItems = ref([])
-const route = useRoute()
 const accountsCount = ref(null)
+const pagination = ref(null)
+const user = ref(null)
+
 
 const pages = reactive({
   actualPage: 1,
@@ -59,16 +57,10 @@ const pages = reactive({
 async function load() {
 
   accountsListing.value = await accountStore.retrieveAllAccounts();
-
-  const usersList = await userStore.retrieveAllUsers();
-
-  for (let index = 0; index < obj.accountsListing.data.length; index++) {
-    let item = obj.accountsListing.data[index];
-    let result = usersList.data.filter((user) => user.id === item.userId);
-    ownersOfAccounts.set(item.userId, result[0].firstName + result[0].lastName);
-  }
-
+  accountsCount.value = obj.accountsListing.data.length;
+  user.value.retrieveUser(obj.accountsListing.data, ownersOfAccounts);
   paginateItems();
+
 }
 
 load()
@@ -81,14 +73,12 @@ onMounted(() => {
 
 function paginateItems() {
 
-  route.query.page = pages.actualPage;
-  accountsCount.value = obj.accountsListing.data.length;
-  const start = (route.query.page - 1) * pages.perPage;
-  const stop = start + pages.perPage;
-
-  paginatedItems.value = accountsListing.value.data.slice(start, stop);
+  pagination.value.paginate(accountsListing.value.data);
+  paginatedItems.value = pagination.value.props.paginatedItems.value;
 
 }
+
+
 
 
 function displayNewPage() {

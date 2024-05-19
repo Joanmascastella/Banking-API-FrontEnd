@@ -1,15 +1,27 @@
 <script setup>
 
 
-defineProps({
+const props = defineProps({
   pages: null,
+  pageQuery:null,
+  paginatedItems:null,
 });
+
+function paginate(itemListing) {
+  const start = (props.pageQuery - 1) * props.pages.perPage;
+  const stop = start + props.pages.perPage;
+  props.paginatedItems.value = itemListing.slice(start, stop);
+}
+
+defineExpose({
+props,
+paginate,
+})
 
 
 </script>
 
 <template>
-
   <div style="text-align: right" id="pagination">
     <button :disabled="pages.actualPage <= 1" @click="pages.actualPage--; $emit('newPage')">
       < </button>
@@ -22,7 +34,8 @@ defineProps({
 
 <style scoped>
 #pagination {
-  margin: 10px;
+  margin-top: 0px;
+  margin-bottom: 15px;
 }
 
 #pagination button {
