@@ -4,7 +4,7 @@ export const useAtmPOSTAPICalls = defineStore('useAtmPost', {
   actions: {
     async withdraw(transaction) {
       try {
-        const response = await this.$axios.post('/withdrawals', transaction);
+        const response = await this.$axios.post('/atm/withdrawals', transaction);
         return response.data;
       } catch (error) {
         console.error('Error during withdrawal:', error);
@@ -13,7 +13,7 @@ export const useAtmPOSTAPICalls = defineStore('useAtmPost', {
     },
     async deposit(transaction) {
       try {
-        const response = await this.$axios.post('/deposits', transaction);
+        const response = await this.$axios.post('/atm/deposits', transaction);
         return response.data;
       } catch (error) {
         console.error('Error during deposit:', error);

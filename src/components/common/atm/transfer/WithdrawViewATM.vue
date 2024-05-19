@@ -21,12 +21,21 @@
   <script>
   import { useAtmPOSTAPICalls } from '@/stores/backend-calls-atm/atmPOSTAPICalls';
   import { useCustomerGETAPICalls } from '@/stores/backend-calls-customer/customerGetAPICalls.js';
-  import { computed, ref, reactive, watch, onMounted } from 'vue';
+  import { ref, reactive, watch, onMounted } from 'vue';
   
   export default {
   setup() {
     const customerStore = useCustomerGETAPICalls();
-    const userData = computed(() => customerStore.userData);
+    const userData = ref([]); 
+
+    onMounted(async () => {
+      const response = await customerStore.getUserAccountDetails();
+      if (response.success) {
+        userData.value = response.data; 
+      } else {
+        console.error(response.message);
+      }
+    });
 
     const transaction = reactive({
       fromAccount: '',
@@ -40,7 +49,7 @@
     const selectedAccountType = ref('CHECKING'); // Default to checking account
 
     const updateFromAccount = () => {
-      if (userData.value && userData.value.length) {
+      if (this.userData.value && this.userData.value.length) {
         const selectedAccount = userData.value.find(account => account.accountType === selectedAccountType.value);
         transaction.fromAccount = selectedAccount ? selectedAccount.IBAN : '';
       }
@@ -49,7 +58,7 @@
     const submitWithdrawal = async () => {
       try {
         if (!transaction.userId) {
-          transaction.userId = customerStore.userData.userId;
+          transaction.userId = userData.userId;
         }
         const atmStore = useAtmPOSTAPICalls();
         const response = await atmStore.withdraw(transaction);
@@ -58,15 +67,6 @@
         console.error('Withdrawal failed:', error);
       }
     };
-
-    // Fetch user data on mount
-    onMounted(async () => {
-      await customerStore.getUserAccountDetails();
-      if (customerStore.userData.value.length) {
-        transaction.userId = customerStore.userId;
-        updateFromAccount();
-      }
-    });
 
     // Watch for changes in userData and update the account if needed
     watch(userData, () => {
