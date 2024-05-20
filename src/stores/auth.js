@@ -46,8 +46,33 @@ export const useAuthStore = defineStore('auth', {
         return { success: false, message: error.message || "Login failed. Please check your credentials." };
       }
     },
-    
+    async atmLogin(email, password) {
+      try {
+        const response = await this.$axios.post('/atm/login', { email, password });
 
+        const data = response.data;
+        const authToken = data.token;
+        if (!authToken) {
+          throw new Error("ATM login failed");
+        }
+        const decoded = decodeToken(authToken);
+        if (!decoded) {
+          throw new Error("Failed to decode token.");
+        }
+
+        this.setUser({
+          authToken: authToken,
+          id: decoded.sub,
+          role: decoded.auth,
+          isApproved: decoded.approved,
+        });
+        return { success: true, message: "Login successful!" };
+      } catch (error) {
+        console.error("ATM Login Error:", error);
+        return { success: false, message: error.message || "ATM login failed. Please check your credentials." };
+      }
+    },
+  
     setUser(userData) {
       this.user = {
         id: userData.id,
@@ -81,8 +106,8 @@ export const useAuthStore = defineStore('auth', {
           console.error("Error in checkUser:", error);
         }
       }
-    },
-  },
+   },
+},
 
   getters: {
     isEmployee: (state) => state.user?.role === 'ROLE_EMPLOYEE',

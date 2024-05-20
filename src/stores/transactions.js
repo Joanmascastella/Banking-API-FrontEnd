@@ -33,6 +33,9 @@ export const transactions = defineStore('transactions', {
         },
         async retrieveTransactionsOfUser(userId) {
             return await this.$axios.get(`/transactions/${userId}/history`);
+        },
+        async searchTransactions(params) {
+            return await this.$axios.get('/transactions/search', { params });
         }
     
     

@@ -18,6 +18,7 @@
             <h3>{{ user.accountType }} Account</h3>
             <p><strong>IBAN:</strong> {{ user.IBAN }}</p>
             <p><strong>Balance:</strong> {{ user.currency }} {{ user.balance }}</p>
+            <button class="btn tertiary" @click="goToHistory(user.IBAN)">View History</button>
           </div>
         </div>
       </div>
@@ -25,6 +26,8 @@
   </template>
   
   <script>
+  import { useAuthStore } from '@/stores/auth';
+
   export default {
     name: "InitialVerifiedView",
     props: {
@@ -33,13 +36,22 @@
         required: true
       }
     },
+    setup() {
+    const authStore = useAuthStore();
+    const userId = authStore.userId;
+      console.log("User id" + userId);
+    return { userId };
+    },
     methods: {
       goToTransfer() {
         this.$router.push({ path: '/make/transfer' });
       },
       goToInternalTransfer() {
         this.$router.push({ path: '/own/transfer' });
-      }
+      },
+      goToHistory(iban) {
+      this.$router.push({ path: `/transactions/${this.userId}/history`, query: { iban: iban } });
+    }
     }
   }
   </script>

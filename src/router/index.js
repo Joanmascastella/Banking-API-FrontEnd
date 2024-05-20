@@ -16,7 +16,12 @@ import TransferToOwn from '@/components/common/customer/transfer/TransferToOwn.v
 import TransferToOthers from '@/components/common/customer/transfer/TransferToOthers.vue';
 import UserTransactions from "../components/page/employee/UserTransactions.vue";
 import UsersPage from "@/components/page/employee/UsersPage.vue"
-
+import ATMLoginPage from "../components/page/ATMLoginPage.vue"
+import ATMDashboard from "../components/page/ATMDashboard.vue"
+import ATMWithdraw from "@/components/common/atm/transfer/WithdrawViewATM.vue"
+import ATMDeposit from "@/components/common/atm/transfer/DepositViewATM.vue"
+import ATMBalance from "@/components/common/atm/CheckBalanceView.vue"
+import TransactionHistory from "@/components/common/customer/TransactionHistory.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -101,7 +106,38 @@ const router = createRouter({
       name: 'UsersPage',
       component: UsersPage
     },
+      path: '/atm/login',
+      name: 'atmLogin',
+      component: ATMLoginPage
+    },
+    {
+      path: '/atm/dashboard',
+      name: 'atmDashboard',
+      component: ATMDashboard
+    },
+    {
+      path: '/atm/withdraw',
+      name: 'atmWithdraw',
+      component: ATMWithdraw
+    },
+    {
+      path: '/atm/deposit',
+      name: 'atmDeposit',
+      component: ATMDeposit
+    },
+    {
+      path: '/atm/check-balance',
+      name: 'atmBalance',
+      component: ATMBalance
+    },
+    {
+      path: '/transactions/:userId/history',
+      name: 'TransactionHistory',
+      component: TransactionHistory,
+      props: true
+    },
   ]
-});
+
+);
 
 export default router;
