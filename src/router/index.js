@@ -106,6 +106,7 @@ const router = createRouter({
       name: 'UsersPage',
       component: UsersPage
     },
+    {
       path: '/atm/login',
       name: 'atmLogin',
       component: ATMLoginPage
@@ -138,6 +139,6 @@ const router = createRouter({
     },
   ]
 
-);
+});
 
 export default router;
