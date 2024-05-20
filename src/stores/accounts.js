@@ -11,21 +11,33 @@ export const accounts = defineStore('accounts', {
     actions: {
 
         async retrieveAllAccounts() {
-            return await this.$axios.get('/accounts/customers');
-        },
-        async retrieveAccountsByAbsoluteLimit(absoluteLimit) {
-            return await this.$axios.get('/accounts/byAbsoluteLimit?absoluteLimit='+absoluteLimit);
-        },
-        async updateAccountLimit(account){
-            try{
-                const response = await this.$axios.put(`/accounts/customers`, account);
-                return {success: true};
-            } catch (error) {
-                return {success:  false, message: error.message || "Error updating the absolute transaction limit."};
+            try {
+                return await this.$axios.get('/accounts/customers');
+            }
+            catch (error) {
+                const errorMessage = error.response.status;
+                return { error: errorMessage };
             }
         },
-    
+        async retrieveAccountsByAbsoluteLimit(absoluteLimit) {
+            try {
+                return await this.$axios.get('/accounts/byAbsoluteLimit?absoluteLimit=' + absoluteLimit);
+            }
+            catch (error) {
+                const errorMessage = error.response.status;
+                return { error: errorMessage };
+            }
+        },
+        async updateAccountLimit(account) {
+            try {
+                const response = await this.$axios.put(`/accounts/customers`, account);
+                return { success: true };
+            } catch (error) {
+                return { success: false, message: error.message || "Error updating the absolute transaction limit." };
+            }
+        },
+
     }
-        
-        
+
+
 });

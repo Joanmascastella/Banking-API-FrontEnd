@@ -1,10 +1,38 @@
 <template>
-<div id="user"><img src="../../../assets/img/user.png"> <h5>{{ ownerOfAccounts.get("user") }}</h5></div>
 
-<Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+  <div v-if="!transactionsListing.error" id="user"><img src="../../../assets/img/user.png">
+    <h5>{{ ownerOfAccounts.get("user") }}</h5>
+  </div>
 
-  <TransactionsTableTemplate :transactions="paginatedItems"  :ownersOfAccounts="ownerOfAccounts" ref="user"/>
+  <Pagination v-if="!transactionsListing.error" ref="pagination" :pages="pages" @newPage="displayNewPage"
+    :pageQuery="pages.actualPage" :paginatedItems="paginatedItems" />
 
+  <div v-if="!transactionsListing.error" class="grid">
+
+    <div>
+      <button @click="displayAllTransactions">All transactions</button>
+    </div>
+
+
+    <div>
+      <button @click="displayATMDeposits">ATM deposits</button>
+    </div>
+
+    <div>
+      <button @click="displayATMWithdrawals">ATM withdrawals</button>
+    </div>
+
+    <div>
+
+      <button @click="displayOnlineTransfers">Online</button>
+    </div>
+  </div>
+
+
+  <div v-if="!transactionsListing.error" id="transactions">
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" ref="user" />
+  </div>
+  <div v-else-if="transactionsListing.error===403">You are not authorized to view this page</div>
 </template>
 
 <script setup>
@@ -29,6 +57,10 @@ let paginatedItems = ref([])
 const transactionsCount = ref(null)
 const pagination = ref(null)
 const router = useRouter()
+let viewATMDeposits = ref(false)
+let viewATMWithdrawals = ref(false)
+let viewOnlineTransfers= ref(false)
+
 
 
 const pages = reactive({
@@ -43,7 +75,8 @@ const pages = reactive({
 
 async function load() {
 
-  transactionsListing.value = await transactionStore.retrieveTransactionsOfUser(route.query.userId);
+  transactionsListing.value = await retrieveTransactionCategory()
+
   transactionsCount.value = obj.transactionsListing.data.length;
 
   const usersList = await userStore.retrieveAllUsers();
@@ -62,16 +95,73 @@ load()
 function paginateItems() {
 pagination.value.paginate(transactionsListing.value.data);
 paginatedItems.value = pagination.value.props.paginatedItems.value;
-
 }
 
 
 function displayNewPage() {
 
-  router.push({ path: '/transactions/history', query: { userId: ownerOfAccounts.get("userId"), page: pages.actualPage } });
+  router.push({ path: '/transactions/customer', query: { userId: ownerOfAccounts.get("userId"), page: pages.actualPage } });
 
 load();
+
 }
+
+async function retrieveTransactionCategory(){
+
+  if (viewATMDeposits.value === true) {
+    transactionsListing.value = await transactionStore.retrieveATMDepositsOfUser(route.query.userId);
+  }
+  else if (viewATMWithdrawals.value === true) {
+    transactionsListing.value = await transactionStore.retrieveATMWithdrawalsOfUser(route.query.userId);
+  }
+  else if (viewOnlineTransfers.value === true) {
+    transactionsListing.value = await transactionStore.retrieveOnlineTransfersOfUser(route.query.userId);
+  }
+  else {
+    transactionsListing.value = await transactionStore.retrieveTransactionsOfUserByEmployee(route.query.userId);
+
+  }
+
+  return transactionsListing.value;
+
+}
+
+function displayAllTransactions() {
+
+  viewATMDeposits.value = false;
+  viewATMWithdrawals.value = false;
+  viewOnlineTransfers.value = false;
+  displayNewPage();
+
+}
+
+function displayATMDeposits() {
+
+  viewATMDeposits.value = true;
+  viewATMWithdrawals.value = false;
+  viewOnlineTransfers.value = false;
+  displayNewPage();
+
+}
+
+function displayATMWithdrawals() {
+
+  viewATMWithdrawals.value = true;
+  viewATMDeposits.value = false;
+  viewOnlineTransfers.value = false;
+  displayNewPage();
+
+}
+
+function displayOnlineTransfers() {
+
+  viewOnlineTransfers.value = true;
+  viewATMWithdrawals.value = false;
+  viewATMDeposits.value = false;
+  displayNewPage();
+
+}
+
 
 
 </script>
@@ -80,11 +170,21 @@ load();
 
 <style scoped>
 
+.grid {
+  min-width: 90vw;
+  margin-bottom: 10px;
+}
+.grid button {
+  border: none;
+  width: 100%;
+}
+
 #user {
   display: flex;
   column-gap: 0.5rem;
   margin-top: 0px;
   margin-bottom:5px;
+  padding:0px;
 }
 
 #user img {
@@ -98,9 +198,6 @@ load();
   color: black;
 }
 
-
-
-
-
+#transactions{width:100%;}
 
 </style>
