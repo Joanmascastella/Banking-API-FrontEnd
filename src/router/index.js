@@ -92,7 +92,7 @@ const router = createRouter({
       component: TransferToOthers
     },
     {
-      path: '/transactions/history/:id',
+      path: '/transactions/history',
       name: 'UserTransactions',
       component: UserTransactions
     },

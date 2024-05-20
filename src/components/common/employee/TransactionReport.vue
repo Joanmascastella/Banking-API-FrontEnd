@@ -52,6 +52,8 @@ function viewReport() {
 document.getElementById("report-container").style.display = "flex";
 document.getElementById("report-container").style.justifyContent = "space-around";
 document.getElementById("transactions-table").style.display = "none";
+document.getElementById("pagination").style.display = "none";
+
 
 }
 
