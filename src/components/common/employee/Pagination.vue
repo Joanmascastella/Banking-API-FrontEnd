@@ -34,7 +34,7 @@ paginate,
 
 <style scoped>
 #pagination {
-  margin-top: 0px;
+  margin-top: 10px;
   margin-bottom: 15px;
 }
 
@@ -42,6 +42,6 @@ paginate,
   background-color: #dd5602;
   border: none;
   font-size: medium;
-  padding: 10px;
+  padding: 7px;
 }
 </style>

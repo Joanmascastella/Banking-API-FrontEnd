@@ -1,13 +1,15 @@
 
 <script setup>
+import { useRouter } from 'vue-router'
 import { users } from "../../../stores/users";
-const userStore = users();
 
+const userStore = users();
+const router = useRouter()
 
 
 defineProps({
   transactions: Array,
-  ownersOfAccounts: Map
+  ownersOfAccounts: Map,
 });
 
 async function retrieveUser(transactions, accountOwnerData) {
@@ -19,7 +21,6 @@ async function retrieveUser(transactions, accountOwnerData) {
     let result = usersList.data.filter((user) => user.id === item.userId);
     accountOwnerData.set(item.userId, result[0].firstName + result[0].lastName);
   }
-
 }
 
 defineExpose({
@@ -29,7 +30,6 @@ defineExpose({
 </script>
 
 <template>
-   
         <table id="transactions-table">
             <thead>
             <tr>
@@ -42,10 +42,10 @@ defineExpose({
             </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, count) in transactions" :key="item.userId">
+              <tr v-for="(item, count) in transactions" :key="item.userId" >
                   <td>{{++count}} </td>
                    <td>{{item.date}} </td>
-                   <td v-if="!ownersOfAccounts.has('user')"><div id="customerTransactions">{{ ownersOfAccounts.get(item.userId) }} <router-link :to="{ path: '/transactions/history', query: { userId: item.userId }}"><button>View transactions</button></router-link></div></td>
+                   <td v-if="!ownersOfAccounts.has('user')"><div id="customerTransactions">{{ ownersOfAccounts.get(item.userId) }} <router-link v-if="router.currentRoute.value.name==='transactionsByCustomers'" :to="{ path: '/transactions/customer', query: { userId: item.userId }}"><button>View transactions</button></router-link></div></td>
                   <td v-if="item.fromAccount != 'ATM'"><div>{{item.fromAccount}}  <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img class="account" src="../../../assets/img/account-details-icon.png"></b-button></router-link></div></td>
                   <td v-else>{{item.fromAccount}}</td>
                   <td v-if="item.toAccount != 'ATM'">{{item.toAccount}} <router-link :to="{ path : '#' }" class="link"><b-button v-b-tooltip.hover title="View account details"><img class="account" src="../../../assets/img/account-details-icon.png"></b-button></router-link></td>
