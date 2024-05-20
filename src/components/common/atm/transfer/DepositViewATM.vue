@@ -42,6 +42,8 @@ export default {
       if (response.success) {
         this.userDetails = response.data;
         this.updateToAccount(); 
+      }
+      else {
         console.error(response.message);
       }
     },
