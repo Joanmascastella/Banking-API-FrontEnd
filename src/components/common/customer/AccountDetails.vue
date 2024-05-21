@@ -28,23 +28,19 @@
 
 <script>
 import { useCustomerGETAPICalls } from '@/stores/backend-calls-customer/customerGetAPICalls.js';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router'; 
 
 export default {
     name: "AccountDetails",
     setup() {
-        const userData = ref([]);
         const customerGetAPICalls = useCustomerGETAPICalls();
         const router = useRouter();
 
         async function getAccountDetails() {
             const result = await customerGetAPICalls.getUserAccountDetails();
             console.log('API Data:', result);
-            if (result.success && result.data) {
-                userData.value = result.data;
-                console.log('Set userData:', userData.value);
-            } else {
+            if (!result.success) {
                 console.error("Failed to fetch account details", result.message);
             }
         }
@@ -55,7 +51,10 @@ export default {
 
         onMounted(getAccountDetails);
 
-        return { userData, goBack };
+        return {
+            userData: customerGetAPICalls.getUserData,
+            goBack
+        };
     }
 }
 </script>

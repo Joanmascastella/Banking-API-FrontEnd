@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import App from './App.vue';
 import router from './router';
 import axios from 'axios';
@@ -7,7 +8,7 @@ import './assets/main.css';
 // Create an Axios instance
 const $axios = axios.create({
   baseURL: 'https://banking-api-backend.onrender.com'
-  // baseURL: 'http://localhost:8080'
+  //baseURL: 'http://localhost:8080'
 });
 
 // Set up an interceptor for adding the auth token to requests
@@ -29,6 +30,7 @@ function axiosPlugin({ store }) {
 
 const app = createApp(App);
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 pinia.use(axiosPlugin);
 
 app.use(router);

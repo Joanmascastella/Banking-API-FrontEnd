@@ -7,7 +7,7 @@
 <script>
 import { useCustomerGETAPICalls } from '@/stores/backend-calls-customer/customerGetAPICalls.js';
 import IntialVerifiedView from "../../common/customer/dashboard/IntialVerifiedView.vue";
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 export default {
     name: "VerifiedContainer",
@@ -16,18 +16,15 @@ export default {
     },
     setup() {
         const customerStore = useCustomerGETAPICalls();
-        const userData = ref([]); 
 
         onMounted(async () => {
             const response = await customerStore.getUserAccountDetails();
-            if (response.success) {
-                userData.value = response.data; 
-            } else {
+            if (!response.success) {
                 console.error(response.message);
             }
         });
 
-        return { userData };
+        return { userData: customerStore.getUserData };
     }
 }
 </script>
