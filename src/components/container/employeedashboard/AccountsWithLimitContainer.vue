@@ -2,17 +2,20 @@
 
   <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
 
-  <div id="pagination-container">
+  <div id="pagination-container" v-if="!accountsListing.error">
 
-    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+      :paginatedItems="paginatedItems" />
 
   </div>
 
-  <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" />
+  <div v-if="!accountsListing.error" id="transactions">
+    <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" />
+  </div>
+  <div v-else-if="accountsListing.error === 403">You are not authorized to view this page</div>
 
-
-  <b-button v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img id="accounts-list"
-      src="../../../assets/img/account-details-icon.png"> </b-button>
+  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
+      id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
 
 </template>
 
@@ -94,6 +97,9 @@ function listAllAccounts() {
 h2 {
   font-weight: initial;
 }
+
+#transactions{width:100%;}
+
 
 
 /*mobile*/

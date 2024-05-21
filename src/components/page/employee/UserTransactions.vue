@@ -15,7 +15,9 @@ import UserTransactionsContainer from "../../container/employeedashboard/UserTra
 
 h1 {
   text-align: center;
-  margin-top: 20vh;
+  margin-top: 10vh;
+  margin-bottom:1.5vh;
+
 }
 
 

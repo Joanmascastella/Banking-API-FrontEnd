@@ -1,17 +1,22 @@
 <template>
 
-  <div id="pagination-container">
+  <div id="pagination-container"  v-if="!accountsListing.error">
     <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
   </div>
-  <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" @update-totalLimit="updateTotalLimit" ref="user"/>
 
-  <b-button v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img id="accounts-list"
+  <div v-if="!accountsListing.error" id="transactions">
+   <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" @update-totalLimit="updateTotalLimit" ref="user"/>
+  </div>
+  <div v-else-if="accountsListing.error===403">You are not authorized to view this page</div>
+
+
+  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img id="accounts-list"
       src="../../../assets/img/account-details-icon.png"> </b-button>
 
-  <b-button v-b-tooltip.hover title="Filter by absolute limit" @click="filterAccounts"> <img id="absolute-limit-filter"
+  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="Filter by absolute limit" @click="filterAccounts"> <img id="absolute-limit-filter"
       src="../../../assets/img/filter-accounts.png"> </b-button>
 
-  <div id="filter-container">
+  <div v-if="!accountsListing.error" id="filter-container">
     <div>
 
       <h2> Filter by absolute limit</h2>
@@ -20,6 +25,8 @@
       <button @click="listAccountsByAbsoluteLimit">List accounts</button>
     </div>
   </div>
+
+
 </template>
 
 <script setup>
@@ -165,6 +172,8 @@ button {
   background-color: #43A801;
   border: none;
 }
+
+#transactions{width:100%;}
 
 
 

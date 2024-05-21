@@ -1,18 +1,22 @@
 <template>
 
-  <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+  <Pagination  v-if="!transactionsListing.error" ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
 
-  <TransactionCategoryLinks ref="child"/>
+  <TransactionCategoryLinks  v-if="!transactionsListing.error" ref="child"/>
 
-  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" ref="user"/>
+  <div v-if="!transactionsListing.error" id="transactions">
+
+  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" ref="user"/></div>
+
+  <div v-else-if="transactionsListing.error===403">You are not authorized to view this page</div>
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
   :OnlineByCustomersCount="reportData.get('byCustomersCount')" :OnlineByEmployeesCount="reportData.get('byEmployeesCount')" :OnlineByCustomersAmount="reportData.get('byCustomersAmount')" :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')"/>
 
 
-  <b-button v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
+  <b-button  v-if="!transactionsListing.error" v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
     id="transaction-list" src="../../../assets/img/transactions.png"> </b-button>
-<b-button v-b-tooltip.hover title="View transaction report" id="report-link" @click="viewReport()"> <img
+<b-button  v-if="!transactionsListing.error" v-b-tooltip.hover title="View transaction report" id="report-link" @click="viewReport()"> <img
     id="transaction-report" src="../../../assets/img/transaction-report-icon.png"> </b-button>
 
 </template>
