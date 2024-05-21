@@ -7,6 +7,7 @@ import './assets/main.css';
 // Create an Axios instance
 const $axios = axios.create({
   baseURL: 'https://banking-api-backend.onrender.com'
+  // baseURL: 'http://localhost:8080'
 });
 
 // Set up an interceptor for adding the auth token to requests
