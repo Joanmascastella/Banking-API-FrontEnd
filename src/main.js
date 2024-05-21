@@ -6,7 +6,7 @@ import axios from 'axios';
 import './assets/main.css';
 // Create an Axios instance
 const $axios = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL
+  baseURL: 'https://banking-api-backend.onrender.com'
 });
 
 // Set up an interceptor for adding the auth token to requests
@@ -35,5 +35,3 @@ app.use(pinia);
 app.config.globalProperties.$axios = $axios;
 
 app.mount('#app');
-
-console.log('API Base URL:', import.meta.env.VITE_API_BASE_URL);
