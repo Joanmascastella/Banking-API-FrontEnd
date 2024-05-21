@@ -59,6 +59,9 @@ export const useAuthStore = defineStore('auth', {
         if (!decoded) {
           throw new Error("Failed to decode token.");
         }
+        if (decoded.auth === 'ROLE_EMPLOYEE') {
+          throw new Error("ATM login not allowed for employees");
+        }
 
         this.setUser({
           authToken: authToken,
@@ -69,7 +72,7 @@ export const useAuthStore = defineStore('auth', {
         return { success: true, message: "Login successful!" };
       } catch (error) {
         console.error("ATM Login Error:", error);
-        return { success: false, message: error.message || "ATM login failed. Please check your credentials." };
+        return { success: false, message: "ATM login failed. Please check your credentials." };
       }
     },
   

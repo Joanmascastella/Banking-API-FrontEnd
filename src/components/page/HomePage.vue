@@ -1,20 +1,23 @@
 <template>
   <div v-if="authStore.user">
-      <div v-if="isEmployee">
-          <EmployeeDashboard />
-      </div>
-      <div v-else-if="isCustomer">
-          <CustomerDashboard />
-      </div>
+    <div v-if="isEmployee">
+      <EmployeeDashboard />
+    </div>
+    <div v-else-if="isCustomer && !isATMPage">
+      <CustomerDashboard />
+    </div>
+    <div v-else-if="isCustomer && isATMPage">
+      <ATMDashboard />
+    </div>
   </div>
   <div v-else class="welcome">
-      <div class="centered-container">
-          <h1>Hi, welcome to BankAPI</h1>
-          <h3>We are excited for you to get started. Please login or register to continue.</h3>
-          <a href="/login" class="button primary">Login</a>
-          <a href="/register" class="button">Register</a>
-          <a href="/atm/login" class="button">ATM</a>
-      </div>
+    <div class="centered-container">
+      <h1>Hi, welcome to BankAPI</h1>
+      <h3>We are excited for you to get started. Please login or register to continue.</h3>
+      <a href="/login" class="button primary">Login</a>
+      <a href="/register" class="button">Register</a>
+      <a href="/atm/login" class="button">ATM</a>
+    </div>
   </div>
 </template>
 
@@ -22,29 +25,45 @@
 import { useAuthStore } from '@/stores/auth.js';
 import EmployeeDashboard from "./EmployeeDashboard.vue";
 import CustomerDashboard from "./CustomerDashboard.vue";
-import { computed, onMounted } from 'vue'; 
+import ATMDashboard from "./ATMDashboard.vue";
+import { computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: 'Home',
   components: {
-     EmployeeDashboard,
-     CustomerDashboard
+    EmployeeDashboard,
+    CustomerDashboard,
+    ATMDashboard
   },
   setup() {
-      const authStore = useAuthStore();
+    const authStore = useAuthStore();
+    const route = useRoute();
+    const router = useRouter();
 
-      onMounted(() => {
-        authStore.checkUser(); 
-      });
+    onMounted(() => {
+      authStore.checkUser();
+    });
 
-      const isEmployee = computed(() => authStore.isEmployee);
-      const isCustomer = computed(() => authStore.isCustomer);
+    const isEmployee = computed(() => authStore.isEmployee);
+    const isCustomer = computed(() => authStore.isCustomer);
+    const isATMPage = computed(() => route.path.startsWith('/atm'));
 
-      return { authStore, isEmployee, isCustomer };
+    // Redirect logic based on the current route and user role
+    if (authStore.user) {
+      if (isCustomer.value && isATMPage.value) {
+        router.push('/atm/dashboard');
+      } else if (isCustomer.value) {
+        router.push('/');
+      } else if (isEmployee.value) {
+        router.push('/dashboard/employee');
+      }
+    }
+
+    return { authStore, isEmployee, isCustomer, isATMPage };
   },
 }
 </script>
-
 
 <style scoped>
 .welcome {
