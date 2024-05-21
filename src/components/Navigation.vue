@@ -1,10 +1,12 @@
 <template>
   <nav>
     <ul>
-      <li><a href="/" style="color: white;"><strong>BankAPI</strong></a></li>
+      <li>
+        <a :href="homeLink" style="color: white;"><strong>BankAPI</strong></a>
+      </li>
     </ul>
     <ul v-if="authStore.user">
-      <li v-if="authStore.isCustomer && approved">
+      <li v-if="authStore.isCustomer && approved && !isATMPage">
         <a href="/account/details" style="color: white;">View Account Details</a>
       </li>
       <li v-if="authStore.user" class="nav-item">
@@ -16,7 +18,7 @@
 
 <script>
 import { useAuthStore } from '@/stores/auth.js';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { onMounted, computed } from 'vue';
 
 export default {
@@ -25,6 +27,13 @@ export default {
     const authStore = useAuthStore();
     const approved = computed(() => authStore.isUserApproved);
     const router = useRouter();
+    const route = useRoute();
+
+    // Check if the current route is an ATM route
+    const isATMPage = computed(() => route.path.startsWith('/atm'));
+
+    // Determine the appropriate home link based on the route
+    const homeLink = computed(() => (isATMPage.value ? '/atm/dashboard' : '/'));
 
     onMounted(() => {
       authStore.checkUser();
@@ -35,10 +44,11 @@ export default {
       router.push('/');
     };
 
-    return { authStore, approved, logout };
+    return { authStore, approved, logout, isATMPage, homeLink };
   },
 };
 </script>
+
 
 <style scoped>
 nav {
