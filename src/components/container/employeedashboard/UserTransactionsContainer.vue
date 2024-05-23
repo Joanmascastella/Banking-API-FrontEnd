@@ -30,7 +30,7 @@
 
 
   <div v-if="!transactionsListing.error" id="transactions">
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" ref="user" />
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" ref="user" />
   </div>
   <div v-else-if="transactionsListing.error===403">You are not authorized to view this page</div>
 </template>
@@ -51,6 +51,8 @@ const transactionStore = transactions();
 const obj = reactive({ transactionsListing })
 const userStore = users();
 const ownerOfAccounts = reactive(new Map());
+const accountsData = reactive(new Map());
+const user = ref(null)
 const userId = route.query.userId;
 const userData = reactive({ id: userId});
 let paginatedItems = ref([])
@@ -76,13 +78,11 @@ const pages = reactive({
 async function load() {
 
   transactionsListing.value = await retrieveTransactionCategory()
-
   transactionsCount.value = obj.transactionsListing.data.length;
+  user.value.retrieveAccountData(obj.transactionsListing.data, accountsData);
 
   const usersList = await userStore.retrieveAllUsers();
-
   let result = usersList.data.filter((user) => userData.id === user.id.toString());
-
   ownerOfAccounts.set("userId", result[0].id);
   ownerOfAccounts.set("user", result[0].firstName + result[0].lastName);
 

@@ -6,7 +6,7 @@
 
   <div v-if="!transactionsListing.error" id="transactions">
 
-  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" ref="user"/></div>
+  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" ref="user"/></div>
 
   <div v-else-if="transactionsListing.error===403">You are not authorized to view this page</div>
 
@@ -34,6 +34,7 @@ import { useRouter } from 'vue-router';
 const transactionsListing = ref([])
 const transactionStore = transactions();
 const ownersOfAccounts = reactive(new Map());
+const accountsData = reactive(new Map());
 const child = ref(null)
 const obj = reactive({ transactionsListing })
 const reportData = reactive(new Map()) 
@@ -53,13 +54,15 @@ const pages = reactive({
 });
 
 async function load() {
-transactionsListing.value = await transactionStore.retrieveTransactionsByEmployees();
-transactionsCount.value = obj.transactionsListing.data.length;
 
-user.value.retrieveUser(obj.transactionsListing.data, ownersOfAccounts);
-report.value.loadReport(reportData, obj.transactionsListing.data);
+  transactionsListing.value = await transactionStore.retrieveTransactionsByEmployees();
+  transactionsCount.value = obj.transactionsListing.data.length;
+  user.value.retrieveAccountData(obj.transactionsListing.data, accountsData);
+  user.value.retrieveUser(obj.transactionsListing.data, ownersOfAccounts);
 
-paginateItems()
+  report.value.loadReport(reportData, obj.transactionsListing.data);
+
+  paginateItems()
 
 
 }
