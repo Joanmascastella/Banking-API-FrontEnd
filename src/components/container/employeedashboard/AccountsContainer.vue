@@ -1,20 +1,22 @@
 <template>
 
-  <div id="pagination-container"  v-if="!accountsListing.error">
-    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+  <div id="pagination-container" v-if="!accountsListing.error">
+    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+      :paginatedItems="paginatedItems" />
   </div>
 
   <div v-if="!accountsListing.error" id="transactions">
-   <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" @update-totalLimit="updateTotalLimit" ref="user"/>
+    <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+      @update-totalLimit="updateTotalLimit" ref="user" />
   </div>
-  <div v-else-if="accountsListing.error===403">You are not authorized to view this page</div>
+  <div v-else-if="accountsListing.error === 403">You are not authorized to view this page</div>
 
 
-  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img id="accounts-list"
-      src="../../../assets/img/account-details-icon.png"> </b-button>
+  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
+      id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
 
-  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="Filter by absolute limit" @click="filterAccounts"> <img id="absolute-limit-filter"
-      src="../../../assets/img/filter-accounts.png"> </b-button>
+  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="Filter by absolute limit" @click="filterAccounts">
+    <img id="absolute-limit-filter" src="../../../assets/img/filter-accounts.png"> </b-button>
 
   <div v-if="!accountsListing.error" id="filter-container">
     <div>
@@ -34,7 +36,7 @@
 import AccountsTable from '../../common/employee/AccountsTable.vue';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { accounts } from "../../../stores/accounts";
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import Swal from 'sweetalert2';
 import Pagination from '../../common/employee/Pagination.vue';
 
@@ -42,9 +44,12 @@ import Pagination from '../../common/employee/Pagination.vue';
 const accountsListing = ref([]);
 const accountStore = accounts();
 const ownersOfAccounts = reactive(new Map());
+const selectedAccount = ref(null);
+const selectedAccountPage = ref(null);
 const obj = reactive({ accountsListing })
 const limit = ref(null)
 const router = useRouter()
+const route = useRoute()
 let paginatedItems = ref([])
 const accountsCount = ref(null)
 const pagination = ref(null)
@@ -52,7 +57,7 @@ const user = ref(null)
 
 
 const pages = reactive({
-  actualPage: 1,
+  actualPage: route.query.page ? route.query.page : 1,
   perPage: 2,
   pagesCount: computed(() =>
     Math.ceil(accountsCount.value / pages.perPage)
@@ -68,6 +73,7 @@ async function load() {
   user.value.retrieveUser(obj.accountsListing.data, ownersOfAccounts);
   paginateItems();
 
+
 }
 
 load()
@@ -77,20 +83,34 @@ onMounted(() => {
   document.getElementById("filter-container").style.display = "none";
 })
 
-
-function paginateItems() {
-
-  pagination.value.paginate(accountsListing.value.data);
-  paginatedItems.value = pagination.value.props.paginatedItems.value;
+function retrieveSelectedAccount() {
+  if (route.query.accountId != null) {
+    selectedAccount.value = route.query.accountId;
+    selectedAccountPage.value = route.query.page;
+  }
 
 }
 
 
+function paginateItems() {
+  pagination.value.paginate(accountsListing.value.data);
+  paginatedItems.value = pagination.value.props.paginatedItems.value;
+  retrieveSelectedAccount();
+}
 
 
 function displayNewPage() {
-  router.push({ path: '/accounts/customers', query: { page: pages.actualPage } });
+
+  if (selectedAccountPage.value != pages.actualPage) {
+    router.push({ path: '/accounts/customers', query: { page: pages.actualPage } });
+  }
+  else {
+    router.push({ path: '/accounts/customers', query: { accountId: selectedAccount.value, page: pages.actualPage } });
+    load();
+
+  }
   load();
+
 }
 
 
@@ -147,7 +167,7 @@ function listAllAccounts() {
 }
 
 #accounts-list {
-  right:105px;
+  right: 105px;
   padding: 7px;
 }
 
@@ -173,7 +193,9 @@ button {
   border: none;
 }
 
-#transactions{width:100%;}
+#transactions {
+  width: 100%;
+}
 
 
 
