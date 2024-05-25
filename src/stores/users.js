@@ -5,16 +5,17 @@ import { defineStore } from 'pinia'
 export const users = defineStore('users', {
     state() {
         return {
+          usersData: [],
         };
     },
 
     actions: {
-
         async retrieveAllUsers() {
             try{
                 const response = await this.$axios.get('/users');
                 if(response.data) {
-                    return {success: true, data: response.data};
+                    this.usersData = response.data;
+                    return {success: true};
                 }
                 return {success:  false, message: "No users were found."};
             } catch (error) {
@@ -25,7 +26,8 @@ export const users = defineStore('users', {
             try{
                 const response = await this.$axios.get('/users/noncustomers');
                 if(response.data) {
-                    return {success: true, data: response.data};
+                    this.usersData = response.data;
+                    return {success: true};
                 }
                 return {success:  false, message: "No pending users were found."};
             } catch (error) {
@@ -39,15 +41,27 @@ export const users = defineStore('users', {
                     absoluteSavingLimit,
                     absoluteCheckingLimit
                 });
-                return {success: true};
+                if (response.data) {
+                    const updatedUserIndex = this.usersData.findIndex(user => user.id === userId);
+                    if (updatedUserIndex !== -1) {
+                        this.usersData[updatedUserIndex].isApproved = true;
+                    }
+                    return {success: true};
+                }
             } catch (error) {
-                return {success:  false, message: error.message || "Error approving user."};
+                return {success: false, message: error.message || "Error approving user."};
             }
         },
         async updateDailyLimit(user){
             try{
                 const response = await this.$axios.put(`/users`, user);
-                return {success: true};
+                if (response.data) {
+                    const updatedUserIndex = this.usersData.findIndex(u => u.id === user.id);
+                    if (updatedUserIndex !== -1) {
+                        this.usersData[updatedUserIndex].dailyLimit = user.dailyLimit;
+                    }
+                    return {success: true};
+                }
             } catch (error) {
                 return {success:  false, message: error.message || "Error updating the Daily limit."};
             }
@@ -55,9 +69,16 @@ export const users = defineStore('users', {
         async closeAccount(userId) {
             try{
                 const response = await this.$axios.delete(`/users/${userId}`);
-                return {success: true};
+                if(response.data) {
+                    const userIndex = this.usersData.findIndex(user => user.id === userId);
+                    if (userIndex !== -1) {
+                        this.usersData[userIndex].isActive = false;
+                    }
+                    return {success: true};
+                }
             } catch (error) {
-                return {success:  false, message: error.message || "Error closing the account."};
+                
+                return {success:  false, message: error.response.data || "Error closing the account."};
             }
         }
     } 

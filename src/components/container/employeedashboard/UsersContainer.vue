@@ -1,5 +1,5 @@
 <template>
-    <UserTable v-if="usersData.length" :usersData="usersData" @approve-user="approveUser" @cancel-account="cancelAccount" @edit-limit="editDailyLimit"/>
+    <UserTable v-if="userStore.usersData.length" :usersData="userStore.usersData" @approve-user="approveUser" @cancel-account="cancelAccount" @edit-limit="editDailyLimit"/>
 </template>
 
 <script>
@@ -18,17 +18,13 @@ export default {
     },
     setup(props, { emit }) {
         const userStore = users();
-        const usersData = ref([]);
 
         const fetchData = async () => {
             try {
                 const response = props.selectedFilter === 'all' 
                     ? await userStore.retrieveAllUsers() 
                     : await userStore.retrieveUnapprovedUsers();
-                
-                if (response.success) {
-                    usersData.value = response.data;
-                } else {
+                if (!response.success) {
                     console.error(response.message);
                     Swal.fire({
                       title: 'Error!',
@@ -41,7 +37,7 @@ export default {
                 console.error('Error fetching users:', error);
                 Swal.fire({
                       title: 'Error!',
-                      text: 'There was an error loading the users.',
+                      text: 'There was an error loading the users.'+ response.message,
                       icon: 'error',
                       confirmButtonText: 'OK'
                   });
@@ -53,7 +49,6 @@ export default {
                 console.log(userId, dailyLimit, absoluteSavingLimit, absoluteCheckingLimit);
                 const response = await userStore.approveUser(userId, dailyLimit, absoluteSavingLimit, absoluteCheckingLimit);
                 if (response.success) {
-                    fetchData();
                     Swal.fire({
                       title: 'Success!',
                       text: 'User is approved',
@@ -74,7 +69,7 @@ export default {
                 console.error('Error approving user:', error);
                 Swal.fire({
                       title: 'Error!',
-                      text: 'There was an error approving the user.',
+                      text: 'There was an error approving the user.'+ response.message,
                       icon: 'error',
                       confirmButtonText: 'OK'
                   });
@@ -85,7 +80,6 @@ export default {
             try {
                 const response = await userStore.closeAccount(userId);
                 if (response.success) {
-                    fetchData();
                     Swal.fire({
                       title: 'Success!',
                       text: 'Account is closed',
@@ -94,19 +88,17 @@ export default {
                       confirmButtonText: 'OK'
                   });
                 } else {
-                    console.error('Failed to close account:', response.message);
                     Swal.fire({
                       title: 'Error!',
-                      text: 'There was an error closing the account.',
+                      text: 'There was an error closing the account: '+ response.message,
                       icon: 'error',
                       confirmButtonText: 'OK'
                   });
                 }
             } catch (error) {
-                console.error('Error cancelling account:', error);
                 Swal.fire({
                       title: 'Error!',
-                      text: 'There was an error closing the account.',
+                      text: 'There was an error closing the account: ' + response.message,
                       icon: 'error',
                       confirmButtonText: 'OK'
                   });
@@ -124,15 +116,11 @@ export default {
                       timer: 1500,
                       confirmButtonText: 'OK'
                   });
-                    const index = usersData.value.findIndex(user => user.id === user.id);
-                    if (index !== -1) {
-                        usersData.value[index] = user;
-                    }
                 } else {
                     console.error('Failed to edit the limit:', response.message);
                     Swal.fire({
                       title: 'Error!',
-                      text: 'There was an error setting the daily limit.',
+                      text: 'There was an error setting the daily limit.'+ response.message,
                       icon: 'error',
                       confirmButtonText: 'OK'
                   });
@@ -141,7 +129,7 @@ export default {
                 console.error('Error editing the limit:', error);
                 Swal.fire({
                       title: 'Error!',
-                      text: 'There was an error setting the daily limit.',
+                      text: 'There was an error setting the daily limit.' + response.message,
                       icon: 'error',
                       confirmButtonText: 'OK'
                   });
@@ -150,7 +138,7 @@ export default {
 
         watch(() => props.selectedFilter, fetchData, { immediate: true });
 
-        return { usersData, approveUser, cancelAccount, editDailyLimit };
+        return { userStore, approveUser, cancelAccount, editDailyLimit };
     }
     
 }
