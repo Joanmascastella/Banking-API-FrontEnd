@@ -1,23 +1,25 @@
 <template>
+<div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
 
-  <Pagination  v-if="!transactionsListing.error" ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+  <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
 
-  <TransactionCategoryLinks  v-if="!transactionsListing.error" ref="child"/>
+  <TransactionCategoryLinks  ref="child"/>
 
-  <div v-if="!transactionsListing.error" id="transactions">
 
-  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" ref="user"/></div>
-
-  <div v-else-if="transactionsListing.error===403">You are not authorized to view this page</div>
+  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" ref="user"/>
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
   :OnlineByCustomersCount="reportData.get('byCustomersCount')" :OnlineByEmployeesCount="reportData.get('byEmployeesCount')" :OnlineByCustomersAmount="reportData.get('byCustomersAmount')" :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')"/>
 
 
-  <b-button  v-if="!transactionsListing.error" v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
+  <b-button  v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
     id="transaction-list" src="../../../assets/img/transactions.png"> </b-button>
-<b-button  v-if="!transactionsListing.error" v-b-tooltip.hover title="View transaction report" id="report-link" @click="viewReport()"> <img
+<b-button  v-b-tooltip.hover title="View transaction report" id="report-link" @click="viewReport()"> <img
     id="transaction-report" src="../../../assets/img/transaction-report-icon.png"> </b-button>
+  </div>
+<div v-show="transactionStore.errorMessage === 403"> 
+  You are not authorized to view this page
+</div>
 
 </template>
 
@@ -32,12 +34,10 @@ import Pagination from '../../common/employee/Pagination.vue';
 import { useRouter } from 'vue-router';
 
 
-const transactionsListing = ref([])
 const transactionStore = transactions();
 const ownersOfAccounts = reactive(new Map());
 const accountsData = reactive(new Map());
 const child = ref(null)
-const obj = reactive({ transactionsListing })
 const reportData = reactive(new Map()) 
 const report = ref(null)
 const user = ref(null)
@@ -59,25 +59,23 @@ const pages = reactive({
 
 async function load() {
 
-  transactionsListing.value = await transactionStore.retrieveOnlineTransactions();
-  transactionsCount.value = obj.transactionsListing.data.length;
-  user.value.retrieveAccountData(obj.transactionsListing.data, accountsData);
-  user.value.retrieveUser(obj.transactionsListing.data, ownersOfAccounts);
+  await transactionStore.retrieveOnlineTransactions();
+  await transactionStore.retrieveOnlineTransactionsByCustomers();
+  await transactionStore.retrieveOnlineTransactionsByEmployees();
+  transactionsCount.value = transactionStore.getOnlineTransactions.length;
+  user.value.retrieveAccountData(transactionStore.getOnlineTransactions, accountsData);
+  user.value.retrieveUser(transactionStore.getOnlineTransactions, ownersOfAccounts);
 
-  const onlineCustomerTransactions = await transactionStore.retrieveOnlineTransactionsByCustomers();
-  const onlineEmployeeTransactions = await transactionStore.retrieveOnlineTransactionsByEmployees();
-  report.value.loadReport(reportData, obj.transactionsListing.data);
-  report.value.loadOnlineReport(reportData, onlineCustomerTransactions.data, onlineEmployeeTransactions.data);
+  report.value.loadReport(reportData, transactionStore.getOnlineTransactions);
+  report.value.loadOnlineReport(reportData, transactionStore.getOnlineTransactionsByCustomers, transactionStore.getOnlineTransactionsByEmployees);
 
   paginateItems()
-
 }
 
-load()
 
 function paginateItems() {
 
-pagination.value.paginate(transactionsListing.value.data);
+pagination.value.paginate(transactionStore.getOnlineTransactions);
 paginatedItems.value = pagination.value.props.paginatedItems.value;
 
 }
@@ -91,6 +89,7 @@ load();
 
 onMounted(() => {
 document.getElementById("report-container").style.display = "none";
+load()
 })
 
 function viewReport() {

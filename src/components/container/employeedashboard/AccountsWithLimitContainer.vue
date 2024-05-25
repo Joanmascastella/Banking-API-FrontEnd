@@ -1,25 +1,23 @@
 <template>
+
   <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
 
-  <div id="pagination-container" v-if="!accountStore.errorMessage">
+  <div v-show="!accountStore.errorMessage" id="accountsContainer"> 
 
     <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
 
-  </div>
-
-  <div v-if="!accountStore.errorMessage" id="transactions">
     <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
       @update-totalLimit="updateTotalLimit" />
-  </div>
-  <div v-else-if="accountStore.errorMessage === 403">You are not authorized to view this page</div>
-
 
   <AccountsContainer ref="accountManager"></AccountsContainer>
 
-  <b-button v-if="!accountStore.errorMessage" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
+  <b-button  v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
       id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
-
+  </div>
+<div v-show="accountStore.errorMessage === 403"> 
+  You are not authorized to view this page
+</div>
 
 </template>
 
@@ -111,11 +109,14 @@ h2 {
   font-weight: initial;
 }
 
-#transactions {
+
+#accountsContainer {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
 }
-
-
 
 /*mobile*/
 
