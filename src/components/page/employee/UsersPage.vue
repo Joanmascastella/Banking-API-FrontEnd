@@ -5,8 +5,6 @@
             <option value="all">All Users</option>
             <option value="unapproved Users">Pending Users</option>
         </select>
-    </div>
-    <div>
         <UsersContainer :selectedFilter="selectedFilter"/>
     </div>
 </template>
@@ -29,6 +27,7 @@ export default {
 <style scoped>
     .container{
         padding-top: 10%;
+        max-width:90%;
     }
     select{
         background-color: #FCC26B;

@@ -54,7 +54,7 @@ export const users = defineStore('users', {
         },
         async closeAccount(userId) {
             try{
-                const response = await this.$axios.delete(`/accounts/${userId}`);
+                const response = await this.$axios.delete(`/users/${userId}`);
                 return {success: true};
             } catch (error) {
                 return {success:  false, message: error.message || "Error closing the account."};

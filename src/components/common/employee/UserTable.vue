@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="users-container">
         <table>
             <thead>
                 <tr>
@@ -15,17 +15,17 @@
             </thead>
             <tbody>
                 <tr v-for="user in usersData" :key="user.id">
-                    <td class=".hidden-sm">{{ user.username }}</td>
+                    <td>{{ user.username }}</td>
                     <td>{{ user.firstName }} {{ user.lastName }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.BSN }}</td>
-                    <td class=".hidden-sm">{{ user.phoneNumber }}</td>
+                    <td>{{ user.phoneNumber }}</td>
                     <td>{{ user.birthDate }}</td>
-                    <td>{{ user.isApproved ? 'Approved': 'Pending'}}</td>
+                    <td>{{ !user.isActive ? 'Closed' : (user.isApproved ? 'Approved' : 'Pending')}}</td>
                     <td>
                         <button id="btn-approve" v-if="!user.isApproved" @click="openPopUp(user, false)">Approve</button>
-                        <button id="btn-cancel" v-if="user.isApproved" @click="cancelAccount(user.id)">Close Account</button> 
-                        <button v-if="user.isApproved" @click="openPopUp(user, true)">Edit Daily Limit</button>
+                        <button id="btn-cancel" v-if="user.isApproved && user.isActive" @click="cancelAccount(user.id)">Close Account</button> 
+                        <button v-if="user.isApproved && user.isActive" @click="openPopUp(user, true)">Edit Daily Limit</button>
                     </td>
                 </tr>
             </tbody>
@@ -88,6 +88,14 @@ import TransferLimitsView from './TransferLimitsView.vue';
 </script>
 
 <style scoped>
+
+.users-container{
+    max-width: 100%;
+    overflow-x: auto;
+    margin-bottom: 10%;
+    box-sizing: border-box;
+    padding: 0;
+}
 table th {
   background-color: #FCC26B;
 }
@@ -105,11 +113,12 @@ td {
 }
 
 table {
-  border-spacing: 0px;
-  border-collapse: collapse;
-  width: 100%;
-  border-radius: 15px;
-  overflow: hidden;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border-radius: 15px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 button {
@@ -118,6 +127,7 @@ button {
     margin: 5px;
     font-size: 10px;
     padding:0;
+    white-space: wrap;
     border: none;
 }
 
@@ -129,10 +139,11 @@ button {
     background-color: red;
 }
 
-@media screen and (max-width: 1024px) {
-    .container {
+/* @media screen and (max-width: 1024px) {
+    .users-container {
         overflow-x: auto;
+        max-width:100%;
     }
-}
+} */
 
 </style>

@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <UserTable v-if="usersData.length" :usersData="usersData" @approve-user="approveUser" @cancel-account="cancelAccount" @edit-limit="editDailyLimit"/>
-    </div>
+    <UserTable v-if="usersData.length" :usersData="usersData" @approve-user="approveUser" @cancel-account="cancelAccount" @edit-limit="editDailyLimit"/>
 </template>
 
 <script>
