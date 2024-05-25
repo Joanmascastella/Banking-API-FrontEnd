@@ -1,52 +1,48 @@
 <template>
+  <div v-show="router.currentRoute.value.name === 'customerAccounts'" id="accountsPage">
+    <div id="pagination-container" v-if="!accountStore.errorMessage">
 
-  <div id="pagination-container" v-if="!accountsListing.error">
-    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
-      :paginatedItems="paginatedItems" />
-  </div>
-
-  <div v-if="!accountsListing.error" id="transactions">
-    <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
-      @update-totalLimit="updateTotalLimit" ref="user" />
-  </div>
-  <div v-else-if="accountsListing.error === 403">You are not authorized to view this page</div>
+      <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+        :paginatedItems="paginatedItems" />
+    </div>
+    <div v-if="!accountStore.errorMessage" id="transactions">
+      <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+        @update-totalLimit="updateTotalLimit" ref="user" />
+    </div>
+    <div v-else-if="accountStore.errorMessage === 403">You are not authorized to view this page</div>
 
 
-  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
-      id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
+    <b-button v-if="!accountStore.errorMessage" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts">
+      <img id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
 
-  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="Filter by absolute limit" @click="filterAccounts">
-    <img id="absolute-limit-filter" src="../../../assets/img/filter-accounts.png"> </b-button>
+    <b-button v-if="!accountStore.errorMessage" v-b-tooltip.hover title="Filter by absolute limit"
+      @click="filterAccounts">
+      <img id="absolute-limit-filter" src="../../../assets/img/filter-accounts.png"> </b-button>
 
-  <div v-if="!accountsListing.error" id="filter-container">
-    <div>
-
-      <h2> Filter by absolute limit</h2>
-      <p>Find all accounts with an absolute limit less than or equal to a specific limit</p>
-      <input type="text" name="text" placeholder="€3000" aria-label="Text" ref="limit" />
-      <button @click="listAccountsByAbsoluteLimit">List accounts</button>
+    <div v-if="!accountStore.errorMessage" id="filter-container">
+      <div>
+        <h2> Filter by absolute limit</h2>
+        <p>Find all accounts with an absolute limit less than or equal to a specific limit</p>
+        <input type="text" name="text" placeholder="€3000" aria-label="Text" ref="limit" />
+        <button @click="listAccountsByAbsoluteLimit">List accounts</button>
+      </div>
     </div>
   </div>
-
-
 </template>
-
 <script setup>
 
 import AccountsTable from '../../common/employee/AccountsTable.vue';
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { accounts } from "../../../stores/accounts";
 import { useRouter, useRoute } from 'vue-router';
 import Swal from 'sweetalert2';
 import Pagination from '../../common/employee/Pagination.vue';
 
 
-const accountsListing = ref([]);
 const accountStore = accounts();
 const ownersOfAccounts = reactive(new Map());
 const selectedAccount = ref(null);
 const selectedAccountPage = ref(null);
-const obj = reactive({ accountsListing })
 const limit = ref(null)
 const router = useRouter()
 const route = useRoute()
@@ -54,7 +50,6 @@ let paginatedItems = ref([])
 const accountsCount = ref(null)
 const pagination = ref(null)
 const user = ref(null)
-
 
 const pages = reactive({
   actualPage: route.query.page ? route.query.page : 1,
@@ -66,23 +61,6 @@ const pages = reactive({
 
 
 
-async function load() {
-
-  accountsListing.value = await accountStore.retrieveAllAccounts();
-  accountsCount.value = obj.accountsListing.data.length;
-  user.value.retrieveUser(obj.accountsListing.data, ownersOfAccounts);
-  paginateItems();
-
-
-}
-
-load()
-
-
-onMounted(() => {
-  document.getElementById("filter-container").style.display = "none";
-})
-
 function retrieveSelectedAccount() {
   if (route.query.accountId != null) {
     selectedAccount.value = route.query.accountId;
@@ -91,25 +69,31 @@ function retrieveSelectedAccount() {
 
 }
 
+async function load() {
+  await accountStore.retrieveAllAccounts();
+  accountsCount.value = accountStore.getAccounts.length;
+  user.value.retrieveUser(accountStore.getAccounts, ownersOfAccounts);
+  paginateItems()
+}
+
+
 
 function paginateItems() {
-  pagination.value.paginate(accountsListing.value.data);
+  pagination.value.paginate(accountStore.getAccounts);
   paginatedItems.value = pagination.value.props.paginatedItems.value;
   retrieveSelectedAccount();
+
 }
 
 
 function displayNewPage() {
-
   if (selectedAccountPage.value != pages.actualPage) {
     router.push({ path: '/accounts/customers', query: { page: pages.actualPage } });
   }
   else {
     router.push({ path: '/accounts/customers', query: { accountId: selectedAccount.value, page: pages.actualPage } });
-    load();
-
   }
-  load();
+ load()
 
 }
 
@@ -149,6 +133,18 @@ function listAllAccounts() {
 
 }
 
+
+onMounted(() => {
+  document.getElementById("filter-container").style.display = "none";
+  load()
+
+})
+
+
+defineExpose({
+  updateTotalLimit,
+
+})
 
 
 </script>
@@ -197,6 +193,13 @@ button {
   width: 100%;
 }
 
+#accountsPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
 
 
 /*mobile*/
