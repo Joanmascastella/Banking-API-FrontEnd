@@ -200,11 +200,13 @@ I changed it to allow to display the button fields on mobile devices as well.
 
 .root {
   background: var(--root-color);
+  color: #000000
 }
 </style>
 
 <style>
 :root {
-  --root-color: #d5c323;
+  --root-color: #B3FFAE
+  
 }
 </style>

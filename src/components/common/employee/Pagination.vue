@@ -40,7 +40,7 @@ paginate,
 }
 
 #pagination button {
-  background-color: #dd5602;
+  background-color: #0970AE;
   border: none;
   font-size: medium;
   padding: 7px;

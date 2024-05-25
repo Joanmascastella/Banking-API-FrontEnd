@@ -1,111 +1,171 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+
+export const transactions = defineStore('transactions', () => {
+
+    const transactions = ref([])
+    const ATMTransactions = ref([])
+    const transactionsByCustomers = ref([])
+    const transactionsByEmployees = ref([])
+    const OnlineTransactions = ref([])
+    const OnlineTransactionsByCustomers = ref([])
+    const OnlineTransactionsByEmployees = ref([])
+    const transactionsOfUserByEmployee = ref([])
+    const errorMessage = ref(null)
+    const ATMDepositsOfUser = ref([])
+    const ATMWithdrawalsOfUser = ref([])
+    const OnlineTransactionsOfUser = ref([])
+
+
+    const getTransactions = computed(() => transactions.value.data)
+    const getTransactionsByCustomers = computed(() => transactionsByCustomers.value.data)
+    const getTransactionsByEmployees = computed(() => transactionsByEmployees.value.data)
+    const getATMTransactions = computed(() => ATMTransactions.value.data)
+    const getOnlineTransactions = computed(() => OnlineTransactions.value.data)
+    const getOnlineTransactionsByCustomers = computed(() => OnlineTransactionsByCustomers.value.data)
+    const getOnlineTransactionsByEmployees = computed(() => OnlineTransactionsByEmployees.value.data)
+    const getTransactionsOfUserByEmployee = computed(() => transactionsOfUserByEmployee.value)
+    const getATMDepositsOfUser = computed(() => ATMDepositsOfUser.value)
+    const getATMWithdrawalsOfUser = computed(() => ATMWithdrawalsOfUser.value)
+    const getOnlineTransactionsOfUser = computed(() => OnlineTransactionsOfUser.value)
 
 
 
-export const transactions = defineStore('transactions', {
-    state() {
-        return {
-        };
-    },
-
-    actions: {
-
-        async retrieveAllTransactions() {
-            try {
-                return await this.$axios.get('/transactions');
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveATMTransactions() {
-            try {
-                return await this.$axios.get('/transactions/ATM');
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveTransactionsByCustomers() {
-            try {
-                return await this.$axios.get('/transactions/byCustomers');
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-
-        },
-        async retrieveTransactionsByEmployees() {
-            try {
-                return await this.$axios.get('/transactions/byEmployees');
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveOnlineTransactions() {
-            try {
-                return await this.$axios.get('/transactions/online');
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveOnlineTransactionsByEmployees() {
-            return await this.$axios.get('/transactions/online/byEmployees');
-        },
-        async retrieveOnlineTransactionsByCustomers() {
-            return await this.$axios.get('/transactions/online/byCustomers');
-        },
-        async retrieveTransactionsOfUser(userId) {
-            return await this.$axios.get(`/transactions/${userId}/history`);
-        },
-        async retrieveTransactionsOfUserByEmployee(userId) {
-            try {
-                return await this.$axios.get(`/transactions/customer/${userId}`);
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveATMDepositsOfUser(userId) {
-            try {
-                return await this.$axios.get(`/transactions/ATM/deposits/${userId}`);
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveATMWithdrawalsOfUser(userId) {
-            try {
-                return await this.$axios.get(`/transactions/ATM/withdrawals/${userId}`);
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async retrieveOnlineTransfersOfUser(userId) {
-            try {
-                return await this.$axios.get(`/transactions/online/${userId}`);
-            }
-            catch (error) {
-                const errorMessage = error.response.status;
-                return { error: errorMessage };
-            }
-        },
-        async searchTransactions(params) {
-            return await this.$axios.get('/transactions/search', { params });
+    async function retrieveAllTransactions() {
+        try {
+            transactions.value = await this.$axios.get('/transactions');
         }
 
+        catch (error) {
+            errorMessage.value = error.response.status;
 
+        }
+    }
+    async function retrieveATMTransactions() {
+        try {
+            ATMTransactions.value = await this.$axios.get('/transactions/ATM');
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+        }
+    }
+    async function retrieveTransactionsByCustomers() {
+        try {
+            transactionsByCustomers.value = await this.$axios.get('/transactions/byCustomers');
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+
+        }
+
+    }
+    async function retrieveTransactionsByEmployees() {
+        try {
+            transactionsByEmployees.value = await this.$axios.get('/transactions/byEmployees');
+        }
+        catch (error) {
+
+            errorMessage.value = error.response.status;
+
+        }
+    }
+    async function retrieveOnlineTransactions() {
+        try {
+            OnlineTransactions.value = await this.$axios.get('/transactions/online');
+
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+        }
+    }
+    async function retrieveOnlineTransactionsByEmployees() {
+        try {
+            OnlineTransactionsByEmployees.value = await this.$axios.get('/transactions/online/byEmployees');
+        } catch (error) {
+            errorMessage.value = error.response.status;
+        }
+    }
+    async function retrieveOnlineTransactionsByCustomers() {
+        try {
+            OnlineTransactionsByCustomers.value = await this.$axios.get('/transactions/online/byCustomers');
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+        }
+    }
+
+    async function retrieveTransactionsOfUser(userId) {
+        return await this.$axios.get(`/transactions/${userId}/history`);
+    }
+
+    async function retrieveTransactionsOfUserByEmployee(userId) {
+        try {
+            transactionsOfUserByEmployee.value = await this.$axios.get(`/transactions/customer/${userId}`);
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+        }
+    }
+
+    async function retrieveATMDepositsOfUser(userId) {
+        try {
+            ATMDepositsOfUser.value = await this.$axios.get(`/transactions/ATM/deposits/${userId}`);
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+        }
+    }
+
+    async function retrieveATMWithdrawalsOfUser(userId) {
+        try {
+            ATMWithdrawalsOfUser.value = await this.$axios.get(`/transactions/ATM/withdrawals/${userId}`);
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+
+        }
+    }
+    async function retrieveOnlineTransfersOfUser(userId) {
+        try {
+            OnlineTransactionsOfUser.value = await this.$axios.get(`/transactions/online/${userId}`);
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+
+        }
+    }
+    async function searchTransactions(params) {
+        return await this.$axios.get('/transactions/search', { params });
+    }
+
+    return {
+        retrieveAllTransactions,
+        retrieveATMTransactions,
+        retrieveTransactionsByCustomers,
+        retrieveTransactionsByEmployees,
+        retrieveOnlineTransactions,
+        retrieveOnlineTransactionsByEmployees,
+        retrieveOnlineTransactionsByCustomers,
+        retrieveTransactionsOfUser,
+        retrieveTransactionsOfUserByEmployee,
+        retrieveATMDepositsOfUser,
+        retrieveATMWithdrawalsOfUser,
+        retrieveOnlineTransfersOfUser,
+        searchTransactions,
+        errorMessage,
+        transactions,
+        getTransactions,
+        getATMTransactions,
+        getTransactionsByCustomers,
+        getTransactionsByEmployees,
+        getOnlineTransactions,
+        getOnlineTransactionsByEmployees,
+        getOnlineTransactionsByCustomers,
+        getTransactionsOfUserByEmployee,
+        getATMDepositsOfUser,
+        getATMWithdrawalsOfUser,
+        getOnlineTransactionsOfUser,
     }
 
 

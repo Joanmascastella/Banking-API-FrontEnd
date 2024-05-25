@@ -1,25 +1,22 @@
 <template>
-  <div v-show="router.currentRoute.value.name === 'customerAccounts'" id="accountsPage">
-    <div id="pagination-container" v-if="!accountStore.errorMessage">
+   <div v-show="!accountStore.errorMessage" id="accountsContainer"> 
 
-      <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+  <div v-show="router.currentRoute.value.name === 'customerAccounts'" id="accountsContainer">
+
+      <Pagination v-if="!filter" ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
         :paginatedItems="paginatedItems" />
-    </div>
-    <div v-if="!accountStore.errorMessage" id="transactions">
+
       <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
         @update-totalLimit="updateTotalLimit" ref="user" />
-    </div>
-    <div v-else-if="accountStore.errorMessage === 403">You are not authorized to view this page</div>
 
-
-    <b-button v-if="!accountStore.errorMessage" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts">
+    <b-button v-b-tooltip.hover title="List all accounts" @click="listAllAccounts">
       <img id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
 
-    <b-button v-if="!accountStore.errorMessage" v-b-tooltip.hover title="Filter by absolute limit"
+    <b-button v-b-tooltip.hover title="Filter by absolute limit"
       @click="filterAccounts">
       <img id="absolute-limit-filter" src="../../../assets/img/filter-accounts.png"> </b-button>
 
-    <div v-if="!accountStore.errorMessage" id="filter-container">
+    <div id="filter-container">
       <div>
         <h2> Filter by absolute limit</h2>
         <p>Find all accounts with an absolute limit less than or equal to a specific limit</p>
@@ -28,11 +25,15 @@
       </div>
     </div>
   </div>
+</div>
+<div v-show="accountStore.errorMessage === 403"> 
+  You are not authorized to view this page
+</div>
 </template>
 <script setup>
 
 import AccountsTable from '../../common/employee/AccountsTable.vue';
-import { ref, reactive, onMounted, computed, watch } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { accounts } from "../../../stores/accounts";
 import { useRouter, useRoute } from 'vue-router';
 import Swal from 'sweetalert2';
@@ -50,6 +51,7 @@ let paginatedItems = ref([])
 const accountsCount = ref(null)
 const pagination = ref(null)
 const user = ref(null)
+const filter = ref(false)
 
 const pages = reactive({
   actualPage: route.query.page ? route.query.page : 1,
@@ -99,6 +101,7 @@ function displayNewPage() {
 
 
 function filterAccounts() {
+  filter.value=true;
   document.getElementById("filter-container").style.display = "flex";
   document.getElementById("filter-container").style.justifyContent = "space-around";
   document.getElementById("accounts-table").style.display = "none";
@@ -189,11 +192,7 @@ button {
   border: none;
 }
 
-#transactions {
-  width: 100%;
-}
-
-#accountsPage {
+#accountsContainer {
   width: 100%;
   display: flex;
   flex-direction: column;
