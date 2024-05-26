@@ -94,7 +94,7 @@ function setItemRef(el, item) {
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in accountListing" :key="item.id">
+      <template v-for="(item, index) in accountListing" :key="item.id">
         <tr :ref="(el) => setItemRef(el, item)" id="selectedRow">
           <td>{{ item.id }}</td>
           <td>{{ item.IBAN }} </td>

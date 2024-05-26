@@ -139,6 +139,26 @@ export const transactions = defineStore('transactions', () => {
         return await this.$axios.get('/transactions/search', { params });
     }
 
+    function getPaginatedItems(pages, list="allTransactions") {
+        const start = (pages.actualPage - 1) * pages.perPage;
+        const stop = start + pages.perPage;
+        if (list == "allTransactions") {
+            return transactions.value.data.slice(start, stop)
+        }
+        else if (list == "ATMTransactions"){
+            return ATMTransactions.value.data.slice(start, stop)
+        }
+        else if (list == "transactionsByCustomers"){
+            return transactionsByCustomers.value.data.slice(start, stop)
+        }
+        else if (list == "transactionsByEmployees"){
+            return transactionsByEmployees.value.data.slice(start, stop)
+        }
+        else if (list == "onlineTransactions"){
+            return OnlineTransactions.value.data.slice(start, stop)
+        }
+       }
+
     return {
         retrieveAllTransactions,
         retrieveATMTransactions,
@@ -166,6 +186,7 @@ export const transactions = defineStore('transactions', () => {
         getATMDepositsOfUser,
         getATMWithdrawalsOfUser,
         getOnlineTransactionsOfUser,
+        getPaginatedItems
     }
 
 
