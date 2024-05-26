@@ -1,12 +1,12 @@
 <template>
 <div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
 
-  <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+  <Pagination  :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
 
   <TransactionCategoryLinks  ref="child"/>
 
 
-  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" ref="user"/>
+  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" :pages="pages" ref="user"/>
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
   :OnlineByCustomersCount="reportData.get('byCustomersCount')" :OnlineByEmployeesCount="reportData.get('byEmployeesCount')" :OnlineByCustomersAmount="reportData.get('byCustomersAmount')" :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')"/>
@@ -43,7 +43,6 @@ const report = ref(null)
 const user = ref(null)
 let paginatedItems = ref([])
 const transactionsCount = ref(null)
-const pagination = ref(null)
 const router = useRouter()
 
 
@@ -74,16 +73,14 @@ async function load() {
 
 
 function paginateItems() {
-
-pagination.value.paginate(transactionStore.getOnlineTransactions);
-paginatedItems.value = pagination.value.props.paginatedItems.value;
+paginatedItems.value = transactionStore.getPaginatedItems(pages, "onlineTransactions")
 
 }
 
 
 function displayNewPage() {
 router.push({ path: '/transactions/online', query: { page: pages.actualPage } });
-load();
+paginateItems();
 }
 
 

@@ -1,12 +1,12 @@
 <template>
 <div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
 
-  <Pagination  ref="pagination" :pages="pages" @newPage="displayNewPage"
+  <Pagination :pages="pages" @newPage="displayNewPage"
     :pageQuery="pages.actualPage" :paginatedItems="paginatedItems" />
 
   <TransactionCategoryLinks  ref="child" />
 
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :pages="pages"
       :accountsData="accountsData" ref="user" />
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
@@ -45,7 +45,6 @@ const report = ref(null)
 const user = ref(null)
 let paginatedItems = ref([])
 const transactionsCount = ref(null)
-const pagination = ref(null)
 const router = useRouter()
 
 
@@ -76,16 +75,13 @@ async function load() {
 
 
 function paginateItems() {
-
-  pagination.value.paginate(transactionStore.getTransactions);
-  paginatedItems.value = pagination.value.props.paginatedItems.value;
-
+  paginatedItems.value = transactionStore.getPaginatedItems(pages, "allTransactions")
 }
 
 
 function displayNewPage() {
   router.push({ path: '/transactions', query: { page: pages.actualPage } });
-  load();
+  paginateItems();
 }
 
 onMounted(async () => {

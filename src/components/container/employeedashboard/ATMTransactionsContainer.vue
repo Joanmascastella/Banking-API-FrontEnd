@@ -1,11 +1,11 @@
 <template>
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
 
-  <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
+  <Pagination  :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
 
   <TransactionCategoryLinks ref="child"/>
 
-  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" ref="user" />
+  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" ref="user" :pages="pages"/>
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
   :ATMWithdrawalsCount="reportData.get('ATMWithdrawalsCount')" :ATMDepositsCount="reportData.get('ATMDepositsCount')" :ATMWithdrawalsAmount="reportData.get('ATMWithdrawalsAmount')" :ATMDepositsAmount="reportData.get('ATMDepositsAmount')"/>
@@ -41,7 +41,6 @@ const report = ref(null)
 const user = ref(null)
 let paginatedItems = ref([])
 const transactionsCount = ref(null)
-const pagination = ref(null)
 const router = useRouter()
 
 
@@ -71,16 +70,14 @@ async function load() {
 
 
 function paginateItems() {
-
-pagination.value.paginate(transactionStore.getATMTransactions);
-paginatedItems.value = pagination.value.props.paginatedItems.value;
+paginatedItems.value = transactionStore.getPaginatedItems(pages, "ATMTransactions")
 
 }
 
 
 function displayNewPage() {
 router.push({ path: '/transactions/ATM', query: { page: pages.actualPage } });
-load();
+paginateItems()
 }
 
 

@@ -27,7 +27,7 @@
     </div>
   </div>
 
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" ref="user" />
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" :pages="pages" ref="user" />
 </div>
 <div v-show="transactionStore.errorMessage === 403"> 
   You are not authorized to view this page
@@ -159,10 +159,10 @@ function displayOnlineTransfers() {
 }
 
 onMounted(async () => {
+  await transactionStore.retrieveTransactionsOfUserByEmployee(route.query.userId);
   await transactionStore.retrieveATMDepositsOfUser(route.query.userId);
   await transactionStore.retrieveATMWithdrawalsOfUser(route.query.userId);
   await transactionStore.retrieveOnlineTransfersOfUser(route.query.userId);
-  await transactionStore.retrieveTransactionsOfUserByEmployee(route.query.userId);
 
 load()
 })
