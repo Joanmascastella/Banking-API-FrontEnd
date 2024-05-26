@@ -39,6 +39,18 @@ export const accounts = defineStore('accounts', () => {
         }
     }
 
+   function getPaginatedItems(pages, list="allAccounts") {
+       const start = (pages.actualPage - 1) * pages.perPage;
+       const stop = start + pages.perPage;
+       if (list == "allAccounts") {
+           return accounts.value.data.slice(start, stop)
+       }
+       else if (list = "accountsWithLimit") {
+           return accountsWithLimit.value.data.slice(start, stop)
+       }
+      }
+      
+
     return {
         retrieveAllAccounts,
         retrieveAccountsByAbsoluteLimit,
@@ -47,6 +59,7 @@ export const accounts = defineStore('accounts', () => {
         accounts,
         getAccounts,
         getAccountsWithLimit,
+        getPaginatedItems
     }
 
 });

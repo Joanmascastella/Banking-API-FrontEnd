@@ -4,7 +4,7 @@
 
   <div v-show="!accountStore.errorMessage" id="accountsContainer"> 
 
-    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+    <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
 
     <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
@@ -37,7 +37,6 @@ const route = useRoute()
 const router = useRouter()
 let paginatedItems = ref([])
 const accountsCount = ref(null)
-const pagination = ref(null)
 const user = ref(null)
 const accountManager = ref(null)
 
@@ -63,13 +62,12 @@ async function load() {
 
 
 function paginateItems() {
-  pagination.value.paginate(accountStore.getAccountsWithLimit);
-  paginatedItems.value = pagination.value.props.paginatedItems.value;
+  paginatedItems.value = accountStore.getPaginatedItems(pages, "accountsWithLimit");
 }
 
 function displayNewPage() {
   router.push({ path: '/accounts/byAbsoluteLimit', query: { absoluteLimit: route.query.absoluteLimit, page: pages.actualPage } });
-  load()
+  paginateItems()
 }
 
 async function updateTotalLimit(updatedAccount) {

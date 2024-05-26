@@ -82,6 +82,7 @@ function setItemRef(el, item) {
   <table id="accounts-table">
     <thead>
       <tr>
+        <th>Id</th>
         <th>IBAN</th>
         <th>Account type</th>
         <th>User's name</th>
@@ -93,8 +94,9 @@ function setItemRef(el, item) {
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in accountListing" :key="item.userId">
-        <tr :ref="(el) => setItemRef(el, item)">
+      <template v-for="item in accountListing" :key="item.id">
+        <tr :ref="(el) => setItemRef(el, item)" id="selectedRow">
+          <td>{{ item.id }}</td>
           <td>{{ item.IBAN }} </td>
           <td v-if="item.accountType === 'SAVINGS'"><img src="../../../assets/img/savings-account.png"></td>
           <td v-else><img src="../../../assets/img/checking-account.png"></td>
@@ -147,10 +149,6 @@ button {
   height: 100%;
 }
 
-
-td:nth-child(7n) button {
-  background-color: #43A801;
-}
 
 table th,
 table td {
