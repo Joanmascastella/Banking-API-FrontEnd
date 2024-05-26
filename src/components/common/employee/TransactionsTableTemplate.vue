@@ -38,14 +38,13 @@ function getSelectedAccountPage(accounts, account, accountsPerPage = 2) {
 
 async function retrieveAccountData(transactions, accountsData) {
 
-  const accountsList = await accountStore.retrieveAllAccounts();
-
+   await accountStore.retrieveAllAccounts();
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
-    accountsList.data.filter((account) => {
+    accountStore.getAccounts.filter((account) => {
       if (account.IBAN === item.fromAccount || account.IBAN === item.toAccount) {
         accountsData.set(account.IBAN, account.id)
-        let itemPage = getSelectedAccountPage(accountsList.data, account)
+        let itemPage = getSelectedAccountPage(accountStore.getAccounts, account)
         accountsData.set(`${account.IBAN}page`, itemPage);
 
       }
