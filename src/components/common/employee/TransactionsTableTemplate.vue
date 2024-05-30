@@ -2,13 +2,14 @@
 import { useRouter, useRoute } from 'vue-router'
 import { users } from "../../../stores/users";
 import { accounts } from "../../../stores/accounts";
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 
 const userStore = users();
 const router = useRouter()
 const route = useRoute()
 const accountStore = accounts();
+const rootColor = ref();
 
 
 
@@ -56,6 +57,20 @@ async function retrieveAccountData(transactions, accountsData) {
   }
 }
 
+const setBaseColor = () => rootColor.value = getComputedStyle(document.documentElement).getPropertyValue('--root-color');
+
+onMounted(setBaseColor);
+
+function setItemRef(el, item) {
+  if (route.query.transactionId != null){
+  if (route.query.transactionId == item.id) {
+    el.childNodes.forEach((item) => item.classList.add("root"));
+  }
+
+  }
+
+}
+
 
 defineExpose({
   retrieveUser,
@@ -78,7 +93,8 @@ defineExpose({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in transactions" :key="item.id">
+      <template v-for="(item, index) in transactions" :key="item.id">
+        <tr :ref="(el) => setItemRef(el, item)" id="selectedRow">
         <td>{{ (pages.actualPage*pages.perPage)-pages.perPage + index + 1 }} </td>
         <td>{{ item.date }} </td>
         <td v-if="!ownersOfAccounts.has('user')">
@@ -98,7 +114,8 @@ defineExpose({
               title="View account details">{{ item.toAccount }}</b-button></router-link></td>
         <td v-else>{{ item.toAccount }}</td>
         <td>€{{ item.amount }} </td>
-      </tr>
+        </tr>
+        </template>
     </tbody>
   </table>
 </template>
@@ -164,5 +181,18 @@ button {
     overflow-x: scroll;
     white-space: nowrap;
   }
+}
+
+
+.root {
+  background: var(--root-color);
+  color: #000000
+}
+</style>
+
+<style>
+:root {
+  --root-color: #B3FFAE
+  
 }
 </style>
