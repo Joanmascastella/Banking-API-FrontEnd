@@ -46,7 +46,6 @@ export default {
 
         const approveUser = async (userId, dailyLimit, absoluteSavingLimit, absoluteCheckingLimit) => {
             try {
-                console.log(userId, dailyLimit, absoluteSavingLimit, absoluteCheckingLimit);
                 const response = await userStore.approveUser(userId, dailyLimit, absoluteSavingLimit, absoluteCheckingLimit);
                 if (response.success) {
                     Swal.fire({

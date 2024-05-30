@@ -45,6 +45,7 @@ export const users = defineStore('users', {
                     const updatedUserIndex = this.usersData.findIndex(user => user.id === userId);
                     if (updatedUserIndex !== -1) {
                         this.usersData[updatedUserIndex].isApproved = true;
+                        this.usersData[updatedUserIndex].dailyLimit = dailyLimit;
                     }
                     return {success: true};
                 }

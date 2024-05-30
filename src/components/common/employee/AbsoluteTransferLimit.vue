@@ -29,7 +29,7 @@ export default {
     },
     computed: {
         validForm() {
-            return this.formData.absoluteLimit != null;
+            return this.formData.absoluteLimit != null && this.formData.absoluteLimit != "";
         }
     },
     methods: {

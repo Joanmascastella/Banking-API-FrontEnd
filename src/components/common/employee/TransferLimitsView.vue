@@ -4,7 +4,7 @@
             <h2>Set transfer limits</h2>
             <div class="input-group">
                 <label for="dailyLimit">Daily Transfer Limit</label>
-                <input type="number" v-model.number="formData.dailyLimit" name="dailyLimit" id="dailyLimit">
+                <input type="number" v-model.number="formData.dailyLimit" name="dailyLimit" id="dailyLimit" required>
             </div>
             <div class="input-group" v-if="!editMode">
                 <label for="absoluteLimitSavings">Absolute Transfer Limit (Savings Account)</label>
@@ -27,7 +27,10 @@ export default {
     name: "TransferLimitsView",
     props: {
         editMode: Boolean,
-        dailyLimit: Number,
+        dailyLimit:{
+          type: Number,
+          required: true,
+        },
         absoluteLimitSavings: Number,
         absoluteLimitChecking: Number
    },
@@ -43,13 +46,13 @@ export default {
   computed: {
     validForm() {
         if(!this.editMode){
-            return this.formData.dailyLimit != null && 
-               this.formData.absoluteLimitSavings != null && 
-               this.formData.absoluteLimitChecking != null; 
+            return this.formData.dailyLimit != null && this.formData.dailyLimit != "" && this.formData.dailyLimit > 0 &&
+               this.formData.absoluteLimitSavings != null && this.formData.absoluteLimitSavings != "" &&
+               this.formData.absoluteLimitChecking != null && this.formData.absoluteLimitChecking != ""; 
         } else {
-            return true;
+          return this.formData.dailyLimit != null && this.formData.dailyLimit != "" && this.formData.dailyLimit > 0;
         }
-        }
+      }
     },
    methods: {
     confirm() {
