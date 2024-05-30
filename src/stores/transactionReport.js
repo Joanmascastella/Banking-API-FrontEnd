@@ -3,12 +3,7 @@ import { defineStore } from 'pinia'
 
 
 export const transactionReport = defineStore('transactionReport', {
-    state() {
-        return {
-
-        };
-    },
-
+    state: () => ({}),
     actions: {
 
         retrieveCount(data) {
@@ -21,17 +16,30 @@ export const transactionReport = defineStore('transactionReport', {
         },
         retrieveMinimumAmount(data) {
             let minimumAmount = data[0].amount;
+            let itemId = data[0].id;
             data.forEach((item) => { if (item.amount < minimumAmount){
-                minimumAmount = item.amount;}
+                minimumAmount = item.amount;
+                itemId=item.id;
+            }
+
             });
-            return minimumAmount;
+            
+            return { "id" : itemId, "minimumAmount" : minimumAmount };
+
         },
         retrieveMaximumAmount(data) {
             let maximumAmount = data[0].amount;
+            let itemId = data[0].id;
             data.forEach((item) => { if (item.amount > maximumAmount){
-                maximumAmount = item.amount;}
+                itemId = item.id;
+                maximumAmount = item.amount;
+
+            }
+      
             });
-            return maximumAmount;
+
+            return { "id" : itemId, "maximumAmount" : maximumAmount };
+
         },
         retrieveTotalAmount(data) {
             let totalAmount = 0;

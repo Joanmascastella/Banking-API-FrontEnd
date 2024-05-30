@@ -43,7 +43,6 @@ import { storeToRefs } from 'pinia';
 
 const accountStore = accounts();
 const ownersOfAccounts = reactive(new Map());
-const selectedAccount = ref(null);
 const selectedAccountPage = ref(null);
 const limit = ref(null)
 const router = useRouter()
