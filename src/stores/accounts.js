@@ -14,7 +14,6 @@ export const accounts = defineStore('accounts', () => {
     async function retrieveAllAccounts() {
         try {
             accounts.value = await this.$axios.get('/accounts/customers');
-            return accounts.value
         }
         catch (error) {
             errorMessage.value = error.response.status;

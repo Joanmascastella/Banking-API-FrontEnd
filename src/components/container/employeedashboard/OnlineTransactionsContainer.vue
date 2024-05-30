@@ -9,7 +9,9 @@
   <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" :pages="pages" ref="user"/>
 
   <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
-  :OnlineByCustomersCount="reportData.get('byCustomersCount')" :OnlineByEmployeesCount="reportData.get('byEmployeesCount')" :OnlineByCustomersAmount="reportData.get('byCustomersAmount')" :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')"/>
+  :OnlineByCustomersCount="reportData.get('byCustomersCount')" :OnlineByEmployeesCount="reportData.get('byEmployeesCount')" :OnlineByCustomersAmount="reportData.get('byCustomersAmount')" :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')"
+  :transactionsData="transactionsData" 
+/>
 
 
   <b-button  v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
@@ -25,18 +27,19 @@
 
 <script setup>
 
-import { ref, onMounted, reactive, computed } from 'vue'
+import { ref, onMounted, reactive, computed, watch} from 'vue'
 import TransactionCategoryLinks from "../../common/employee/TransactionCategoryLinks.vue";
 import TransactionsTableTemplate from "../../common/employee/TransactionsTableTemplate.vue";
 import TransactionReport from "../../common/employee/TransactionReport.vue";
 import { transactions } from "../../../stores/transactions";
 import Pagination from '../../common/employee/Pagination.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 
 const transactionStore = transactions();
 const ownersOfAccounts = reactive(new Map());
 const accountsData = reactive(new Map());
+const transactionsData = reactive(new Map());
 const child = ref(null)
 const reportData = reactive(new Map()) 
 const report = ref(null)
@@ -44,10 +47,11 @@ const user = ref(null)
 let paginatedItems = ref([])
 const transactionsCount = ref(null)
 const router = useRouter()
+const route = useRoute()
 
 
 const pages = reactive({
-  actualPage: 1,
+  actualPage: route.query.page ? route.query.page : 1,
   perPage: 2,
   pagesCount: computed(() =>
     Math.ceil(transactionsCount.value / pages.perPage)
@@ -57,7 +61,6 @@ const pages = reactive({
 
 
 async function load() {
-
   await transactionStore.retrieveOnlineTransactions();
   await transactionStore.retrieveOnlineTransactionsByCustomers();
   await transactionStore.retrieveOnlineTransactionsByEmployees();
@@ -67,6 +70,9 @@ async function load() {
 
   report.value.loadReport(reportData, transactionStore.getOnlineTransactions);
   report.value.loadOnlineReport(reportData, transactionStore.getOnlineTransactionsByCustomers, transactionStore.getOnlineTransactionsByEmployees);
+
+  report.value.retrieveMinimumAmountTransaction(transactionStore.getOnlineTransactions, transactionsData);
+  report.value.retrieveMaximumAmountTransaction(transactionStore.getOnlineTransactions, transactionsData);
 
   paginateItems()
 }
@@ -83,6 +89,8 @@ router.push({ path: '/transactions/online', query: { page: pages.actualPage } })
 paginateItems();
 }
 
+watch(() => route.query.transactionId, () => {
+  router.go(0)})
 
 onMounted(() => {
 document.getElementById("report-container").style.display = "none";
