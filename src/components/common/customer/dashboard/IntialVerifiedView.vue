@@ -1,27 +1,27 @@
 <template>
   <div>
-      <br>
-      <br>
-      <br>
-      <div class="header">
-          <h1 style="color: black;">Welcome, {{ userData[0].firstName }} {{ userData[0].lastName }}</h1>
-      </div>
+    <br>
+    <br>
+    <br>
+    <div class="header">
+      <h1 style="color: black;">Welcome, {{ userData[0].firstName }} {{ userData[0].lastName }}</h1>
+    </div>
 
-      <div class="action-buttons">
-          <button class="btn" @click="goToTransfer">Make Transfer</button>
-          <button class="btn secondary" @click="goToInternalTransfer">Transfer between your accounts</button>
-      </div>
+    <div class="action-buttons">
+      <button class="btn" @click="goToTransfer">Make Transfer</button>
+      <button class="btn secondary" @click="goToInternalTransfer">Transfer between your accounts</button>
+    </div>
 
-      <div class="account-cards">
-          <div v-for="(user, index) in userData" :key="index" class="card">
-              <div class="account-info">
-                  <h3>{{ user.accountType }} Account</h3>
-                  <p><strong>IBAN:</strong> {{ user.IBAN }}</p>
-                  <p><strong>Balance:</strong> {{ user.currency }} {{ user.balance }}</p>
-                  <button class="btn tertiary" @click="goToHistory(user.IBAN)">View History</button>
-              </div>
-          </div>
+    <div class="account-cards">
+      <div v-for="(user, index) in userData" :key="index" class="card">
+        <div class="account-info">
+          <h3>{{ user.accountType }} Account</h3>
+          <p><strong>IBAN:</strong> {{ user.IBAN }}</p>
+          <p><strong>Balance:</strong> {{ user.currency }} {{ user.balance }}</p>
+          <button class="btn tertiary" @click="goToHistory(user.IBAN)">View History</button>
+        </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -31,27 +31,32 @@ import { useAuthStore } from '@/stores/auth';
 export default {
   name: "InitialVerifiedView",
   props: {
-      userData: {
-          type: Array,
-          required: true
-      }
+    userData: {
+      type: Array,
+      required: true
+    }
   },
   setup() {
-      const authStore = useAuthStore();
-      const userId = authStore.userId;
-      console.log("User id: " + userId);
-      return { userId };
+    const authStore = useAuthStore();
+    const userId = authStore.userId;
+    console.log("User id: " + userId);
+    return { userId };
   },
   methods: {
-      goToTransfer() {
-          this.$router.push({ path: '/make/transfer' });
-      },
-      goToInternalTransfer() {
-          this.$router.push({ path: '/own/transfer' });
-      },
-      goToHistory(iban) {
-          this.$router.push({ path: `/transactions/${this.userId}/history`, query: { iban: iban } });
-      }
+    goToTransfer() {
+      this.$router.push({ path: '/make/transfer' });
+    },
+    goToInternalTransfer() {
+      const checkingIBAN = this.userData.find(account => account.accountType === "CHECKING").IBAN;
+      const savingsIBAN = this.userData.find(account => account.accountType === "SAVINGS").IBAN;
+      this.$router.push({
+        path: '/own/transfer',
+        query: { checkingIBAN, savingsIBAN }
+      });
+    },
+    goToHistory(iban) {
+      this.$router.push({ path: `/transactions/${this.userId}/history`, query: { iban: iban } });
+    }
   }
 }
 </script>

@@ -89,7 +89,8 @@ const router = createRouter({
     {
       path: '/own/transfer',
       name: 'makeOwnTransfer',
-      component: TransferToOwn
+      component: TransferToOwn,
+      props: route => ({ checkingIBAN: route.query.checkingIBAN, savingsIBAN: route.query.savingsIBAN })
     },
     {
       path: '/make/transfer',

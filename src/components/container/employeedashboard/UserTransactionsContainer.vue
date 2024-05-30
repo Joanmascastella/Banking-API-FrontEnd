@@ -1,13 +1,12 @@
 <template>
 
-  <div v-if="!transactionsListing.error" id="user"><img src="../../../assets/img/user.png">
+<div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
     <h5>{{ ownerOfAccounts.get("user") }}</h5>
-  </div>
 
-  <Pagination v-if="!transactionsListing.error" ref="pagination" :pages="pages" @newPage="displayNewPage"
+  <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage"
     :pageQuery="pages.actualPage" :paginatedItems="paginatedItems" />
 
-  <div v-if="!transactionsListing.error" class="grid">
+  <div class="grid">
 
     <div>
       <button @click="displayAllTransactions">All transactions</button>
@@ -28,16 +27,16 @@
     </div>
   </div>
 
-
-  <div v-if="!transactionsListing.error" id="transactions">
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" ref="user" />
-  </div>
-  <div v-else-if="transactionsListing.error===403">You are not authorized to view this page</div>
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" :pages="pages" ref="user" />
+</div>
+<div v-show="transactionStore.errorMessage === 403"> 
+  You are not authorized to view this page
+</div>
 </template>
 
 <script setup>
 
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import TransactionsTableTemplate from "../../common/employee/TransactionsTableTemplate.vue";
 import { transactions } from "../../../stores/transactions";
 import { users } from "../../../stores/users";
@@ -77,7 +76,7 @@ const pages = reactive({
 
 async function load() {
 
-  transactionsListing.value = await retrieveTransactionCategory()
+  transactionsListing.value = retrieveTransactionCategory()
   transactionsCount.value = obj.transactionsListing.data.length;
   user.value.retrieveAccountData(obj.transactionsListing.data, accountsData);
 
@@ -89,8 +88,6 @@ async function load() {
   paginateItems()
 
 }
-
-load()
 
 function paginateItems() {
 pagination.value.paginate(transactionsListing.value.data);
@@ -106,23 +103,22 @@ load();
 
 }
 
-async function retrieveTransactionCategory(){
+ function retrieveTransactionCategory(){
 
   if (viewATMDeposits.value === true) {
-    transactionsListing.value = await transactionStore.retrieveATMDepositsOfUser(route.query.userId);
+    transactionsListing.value = transactionStore.getATMDepositsOfUser
   }
   else if (viewATMWithdrawals.value === true) {
-    transactionsListing.value = await transactionStore.retrieveATMWithdrawalsOfUser(route.query.userId);
+     transactionsListing.value = transactionStore.getATMWithdrawalsOfUser
   }
   else if (viewOnlineTransfers.value === true) {
-    transactionsListing.value = await transactionStore.retrieveOnlineTransfersOfUser(route.query.userId);
+     transactionsListing.value = transactionStore.getOnlineTransactionsOfUser
   }
   else {
-    transactionsListing.value = await transactionStore.retrieveTransactionsOfUserByEmployee(route.query.userId);
-
+    transactionsListing.value = transactionStore.getTransactionsOfUserByEmployee
   }
 
-  return transactionsListing.value;
+  return transactionsListing.value
 
 }
 
@@ -162,6 +158,15 @@ function displayOnlineTransfers() {
 
 }
 
+onMounted(async () => {
+  await transactionStore.retrieveTransactionsOfUserByEmployee(route.query.userId);
+  await transactionStore.retrieveATMDepositsOfUser(route.query.userId);
+  await transactionStore.retrieveATMWithdrawalsOfUser(route.query.userId);
+  await transactionStore.retrieveOnlineTransfersOfUser(route.query.userId);
+
+load()
+})
+
 
 
 </script>
@@ -198,6 +203,12 @@ function displayOnlineTransfers() {
   color: black;
 }
 
-#transactions{width:100%;}
+#transactionsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
 
 </style>

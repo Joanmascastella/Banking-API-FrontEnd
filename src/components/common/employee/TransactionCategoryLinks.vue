@@ -68,22 +68,6 @@ button {
 }
 
 
-.grid div:first-child button {
-  background-color: #F9970A;
-}
-
-.grid div:nth-child(2n) button {
-  background-color: #43A801;
-}
-
-.grid div:nth-child(3n) button {
-  background-color: #F9791A;
-}
-
-.grid div:nth-child(4n) button {
-  background-color: #15CA20;
-}
-
 
 @media only screen and (max-width:1280px) {
 

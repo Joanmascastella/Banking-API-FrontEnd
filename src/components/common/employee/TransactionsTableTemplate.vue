@@ -1,11 +1,13 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { users } from "../../../stores/users";
 import { accounts } from "../../../stores/accounts";
+import { computed } from 'vue'
 
 
 const userStore = users();
 const router = useRouter()
+const route = useRoute()
 const accountStore = accounts();
 
 
@@ -14,6 +16,7 @@ defineProps({
   transactions: Array,
   ownersOfAccounts: Map,
   accountsData: Map,
+  pages:Map
 
 });
 
@@ -38,14 +41,13 @@ function getSelectedAccountPage(accounts, account, accountsPerPage = 2) {
 
 async function retrieveAccountData(transactions, accountsData) {
 
-  const accountsList = await accountStore.retrieveAllAccounts();
-
+   await accountStore.retrieveAllAccounts();
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
-    accountsList.data.filter((account) => {
+    accountStore.getAccounts.filter((account) => {
       if (account.IBAN === item.fromAccount || account.IBAN === item.toAccount) {
         accountsData.set(account.IBAN, account.id)
-        let itemPage = getSelectedAccountPage(accountsList.data, account)
+        let itemPage = getSelectedAccountPage(accountStore.getAccounts, account)
         accountsData.set(`${account.IBAN}page`, itemPage);
 
       }
@@ -76,8 +78,8 @@ defineExpose({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, count) in transactions" :key="item.userId">
-        <td>{{++count }} </td>
+      <tr v-for="(item, index) in transactions" :key="item.id">
+        <td>{{ (pages.actualPage*pages.perPage)-pages.perPage + index + 1 }} </td>
         <td>{{ item.date }} </td>
         <td v-if="!ownersOfAccounts.has('user')">
           <div id="customerTransactions">{{ ownersOfAccounts.get(item.userId) }} <router-link

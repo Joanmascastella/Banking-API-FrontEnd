@@ -2,47 +2,48 @@
 
   <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
 
-  <div id="pagination-container" v-if="!accountsListing.error">
+  <div v-show="!accountStore.errorMessage" id="accountsContainer"> 
 
-    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+    <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
 
-  </div>
+    <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+      @update-totalLimit="updateTotalLimit" />
 
-  <div v-if="!accountsListing.error" id="transactions">
-    <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts" />
-  </div>
-  <div v-else-if="accountsListing.error === 403">You are not authorized to view this page</div>
+  <AccountsContainer ref="accountManager"></AccountsContainer>
 
-  <b-button v-if="!accountsListing.error" v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
+  <b-button  v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
       id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
+  </div>
+<div v-show="accountStore.errorMessage === 403"> 
+  You are not authorized to view this page
+</div>
 
 </template>
 
 <script setup>
 import AccountsTable from '../../common/employee/AccountsTable.vue'
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { accounts } from "../../../stores/accounts";
 import { useRoute, useRouter } from 'vue-router'
 import Pagination from '../../common/employee/Pagination.vue';
+import AccountsContainer from './AccountsContainer.vue';
 
 
 
-const accountsListing = ref([]);
 const accountStore = accounts();
 const ownersOfAccounts = reactive(new Map());
-const obj = reactive({ accountsListing })
 const route = useRoute()
 const router = useRouter()
 let paginatedItems = ref([])
 const accountsCount = ref(null)
-const pagination = ref(null)
 const user = ref(null)
+const accountManager = ref(null)
 
 
 
 const pages = reactive({
-  actualPage: 1,
+  actualPage: route.query.page ? route.query.page : 1,
   perPage: 2,
   pagesCount: computed(() =>
     Math.ceil(accountsCount.value / pages.perPage)
@@ -53,23 +54,26 @@ const pages = reactive({
 
 async function load() {
 
-  accountsListing.value = await accountStore.retrieveAccountsByAbsoluteLimit(route.query.absoluteLimit);
-  accountsCount.value = obj.accountsListing.data.length;
-  user.value.retrieveUser(obj.accountsListing.data, ownersOfAccounts);
-  paginateItems()
+  await accountStore.retrieveAccountsByAbsoluteLimit(route.query.absoluteLimit);
+  accountsCount.value = accountStore.getAccountsWithLimit.length;
+  user.value.retrieveUser(accountStore.getAccountsWithLimit, ownersOfAccounts);
+  paginateItems();
 }
 
-load()
 
 function paginateItems() {
-  pagination.value.paginate(accountsListing.value.data);
-  paginatedItems.value = pagination.value.props.paginatedItems.value;
+  paginatedItems.value = accountStore.getPaginatedItems(pages, "accountsWithLimit");
 }
 
 function displayNewPage() {
   router.push({ path: '/accounts/byAbsoluteLimit', query: { absoluteLimit: route.query.absoluteLimit, page: pages.actualPage } });
-  load();
+  paginateItems()
 }
+
+async function updateTotalLimit(updatedAccount) {
+  accountManager.value.updateTotalLimit(updatedAccount)
+}
+
 
 
 
@@ -78,6 +82,11 @@ function listAllAccounts() {
   router.push('/accounts/customers');
 
 }
+
+onMounted(() => {
+  load()
+})
+
 
 </script>
 
@@ -98,9 +107,14 @@ h2 {
   font-weight: initial;
 }
 
-#transactions{width:100%;}
 
-
+#accountsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
 
 /*mobile*/
 

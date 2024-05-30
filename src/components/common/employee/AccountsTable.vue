@@ -82,6 +82,7 @@ function setItemRef(el, item) {
   <table id="accounts-table">
     <thead>
       <tr>
+        <th>Id</th>
         <th>IBAN</th>
         <th>Account type</th>
         <th>User's name</th>
@@ -93,8 +94,9 @@ function setItemRef(el, item) {
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in accountListing" :key="item.userId">
-        <tr :ref="(el) => setItemRef(el, item)">
+      <template v-for="(item, index) in accountListing" :key="item.id">
+        <tr :ref="(el) => setItemRef(el, item)" id="selectedRow">
+          <td>{{ item.id }}</td>
           <td>{{ item.IBAN }} </td>
           <td v-if="item.accountType === 'SAVINGS'"><img src="../../../assets/img/savings-account.png"></td>
           <td v-else><img src="../../../assets/img/checking-account.png"></td>
@@ -148,10 +150,6 @@ button {
 }
 
 
-td:nth-child(7n) button {
-  background-color: #43A801;
-}
-
 table th,
 table td {
   text-align: center;
@@ -200,11 +198,13 @@ I changed it to allow to display the button fields on mobile devices as well.
 
 .root {
   background: var(--root-color);
+  color: #000000
 }
 </style>
 
 <style>
 :root {
-  --root-color: #d5c323;
+  --root-color: #B3FFAE
+  
 }
 </style>
