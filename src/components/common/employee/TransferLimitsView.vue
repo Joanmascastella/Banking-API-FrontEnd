@@ -4,15 +4,15 @@
             <h2>Set transfer limits</h2>
             <div class="input-group">
                 <label for="dailyLimit">Daily Transfer Limit</label>
-                <input type="number" v-model.number="formData.dailyLimit" name="dailyLimit" id="dailyLimit" required>
+                <input type="number" v-model="formData.dailyLimit" name="dailyLimit" id="dailyLimit" required>
             </div>
             <div class="input-group" v-if="!editMode">
                 <label for="absoluteLimitSavings">Absolute Transfer Limit (Savings Account)</label>
-                <input type="number" v-model.number="formData.absoluteLimitSavings" name="absoluteLimitSavings" id="absoluteLimitSavings">
+                <input type="number" v-model="formData.absoluteLimitSavings" name="absoluteLimitSavings" id="absoluteLimitSavings">
             </div>
             <div class="input-group" v-if="!editMode">
                 <label for="absoluteLimitChecking">Absolute Transfer Limit (Checking Account)</label>
-                <input type="number" v-model.number="formData.absoluteLimitChecking" name="absoluteLimitChecking" id="absoluteLimitChecking">
+                <input type="number" v-model="formData.absoluteLimitChecking" name="absoluteLimitChecking" id="absoluteLimitChecking">
             </div>
             <div class="button-group">
                 <button id="btn-confirm" @click="confirm" :disabled="!validForm">{{ editMode ? 'Update' : 'Confirm' }}</button>
@@ -45,11 +45,14 @@ export default {
     },
   computed: {
     validForm() {
+      console.log(this.formData);
         if(!this.editMode){
-            return this.formData.dailyLimit != null && this.formData.dailyLimit != "" && this.formData.dailyLimit > 0 &&
-               this.formData.absoluteLimitSavings != null && this.formData.absoluteLimitSavings != "" &&
-               this.formData.absoluteLimitChecking != null && this.formData.absoluteLimitChecking != ""; 
-        } else {
+          return this.formData.dailyLimit !== null && this.formData.dailyLimit > 0 &&
+               this.formData.absoluteLimitSavings !== undefined &&
+               this.formData.absoluteLimitSavings !== "" &&
+               this.formData.absoluteLimitChecking !== undefined &&
+               this.formData.absoluteLimitChecking !== "";
+      } else {
           return this.formData.dailyLimit != null && this.formData.dailyLimit != "" && this.formData.dailyLimit > 0;
         }
       }

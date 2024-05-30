@@ -4,7 +4,7 @@
             <h2>Set absolute Transfer Limit</h2>
             <div class="input-group">
                 <label for="absoluteLimit">Absolute Transfer Limit</label>
-                <input type="number" v-model.number="formData.absoluteLimit" name="absoluteLimit" id="absoluteLimit">
+                <input type="number" v-model="formData.absoluteLimit" name="absoluteLimit" id="absoluteLimit">
             </div>
             <div class="button-group">
                 <button id="btn-update" @click="update" :disabled="!validForm">Update</button>
@@ -29,7 +29,7 @@ export default {
     },
     computed: {
         validForm() {
-            return this.formData.absoluteLimit != null && this.formData.absoluteLimit != "";
+            return this.formData.absoluteLimit !== undefined && this.formData.absoluteLimit !== ""
         }
     },
     methods: {
