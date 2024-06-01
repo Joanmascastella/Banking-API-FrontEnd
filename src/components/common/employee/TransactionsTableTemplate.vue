@@ -41,6 +41,8 @@ function getSelectedAccountPage(accounts, account, accountsPerPage = 2) {
 
 
 async function retrieveAccountData(transactions, accountsData) {
+  await accountStore.retrieveAllAccounts();
+
 
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
@@ -59,12 +61,7 @@ async function retrieveAccountData(transactions, accountsData) {
 const setBaseColor = () => rootColor.value = getComputedStyle(document.documentElement).getPropertyValue('--root-color');
 
 
-onMounted(async () => {
-  await accountStore.retrieveAllAccounts();
-  setBaseColor()
-  
-}
-)
+onMounted(setBaseColor)
 
 function setItemRef(el, item) {
   if (route.query.transactionId != null){
