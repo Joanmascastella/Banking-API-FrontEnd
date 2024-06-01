@@ -360,8 +360,6 @@ defineExpose({
 
   #transaction {
     margin-top: 50px;
-    text-decoration: underline;
-    color: blue;
   }
 
 

@@ -38,7 +38,6 @@ import TransactionReport from "../../common/employee/TransactionReport.vue";
 import { transactions } from "../../../stores/transactions";
 import Pagination from '../../common/employee/Pagination.vue';
 import SubNavigation from '../../common/employee/SubNavigation.vue';
-
 import { useRouter, useRoute } from 'vue-router';
 
 
@@ -48,7 +47,6 @@ const transactionStore = transactions();
 const ownersOfAccounts = reactive(new Map());
 const accountsData = reactive(new Map());
 const transactionsData = reactive(new Map());
-const child = ref(null)
 const reportData = reactive(new Map())
 const report = ref(null)
 const user = ref(null)

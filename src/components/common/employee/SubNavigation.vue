@@ -1,6 +1,6 @@
 <template>
 
-<ul class="navbar" >
+<ul v-if="transactionsPageUrl" class="navbar" >
   <li class="subnav">
     <button class="subnavbtn">  <a :href="'/transactions'" style="color: white;">Transactions</a></button>
 
@@ -21,7 +21,33 @@
     </div>
   </li> 
   </ul>
+
+  <ul v-else-if="accountsPageUrl" class="navbar" >
+  <li class="subnav" v-if="route.query.filter || route.query.absoluteLimit">
+    <button class="subnavbtn">  <a :href="'/accounts/customers'" style="color: white;">Accounts</a></button>
+
+  </li> 
+  <li class="subnav">
+    <button class="subnavbtn"><a :href="'/accounts/customers?filter=true'"  @click="$emit('filter')"  style="color: white;" >Filter accounts</a></button>
+  </li> 
+  </ul>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router';
+
+
+const route = useRoute()
+
+const accountsPageUrl = computed(() => {
+  return route.path.startsWith('/accounts')
+})
+
+const transactionsPageUrl = computed(() => {
+  return route.path.startsWith('/transactions')
+})
+</script>
 
 <style scoped>
 .navbar {

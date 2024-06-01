@@ -4,7 +4,6 @@ import AccountsWithLimitContainer from "../../container/employeedashboard/Accoun
 
 <template>
     <div class="content">
-    <h1>Accounts</h1>
   <AccountsWithLimitContainer/>
   </div>
 </template>

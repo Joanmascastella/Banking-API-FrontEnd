@@ -17,7 +17,7 @@ defineProps({
   transactions: Array,
   ownersOfAccounts: Map,
   accountsData: Map,
-  pages:Map
+  pages: Map
 
 });
 
@@ -42,6 +42,8 @@ function getSelectedAccountPage(accounts, account, accountsPerPage = 2) {
 
 async function retrieveAccountData(transactions, accountsData) {
 
+  await accountStore.retrieveAllAccounts();
+  
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
     accountStore.getAccounts.filter((account) => {
@@ -59,18 +61,13 @@ async function retrieveAccountData(transactions, accountsData) {
 const setBaseColor = () => rootColor.value = getComputedStyle(document.documentElement).getPropertyValue('--root-color');
 
 
-onMounted(async () => {
-  await accountStore.retrieveAllAccounts();
-  setBaseColor()
-  
-}
-)
+onMounted(setBaseColor)
 
 function setItemRef(el, item) {
-  if (route.query.transactionId != null){
-  if (route.query.transactionId == item.id) {
-    el.childNodes.forEach((item) => item.classList.add("root"));
-  }
+  if (route.query.transactionId != null) {
+    if (route.query.transactionId == item.id) {
+      el.childNodes.forEach((item) => item.classList.add("root"));
+    }
 
   }
 
@@ -100,27 +97,27 @@ defineExpose({
     <tbody>
       <template v-for="(item, index) in transactions" :key="item.id">
         <tr :ref="(el) => setItemRef(el, item)" id="selectedRow">
-        <td>{{ (pages.actualPage*pages.perPage)-pages.perPage + index + 1 }} </td>
-        <td>{{ item.date }} </td>
-        <td v-if="!ownersOfAccounts.has('user')">
-          <div id="customerTransactions">{{ ownersOfAccounts.get(item.userId) }} <router-link
-              v-if="router.currentRoute.value.name === 'transactionsByCustomers'"
-              :to="{ path: '/transactions/customer', query: { userId: item.userId } }"><button>View
-                transactions</button></router-link></div>
-        </td>
-        <td v-if="item.fromAccount != 'ATM'"><router-link
-            :to="{ path: '/accounts/customers', query: { accountId: accountsData.get(item.fromAccount), page: accountsData.get(`${item.fromAccount}page`) } }"
-            class="link"><b-button v-b-tooltip.hover title="View account details">{{
-              item.fromAccount}}</b-button></router-link></td>
-        <td v-else>{{ item.fromAccount }}</td>
-        <td v-if="item.toAccount != 'ATM'"><router-link
-            :to="{ path: '/accounts/customers', query: { accountId: accountsData.get(item.toAccount), page: accountsData.get(`${item.toAccount}page`) } }"
-            class="link"><b-button v-b-tooltip.hover
-              title="View account details">{{ item.toAccount }}</b-button></router-link></td>
-        <td v-else>{{ item.toAccount }}</td>
-        <td>€{{ item.amount }} </td>
+          <td>{{ (pages.actualPage * pages.perPage) - pages.perPage + index + 1 }} </td>
+          <td>{{ item.date }} </td>
+          <td v-if="!ownersOfAccounts.has('user')">
+            <div id="customerTransactions">{{ ownersOfAccounts.get(item.userId) }} <router-link
+                v-if="router.currentRoute.value.name === 'transactionsByCustomers'"
+                :to="{ path: '/transactions/customer', query: { userId: item.userId } }"><button>View
+                  transactions</button></router-link></div>
+          </td>
+          <td v-if="item.fromAccount != 'ATM'"><router-link
+              :to="{ path: '/accounts/customers', query: { accountId: accountsData.get(item.fromAccount), page: accountsData.get(`${item.fromAccount}page`) } }"
+              class="link"><b-button v-b-tooltip.hover title="View account details">{{
+                item.fromAccount }}</b-button></router-link></td>
+          <td v-else>{{ item.fromAccount }}</td>
+          <td v-if="item.toAccount != 'ATM'"><router-link
+              :to="{ path: '/accounts/customers', query: { accountId: accountsData.get(item.toAccount), page: accountsData.get(`${item.toAccount}page`) } }"
+              class="link"><b-button v-b-tooltip.hover title="View account details">{{ item.toAccount
+                }}</b-button></router-link></td>
+          <td v-else>{{ item.toAccount }}</td>
+          <td>€{{ item.amount }} </td>
         </tr>
-        </template>
+      </template>
     </tbody>
   </table>
 </template>
@@ -198,6 +195,5 @@ button {
 <style>
 :root {
   --root-color: #B3FFAE
-  
 }
 </style>
