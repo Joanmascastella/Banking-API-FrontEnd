@@ -4,7 +4,6 @@ import AllCustomersTransactionsContainer from "../../container/employeedashboard
 
 <template>
    <div class="content">
-    <h1>Transactions by customers</h1>
   <AllCustomersTransactionsContainer/>
   </div>
 </template>

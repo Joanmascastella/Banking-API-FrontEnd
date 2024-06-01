@@ -23,11 +23,11 @@ defineProps({
 
 async function retrieveUser(transactions, accountOwnerData) {
 
-  const usersList = await userStore.retrieveAllUsers();
+  await userStore.retrieveAllUsers();
 
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
-    let result = usersList.data.filter((user) => user.id === item.userId);
+    let result = userStore.usersData.filter((user) => user.id === item.userId);
     accountOwnerData.set(item.userId, result[0].firstName + result[0].lastName);
   }
 }
@@ -42,7 +42,6 @@ function getSelectedAccountPage(accounts, account, accountsPerPage = 2) {
 
 async function retrieveAccountData(transactions, accountsData) {
 
-   await accountStore.retrieveAllAccounts();
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
     accountStore.getAccounts.filter((account) => {
@@ -59,7 +58,13 @@ async function retrieveAccountData(transactions, accountsData) {
 
 const setBaseColor = () => rootColor.value = getComputedStyle(document.documentElement).getPropertyValue('--root-color');
 
-onMounted(setBaseColor);
+
+onMounted(async () => {
+  await accountStore.retrieveAllAccounts();
+  setBaseColor()
+  
+}
+)
 
 function setItemRef(el, item) {
   if (route.query.transactionId != null){

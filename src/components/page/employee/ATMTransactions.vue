@@ -4,7 +4,6 @@ import ATMTransactionsContainer from "../../container/employeedashboard/ATMTrans
 
 <template>
   <div class="content">
-    <h1>ATM Transactions</h1>
   <ATMTransactionsContainer/>
   </div>
 </template>

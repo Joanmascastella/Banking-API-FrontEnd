@@ -1,28 +1,8 @@
-
-
-#transaction-list {
-  position: absolute;
-  right: 105px;
-  top: 15%;
-  border: 5px solid #D0FAC9;
-  background-color: white;
-  padding: 5px;
-  border-radius: 25px;
-  width: 95px;
-  height: 95px;
-
+h1 {
+  text-align: center;
+  margin-top: 14vh;
 }
 
-#transaction-report {
-  position: absolute;
-  right: 0.5%;
-  top: 15%;
-  border: 5px solid #b9faae;
-  background-color: white;
-  padding: 5px;
-  border-radius: 25px;
-
-}
 
 
 #transactionsContainer {
@@ -31,53 +11,8 @@
   flex-direction: column;
   justify-items: center;
   align-items: center;
+  margin-top:5vh;
 }
 
 
-/*mobile*/
 
-@media only screen and (max-width:768px) {
-
-
-
-  #transaction-list {
-    position: absolute;
-    right: 70px;
-    top: 20%;
-    width: 64px;
-    height: 64px;
-
-  }
-
-  #transaction-report {
-    position: absolute;
-    right: 0;
-    top: 20%;
-    width: 64px;
-    height: 64px;
-  }
-
-}
-
-@media only screen and (min-width:768px) and (max-width:1280px) {
-
-
-  #transaction-list {
-    position: absolute;
-    right: 90px;
-    top: 15%;
-    width: 85px;
-    height: 85px;
-
-  }
-
-  #transaction-report {
-    position: absolute;
-    right: 0;
-    top: 15%;
-    width: 85px;
-    height: 85px;
-  }
-
-
-}

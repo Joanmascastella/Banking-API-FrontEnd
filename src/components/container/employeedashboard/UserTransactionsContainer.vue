@@ -75,13 +75,13 @@ const pages = reactive({
 
 
 async function load() {
+  await userStore.retrieveAllUsers();
 
   transactionsListing.value = retrieveTransactionCategory()
   transactionsCount.value = obj.transactionsListing.data.length;
   user.value.retrieveAccountData(obj.transactionsListing.data, accountsData);
 
-  const usersList = await userStore.retrieveAllUsers();
-  let result = usersList.data.filter((user) => userData.id === user.id.toString());
+  let result = userStore.usersData.filter((user) => userData.id === user.id.toString());
   ownerOfAccounts.set("userId", result[0].id);
   ownerOfAccounts.set("user", result[0].firstName + result[0].lastName);
 

@@ -1,28 +1,32 @@
 <template>
-<div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
 
-  <Pagination :pages="pages" @newPage="displayNewPage"
-    :pageQuery="pages.actualPage" :paginatedItems="paginatedItems" />
+  <SubNavigation v-show="!transactionStore.errorMessage" @summary="viewReport"></SubNavigation>
 
-  <TransactionCategoryLinks  ref="child" />
+  <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
+
+
+    <h1 v-if="!route.query.report">Transactions</h1>
+    <h1 v-else>Overall sumary</h1>
+
+
+    <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+      :paginatedItems="paginatedItems" />
+
+    <TransactionCategoryLinks v-if="!route.query.report" />
 
     <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :pages="pages"
       :accountsData="accountsData" :transactionsData="transactionsData" ref="user" />
 
-  <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
-    :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')" 
-    :transactionsData="transactionsData" 
-    />
+    <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
+      :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
+      :transactionsData="transactionsData" />
 
-  <b-button  v-b-tooltip.hover title="View all transactions" id="report-link"
-    @click="viewAllTransactions()"> <img id="transaction-list" src="../../../assets/img/transactions.png"> </b-button>
-  <b-button  v-b-tooltip.hover title="View transaction report" id="report-link"
-    @click="viewReport()"> <img id="transaction-report" src="../../../assets/img/transaction-report-icon.png">
-  </b-button>
-</div>
-<div v-show="transactionStore.errorMessage === 403"> 
-  You are not authorized to view this page
-</div>
+
+  </div>
+  <div v-show="transactionStore.errorMessage === 403">
+    You are not authorized to view this page
+  </div>
+
 </template>
 
 <script setup>
@@ -33,6 +37,8 @@ import TransactionsTableTemplate from "../../common/employee/TransactionsTableTe
 import TransactionReport from "../../common/employee/TransactionReport.vue";
 import { transactions } from "../../../stores/transactions";
 import Pagination from '../../common/employee/Pagination.vue';
+import SubNavigation from '../../common/employee/SubNavigation.vue';
+
 import { useRouter, useRoute } from 'vue-router';
 
 
@@ -66,13 +72,13 @@ const pages = reactive({
 
 
 async function load() {
-  
+
   await transactionStore.retrieveAllTransactions();
   transactionsCount.value = transactionStore.getTransactions.length;
 
   user.value.retrieveUser(transactionStore.getTransactions, ownersOfAccounts);
   user.value.retrieveAccountData(transactionStore.getTransactions, accountsData);
-  
+
   report.value.loadReport(reportData, transactionStore.getTransactions);
   report.value.retrieveMinimumAmountTransaction(transactionStore.getTransactions, transactionsData);
   report.value.retrieveMaximumAmountTransaction(transactionStore.getTransactions, transactionsData);
@@ -92,17 +98,20 @@ function paginateItems() {
 function displayNewPage() {
   router.push({ path: '/transactions', query: { page: pages.actualPage } });
   paginateItems();
-  
+
 }
 
 watch(() => route.query.transactionId, () => {
-  router.go(0)})
+  router.go(0)
+})
 
 
 onMounted(async () => {
   document.getElementById("report-container").style.display = "none";
   load()
-
+  if (route.query.report) {
+    viewReport()
+  }
 })
 
 function viewReport() {
@@ -110,10 +119,6 @@ function viewReport() {
 
 }
 
-function viewAllTransactions() {
-  child.value.viewAllTransactions();
-
-}
 
 
 </script>

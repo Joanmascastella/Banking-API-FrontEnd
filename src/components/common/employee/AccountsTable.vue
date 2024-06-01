@@ -22,11 +22,11 @@ defineProps({
 
 async function retrieveUser(accounts, accountOwnerData) {
 
-  const usersList = await userStore.retrieveAllUsers();
+  await userStore.retrieveAllUsers();
 
   for (let index = 0; index < accounts.length; index++) {
     let item = accounts[index];
-    let result = usersList.data.filter((user) => user.id === item.userId);
+    let result = userStore.usersData.filter((user) => user.id === item.userId);
     accountOwnerData.set(item.userId, result[0].firstName + result[0].lastName);
   }
 

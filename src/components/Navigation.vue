@@ -70,4 +70,11 @@ ul:first-of-type>li {
   color: white;
   font-size: 25px;
 }
+
+@media only screen and (max-width:768px) {
+
+a {font-size: 16px;}
+}
 </style>
+
+

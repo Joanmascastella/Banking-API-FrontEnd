@@ -4,7 +4,6 @@ import TransactionsContainer from "../../container/employeedashboard/Transaction
 
 <template>
    <div class="content">
-    <h1>Transactions</h1>
   <TransactionsContainer/>
   </div>
 </template>
