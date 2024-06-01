@@ -4,7 +4,6 @@ import OnlineTransactionsContainer from "../../container/employeedashboard/Onlin
 
 <template>
     <div class="content">
-    <h1> Online transactions</h1>
   <OnlineTransactionsContainer/>
   </div>
 </template>

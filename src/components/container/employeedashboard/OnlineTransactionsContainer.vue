@@ -1,38 +1,46 @@
 <template>
-<div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
-
-  <Pagination  :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage" :paginatedItems="paginatedItems"/>
-
-  <TransactionCategoryLinks  ref="child"/>
+  <SubNavigation v-show="!transactionStore.errorMessage" @summary="viewReport"></SubNavigation>
 
 
-  <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" :pages="pages" ref="user"/>
 
-  <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"  :maximumAmount="reportData.get('maximumAmount')"  :totalAmount="reportData.get('totalAmount')" 
-  :OnlineByCustomersCount="reportData.get('byCustomersCount')" :OnlineByEmployeesCount="reportData.get('byEmployeesCount')" :OnlineByCustomersAmount="reportData.get('byCustomersAmount')" :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')"
-  :transactionsData="transactionsData" 
-/>
+  <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
+
+    <h1 v-if="!route.query.report">Online transactions</h1>
+    <h1 v-else>Online transactions summary</h1>
+
+    <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+      :paginatedItems="paginatedItems" />
+
+    <TransactionCategoryLinks v-if="!route.query.report" />
 
 
-  <b-button  v-b-tooltip.hover title="View all transactions" id="report-link" @click="viewAllTransactions()"> <img
-    id="transaction-list" src="../../../assets/img/transactions.png"> </b-button>
-<b-button  v-b-tooltip.hover title="View transaction report" id="report-link" @click="viewReport()"> <img
-    id="transaction-report" src="../../../assets/img/transaction-report-icon.png"> </b-button>
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+      :accountsData="accountsData" :pages="pages" ref="user" />
+
+    <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
+      :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
+      :OnlineByCustomersCount="reportData.get('byCustomersCount')"
+      :OnlineByEmployeesCount="reportData.get('byEmployeesCount')"
+      :OnlineByCustomersAmount="reportData.get('byCustomersAmount')"
+      :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')" :transactionsData="transactionsData" />
+
   </div>
-<div v-show="transactionStore.errorMessage === 403"> 
-  You are not authorized to view this page
-</div>
+  <div v-show="transactionStore.errorMessage === 403">
+    You are not authorized to view this page
+  </div>
 
 </template>
 
 <script setup>
 
-import { ref, onMounted, reactive, computed, watch} from 'vue'
+import { ref, onMounted, reactive, computed, watch } from 'vue'
 import TransactionCategoryLinks from "../../common/employee/TransactionCategoryLinks.vue";
 import TransactionsTableTemplate from "../../common/employee/TransactionsTableTemplate.vue";
 import TransactionReport from "../../common/employee/TransactionReport.vue";
 import { transactions } from "../../../stores/transactions";
 import Pagination from '../../common/employee/Pagination.vue';
+import SubNavigation from '../../common/employee/SubNavigation.vue';
+
 import { useRouter, useRoute } from 'vue-router';
 
 
@@ -40,8 +48,7 @@ const transactionStore = transactions();
 const ownersOfAccounts = reactive(new Map());
 const accountsData = reactive(new Map());
 const transactionsData = reactive(new Map());
-const child = ref(null)
-const reportData = reactive(new Map()) 
+const reportData = reactive(new Map())
 const report = ref(null)
 const user = ref(null)
 let paginatedItems = ref([])
@@ -79,31 +86,30 @@ async function load() {
 
 
 function paginateItems() {
-paginatedItems.value = transactionStore.getPaginatedItems(pages, "onlineTransactions")
+  paginatedItems.value = transactionStore.getPaginatedItems(pages, "onlineTransactions")
 
 }
 
 
 function displayNewPage() {
-router.push({ path: '/transactions/online', query: { page: pages.actualPage } });
-paginateItems();
+  router.push({ path: '/transactions/online', query: { page: pages.actualPage } });
+  paginateItems();
 }
 
 watch(() => route.query.transactionId, () => {
-  router.go(0)})
+  router.go(0)
+})
 
 onMounted(() => {
-document.getElementById("report-container").style.display = "none";
-load()
+  document.getElementById("report-container").style.display = "none";
+  load()
+  if (route.query.report) {
+    viewReport()
+  }
 })
 
 function viewReport() {
-report.value.viewReport();
-
-}
-
-function viewAllTransactions() {
-child.value.viewAllTransactions();
+  report.value.viewReport();
 
 }
 
@@ -112,7 +118,5 @@ child.value.viewAllTransactions();
 
 
 <style scoped>
-
 @import "../../../assets/transactionContainer.css"
-
 </style>

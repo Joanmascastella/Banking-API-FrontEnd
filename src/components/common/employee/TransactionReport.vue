@@ -359,7 +359,7 @@ defineExpose({
   }
 
   #transaction {
-    margin-top: 180px;
+    margin-top: 50px;
     text-decoration: underline;
     color: blue;
   }
