@@ -1,8 +1,11 @@
 <template>
+  <SubNavigation v-show="!accountStore.errorMessage"></SubNavigation>
 
-  <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
+  <div v-show="!accountStore.errorMessage" id="accountsContainer">
 
-  <div v-show="!accountStore.errorMessage" id="accountsContainer"> 
+    <h1>Accounts</h1>
+
+    <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
 
     <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
@@ -10,14 +13,12 @@
     <AccountsTable ref="user" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
       @update-totalLimit="updateTotalLimit" />
 
-  <AccountsContainer ref="accountManager"></AccountsContainer>
+    <AccountsContainer ref="accountManager"></AccountsContainer>
 
-  <b-button  v-b-tooltip.hover title="List all accounts" @click="listAllAccounts"> <img
-      id="accounts-list" src="../../../assets/img/account-details-icon.png"> </b-button>
   </div>
-<div v-show="accountStore.errorMessage === 403"> 
-  You are not authorized to view this page
-</div>
+  <div v-show="accountStore.errorMessage === 403">
+    You are not authorized to view this page
+  </div>
 
 </template>
 
@@ -28,6 +29,7 @@ import { accounts } from "../../../stores/accounts";
 import { useRoute, useRouter } from 'vue-router'
 import Pagination from '../../common/employee/Pagination.vue';
 import AccountsContainer from './AccountsContainer.vue';
+import SubNavigation from '../../common/employee/SubNavigation.vue';
 
 
 
@@ -76,13 +78,6 @@ async function updateTotalLimit(updatedAccount) {
 
 
 
-
-function listAllAccounts() {
-
-  router.push('/accounts/customers');
-
-}
-
 onMounted(() => {
   load()
 })
@@ -91,17 +86,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#accounts-list {
-  position: absolute;
-  right: 0.5%;
-  top: 15%;
-  border: 5px solid #b9faae;
-  background-color: white;
-  padding: 5px;
-  border-radius: 25px;
-
+h1 {
+  text-align: center;
+  margin-top: 17vh;
 }
-
 
 h2 {
   font-weight: initial;
@@ -116,25 +104,5 @@ h2 {
   align-items: center;
 }
 
-/*mobile*/
 
-@media only screen and (max-width:768px) {
-
-  #accounts-list {
-    position: absolute;
-    top: 15%;
-    width: 70px;
-    height: 70px;
-  }
-
-}
-
-
-/*tablet*/
-@media only screen and (min-width:768px) and (max-width:1280px) {
-  #accounts-list {
-    position: absolute;
-    top: 15%;
-  }
-}
 </style>

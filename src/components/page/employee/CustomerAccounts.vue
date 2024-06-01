@@ -4,7 +4,6 @@ import AccountsContainer from "../../container/employeedashboard/AccountsContain
 
 <template>
     <div class="content">
-    <h1>Accounts</h1>
   <AccountsContainer/>
   </div>
 </template>
