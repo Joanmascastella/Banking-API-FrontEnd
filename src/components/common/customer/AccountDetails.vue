@@ -12,7 +12,7 @@
                 <p><strong>Birth Date:</strong> {{ userData[0].birthDate }}</p>
             </div>
         </div>
-    
+
         <div v-for="(account, index) in userData" :key="index" class="card" style="color: black;">
             <div class="account-info">
                 <h3 style="color: black;">{{ account.accountType }} Account</h3>
@@ -23,16 +23,25 @@
                 <p><strong>Absolute Limit:</strong> €{{ account.absoluteLimit }}</p>
             </div>
         </div>
+
+        <div class="card" style="color: black;">
+            <p style="color: black;"><strong>Total Balance:</strong> {{ totalBalance }}</p>
+        </div>
     </div>
 </template>
 
 <script>
 import { useCustomerGETAPICalls } from '@/stores/backend-calls-customer/customerGetAPICalls.js';
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router'; 
+import { useRouter } from 'vue-router';
 
 export default {
     name: "AccountDetails",
+    data() {
+        return {
+            totalBalance: 0
+        }
+    },
     setup() {
         const customerGetAPICalls = useCustomerGETAPICalls();
         const router = useRouter();
@@ -55,8 +64,20 @@ export default {
             userData: customerGetAPICalls.getUserData,
             goBack
         };
+    },
+    computed: {
+        totalBalance() {
+            if (this.userData && this.userData.length >= 2) {
+                const totalBalance = this.userData[0].balance + this.userData[1].balance;
+                return totalBalance;
+            } else {
+                return 0; 
+            }
+        }
     }
+
 }
+
 </script>
 
 <style scoped>
@@ -67,7 +88,7 @@ export default {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    flex-wrap: row; 
+    flex-wrap: row;
 }
 
 .card {
@@ -78,19 +99,22 @@ export default {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     flex: 1 1 calc(50% - 40px);
-    max-width: calc(50% - 40px); 
+    max-width: calc(50% - 40px);
 }
 
-.user-info, .account-info {
+.user-info,
+.account-info {
     display: flex;
     flex-wrap: wrap;
 }
 
-.user-info p, .account-info p {
+.user-info p,
+.account-info p {
     width: 100%;
     margin: 5px 0;
     color: black;
 }
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -98,7 +122,7 @@ export default {
 
     .card {
         flex-basis: calc(100% - 40px);
-        max-width: calc(100% - 40px); 
+        max-width: calc(100% - 40px);
     }
 }
 </style>
