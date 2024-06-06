@@ -40,7 +40,7 @@ export default {
       const customerStore = useCustomerGETAPICalls();
       const response = await customerStore.getUserAccountDetails();
       if (response.success) {
-        this.userDetails = response.data;
+        this.userDetails = customerStore.userData;
         this.updateToAccount(); 
       }
       else {

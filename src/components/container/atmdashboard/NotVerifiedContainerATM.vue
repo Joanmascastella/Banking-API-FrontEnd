@@ -1,13 +1,13 @@
 <template>
     <div class="container">
-        <NotVerifiedViewATM v-if="user" :user="user" />
+        <NotVerifiedViewATM v-if="userData.length" :user="userData" />
     </div>
 </template>
 
 <script>
 import NotVerifiedViewATM from "../../common/atm/dashboard/NotVerifiedViewATM.vue";
 import { useCustomerGETAPICalls } from '@/stores/backend-calls-customer/customerGetAPICalls.js';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 export default {
     name: "NotVerifiedContainerATM",
@@ -16,18 +16,16 @@ export default {
     },
     setup() {
         const customerStore = useCustomerGETAPICalls();
-        const user = ref(null);
+        
 
         onMounted(async () => {
             const response = await customerStore.getUserDetails();
-            if (response.success) {
-                user.value = response.data;
-            } else {
+            if (!response.success) {
                 console.error(response.message);
             }
         });
 
-        return { user };
+        return { userData: customerStore.getUserData };
     }
 }
 </script>
