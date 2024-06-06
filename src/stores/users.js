@@ -55,7 +55,7 @@ export const users = defineStore('users', {
         },
         async updateDailyLimit(user){
             try{
-                const response = await this.$axios.put(`/users`, user);
+                const response = await this.$axios.put(`/users/${user.id}`, user);
                 if (response.data) {
                     const updatedUserIndex = this.usersData.findIndex(u => u.id === user.id);
                     if (updatedUserIndex !== -1) {

@@ -31,7 +31,7 @@ export const accounts = defineStore('accounts', () => {
 
     async function updateAccountLimit(account) {
         try {
-            const response = await this.$axios.put(`/accounts/customers`, account);
+            const response = await this.$axios.put(`/accounts/customers/ ${account.iban}`, account);
             if(response.data) {
                 return { success: true };
             }
