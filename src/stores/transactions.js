@@ -1,3 +1,5 @@
+// This setup store is based on the guide at https://pinia.vuejs.org/core-concepts/
+
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
@@ -39,6 +41,7 @@ export const transactions = defineStore('transactions', () => {
         }
 
         catch (error) {
+            alert(error.response.data)
             errorMessage.value = error.response.data;
 
         }

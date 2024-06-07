@@ -1,3 +1,5 @@
+<!-- This component is based on the guide at https://vuejs.org/guide/essentials/reactivity-fundamentals.html#ref -->
+
 <template>
 
   <SubNavigation v-show="!transactionStore.errorMessage"></SubNavigation>

@@ -1,3 +1,6 @@
+<!-- This component is based on the guide at https://vuejs.org/guide/essentials/reactivity-fundamentals.html#ref -->
+
+
 <template>
 
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer">

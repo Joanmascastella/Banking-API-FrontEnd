@@ -1,3 +1,5 @@
+// This setup store is based on the guide at https://pinia.vuejs.org/core-concepts/
+
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
