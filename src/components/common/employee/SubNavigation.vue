@@ -1,35 +1,35 @@
 <template>
 
-<ul v-if="transactionsPageUrl" class="navbar" >
-  <li class="subnav">
-    <button class="subnavbtn">  <a :href="'/transactions'" style="color: white;">Transactions</a></button>
+  <ul v-if="transactionsPageUrl" class="navbar">
+    <li class="subnav">
+      <button class="subnavbtn"> <a :href="'/transactions'" style="color: white;">Transactions</a></button>
 
-  </li> 
-  <li class="subnav">
-    <button class="subnavbtn"><a>Transactions summary</a></button>
-    <div class="subnav-content">
-      <router-link
-            :to="{ path: '/transactions', query: { report: 'true' }}"class="subnav-link">Overall summary</router-link>
-            <router-link
-            :to="{ path: '/transactions/ATM', query: { report: 'true' }}"class="subnav-link">ATM</router-link>
-            <router-link
-            :to="{ path: '/transactions/byCustomers', query: { report: 'true' }}"class="subnav-link">By customers</router-link>
-            <router-link
-            :to="{ path: '/transactions/byEmployees', query: { report: 'true' }}"class="subnav-link" >By employees</router-link>
-            <router-link
-            :to="{ path: '/transactions/online', query: { report: 'true' }}"class="subnav-link">Online</router-link>
-    </div>
-  </li> 
+    </li>
+    <li class="subnav">
+      <button class="subnavbtn"><a>Transactions summary</a></button>
+      <div class="subnav-content">
+        <router-link :to="{ path: '/transactions', query: { report: 'true' } }" class="subnav-link">Overall
+          summary</router-link>
+        <router-link :to="{ path: '/transactions/ATM', query: { report: 'true' } }" class="subnav-link">ATM</router-link>
+        <router-link :to="{ path: '/transactions/byCustomers', query: { report: 'true' } }" class="subnav-link">By
+          customers</router-link>
+        <router-link :to="{ path: '/transactions/byEmployees', query: { report: 'true' } }" class="subnav-link">By
+          employees</router-link>
+        <router-link :to="{ path: '/transactions/online', query: { report: 'true' } }"
+          class="subnav-link">Online</router-link>
+      </div>
+    </li>
   </ul>
 
-  <ul v-else-if="accountsPageUrl" class="navbar" >
-  <li class="subnav" v-if="route.query.filter || route.query.absoluteLimit">
-    <button class="subnavbtn">  <a :href="'/accounts/customers'" style="color: white;">Accounts</a></button>
+  <ul v-else-if="accountsPageUrl" class="navbar">
+    <li class="subnav" v-if="route.query.filter || route.query.absoluteLimit">
+      <button class="subnavbtn"> <a :href="'/accounts/customers'" style="color: white;">Accounts</a></button>
 
-  </li> 
-  <li class="subnav">
-    <button class="subnavbtn"><a :href="'/accounts/customers?filter=true'"  style="color: white;" >Filter accounts</a></button>
-  </li> 
+    </li>
+    <li class="subnav">
+      <button class="subnavbtn"><a :href="'/accounts/customers?filter=true'" style="color: white;">Filter
+          accounts</a></button>
+    </li>
   </ul>
 </template>
 
@@ -51,17 +51,17 @@ const transactionsPageUrl = computed(() => {
 
 <style scoped>
 .navbar {
-  background-color: green; 
-  width:95%;
-  margin-top:2.5vh;
-  z-index:2;
-  position:fixed;
-  
+  background-color: green;
+  width: 95%;
+  margin-top: 2.5vh;
+  z-index: 2;
+  position: fixed;
+
 }
 
 
 
- .navbar a {
+.navbar a {
   font-size: 16px;
   color: white;
   text-align: center;
@@ -70,11 +70,11 @@ const transactionsPageUrl = computed(() => {
 
 .subnav {
   overflow: hidden;
-  margin:0px;
+  margin: 0px;
 }
 
 .subnav .subnavbtn {
-  font-size: 16px;  
+  font-size: 16px;
   border: none;
   outline: none;
   color: white;
@@ -92,9 +92,9 @@ const transactionsPageUrl = computed(() => {
   min-width: 100vw;
   z-index: 3;
   padding: 5px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin-top:2.5vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 2.5vh;
 }
 
 .subnav-content a {
@@ -104,19 +104,28 @@ const transactionsPageUrl = computed(() => {
   padding-right: 25px;
 }
 
-.subnav-content a:hover{text-decoration: underline;}
+.subnav-content a:hover {
+  text-decoration: underline;
+}
 
 .subnav:hover .subnav-content {
   display: block;
-} 
+}
 
-.subnav-link {  text-emphasis: none;
+.subnav-link {
+  text-emphasis: none;
   text-decoration: none;
-  background-color: transparent;}
+  background-color: transparent;
+}
 
-ul li{display:inline;}
-ul {margin:0;
-padding:0;}
+ul li {
+  display: inline;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
 
 
 
@@ -125,27 +134,35 @@ padding:0;}
 @media only screen and (max-width:768px) {
 
 
-.navbar {
-  width:70%;
-}
-.navbar a {font-size:12px;}
+  .navbar {
+    width: 70%;
+  }
+
+  .navbar a {
+    font-size: 12px;
+  }
 }
 
 @media only screen and (min-width:768px) and (max-width:1280px) {
 
 
-.navbar {
-  width:70%;
-}
-.navbar a {font-size:16px;}
+  .navbar {
+    width: 70%;
+  }
+
+  .navbar a {
+    font-size: 16px;
+  }
 }
 
 @media only screen and (min-width:1280px) {
 
-.navbar {
-  width:80%;
-}
-.navbar a {font-size:16px;}
-}
+  .navbar {
+    width: 80%;
+  }
 
+  .navbar a {
+    font-size: 16px;
+  }
+}
 </style>

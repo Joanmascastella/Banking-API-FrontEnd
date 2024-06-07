@@ -1,40 +1,41 @@
 <template>
 
-<div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
+  <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
 
-   <h1>Transactions </h1>
+    <h1>Transactions </h1>
 
     <h5>{{ ownerOfAccounts.get("user") }}</h5>
 
-  <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage"
-    :pageQuery="pages.actualPage" :paginatedItems="paginatedItems" />
+    <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+      :paginatedItems="paginatedItems" />
 
-  <div class="grid">
+    <div class="grid">
 
-    <div>
-      <button @click="displayAllTransactions">All transactions</button>
+      <div>
+        <button @click="displayAllTransactions">All transactions</button>
+      </div>
+
+
+      <div>
+        <button @click="displayATMDeposits">ATM deposits</button>
+      </div>
+
+      <div>
+        <button @click="displayATMWithdrawals">ATM withdrawals</button>
+      </div>
+
+      <div>
+
+        <button @click="displayOnlineTransfers">Online</button>
+      </div>
     </div>
 
-
-    <div>
-      <button @click="displayATMDeposits">ATM deposits</button>
-    </div>
-
-    <div>
-      <button @click="displayATMWithdrawals">ATM withdrawals</button>
-    </div>
-
-    <div>
-
-      <button @click="displayOnlineTransfers">Online</button>
-    </div>
+    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts"
+      :accountsData="accountsData" :pages="pages" ref="user" />
   </div>
-
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" :pages="pages" ref="user" />
-</div>
-<div v-show="transactionStore.errorMessage" id="error-message"> 
-  {{ transactionStore.errorMessage }}
-</div>
+  <div v-show="transactionStore.errorMessage" id="error-message">
+    {{ transactionStore.errorMessage }}
+  </div>
 </template>
 
 <script setup>
@@ -59,7 +60,7 @@ const transactionsCount = ref(null)
 const pagination = ref(null)
 let viewATMDeposits = ref(false)
 let viewATMWithdrawals = ref(false)
-let viewOnlineTransfers= ref(false)
+let viewOnlineTransfers = ref(false)
 
 
 
@@ -89,8 +90,8 @@ async function load() {
 }
 
 function paginateItems() {
-pagination.value.paginate(transactionsListing.value.data);
-paginatedItems.value = pagination.value.props.paginatedItems.value;
+  pagination.value.paginate(transactionsListing.value.data);
+  paginatedItems.value = pagination.value.props.paginatedItems.value;
 }
 
 
@@ -98,20 +99,20 @@ function displayNewPage() {
 
   router.push({ path: '/transactions/customer', query: { userId: ownerOfAccounts.get("userId"), page: pages.actualPage } });
 
-load();
+  load();
 
 }
 
- function retrieveTransactionCategory(){
+function retrieveTransactionCategory() {
 
   if (viewATMDeposits.value === true) {
     transactionsListing.value = transactionStore.getATMDepositsOfUser
   }
   else if (viewATMWithdrawals.value === true) {
-     transactionsListing.value = transactionStore.getATMWithdrawalsOfUser
+    transactionsListing.value = transactionStore.getATMWithdrawalsOfUser
   }
   else if (viewOnlineTransfers.value === true) {
-     transactionsListing.value = transactionStore.getOnlineTransactionsOfUser
+    transactionsListing.value = transactionStore.getOnlineTransactionsOfUser
   }
   else {
     transactionsListing.value = transactionStore.getTransactionsOfUserByEmployee
@@ -163,7 +164,7 @@ onMounted(async () => {
   await transactionStore.retrieveATMWithdrawalsOfUser(route.query.userId);
   await transactionStore.retrieveOnlineTransfersOfUser(route.query.userId);
 
-load()
+  load()
 })
 
 
@@ -173,7 +174,6 @@ load()
 
 
 <style scoped>
-
 h1 {
   text-align: center;
   margin-top: 17vh;
@@ -185,6 +185,7 @@ h1 {
   min-width: 90vw;
   margin-bottom: 10px;
 }
+
 .grid button {
   border: none;
   width: 100%;
@@ -194,8 +195,8 @@ h1 {
   display: flex;
   column-gap: 0.5rem;
   margin-top: 0px;
-  margin-bottom:5px;
-  padding:0px;
+  margin-bottom: 5px;
+  padding: 0px;
 }
 
 #user img {
@@ -217,7 +218,7 @@ h1 {
   align-items: center;
 }
 
-#error-message {margin-top: 150px;}
-
-
+#error-message {
+  margin-top: 150px;
+}
 </style>

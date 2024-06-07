@@ -157,24 +157,6 @@ table td {
 }
 
 
-/* I commented out this line because I added horizontal scrolling to the table component.
-I changed it to allow to display the button fields on mobile devices as well.
-
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-}
-
-@media (max-width: 1024px) {
-    .table-container {
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        min-width: 1000px;
-  }} */
-
 @media only screen and (max-width:1080px) {
 
   table {
@@ -205,6 +187,5 @@ I changed it to allow to display the button fields on mobile devices as well.
 <style>
 :root {
   --root-color: #B3FFAE
-  
 }
 </style>

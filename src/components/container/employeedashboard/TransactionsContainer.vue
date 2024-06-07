@@ -14,12 +14,13 @@
 
     <TransactionCategoryLinks v-show="!route.query.report" />
 
-    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :pages="pages"
-      :accountsData="accountsData" :transactionsData="transactionsData" ref="user" />
+    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems"
+      :ownersOfAccounts="ownersOfAccounts" :pages="pages" :accountsData="accountsData"
+      :transactionsData="transactionsData" ref="user" />
 
-    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
-      :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
-      :transactionsData="transactionsData" />
+    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')"
+      :minimumAmount="reportData.get('minimumAmount')" :maximumAmount="reportData.get('maximumAmount')"
+      :totalAmount="reportData.get('totalAmount')" :transactionsData="transactionsData" />
 
 
   </div>
@@ -106,7 +107,7 @@ watch(() => route.query.transactionId, () => {
 
 onMounted(async () => {
   load()
- 
+
 })
 
 

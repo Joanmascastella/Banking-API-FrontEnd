@@ -32,26 +32,26 @@ export const accounts = defineStore('accounts', () => {
     async function updateAccountLimit(account) {
         try {
             const response = await this.$axios.put(`/accounts/customers/ ${account.iban}`, account);
-            if(response.data) {
+            if (response.data) {
                 return { success: true };
             }
-            
+
         } catch (error) {
             return { success: false, message: error.message || "Error updating the absolute transaction limit." };
         }
     }
 
-   function getPaginatedItems(pages, list="allAccounts") {
-       const start = (pages.actualPage - 1) * pages.perPage;
-       const stop = start + pages.perPage;
-       if (list == "allAccounts") {
-           return accounts.value.data.slice(start, stop)
-       }
-       else if (list = "accountsWithLimit") {
-           return accountsWithLimit.value.data.slice(start, stop)
-       }
-      }
-      
+    function getPaginatedItems(pages, list = "allAccounts") {
+        const start = (pages.actualPage - 1) * pages.perPage;
+        const stop = start + pages.perPage;
+        if (list == "allAccounts") {
+            return accounts.value.data.slice(start, stop)
+        }
+        else if (list = "accountsWithLimit") {
+            return accountsWithLimit.value.data.slice(start, stop)
+        }
+    }
+
 
     return {
         retrieveAllAccounts,

@@ -104,8 +104,7 @@ h2 {
   align-items: center;
 }
 
-#error-message {margin-top: 150px;}
-
-
-
+#error-message {
+  margin-top: 150px;
+}
 </style>

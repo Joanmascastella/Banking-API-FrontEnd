@@ -165,13 +165,13 @@ defineExpose({
       <h2>Maximum amount</h2>
       <div class="report-data">
         <h2>€{{ maximumAmount }}</h2>
-      </div>  <router-link v-if="route.path == '/transactions/ATM'"
+      </div> <router-link v-if="route.path == '/transactions/ATM'"
         :to="{ path: '/transactions/ATM', query: { transactionId: transactionsData.get('maximumAmountItemId'), page: transactionsData.get('maximumAmountItemIdPage') } }"
         class="link-to-transaction" id="transaction">View transaction</router-link>
       <router-link v-else-if="route.path == '/transactions'"
         :to="{ path: '/transactions', query: { transactionId: transactionsData.get('maximumAmountItemId'), page: transactionsData.get('maximumAmountItemIdPage') } }"
         class="link-to-transaction" id="transaction">View transaction</router-link>
-        <router-link v-else-if="route.path == '/transactions/online'"
+      <router-link v-else-if="route.path == '/transactions/online'"
         :to="{ path: '/transactions/online', query: { transactionId: transactionsData.get('maximumAmountItemId'), page: transactionsData.get('maximumAmountItemIdPage') } }"
         class="link-to-transaction" id="transaction">View transaction</router-link>
       <router-link v-else-if="route.path == '/transactions/byCustomers'"
@@ -209,8 +209,8 @@ defineExpose({
   width: 100%;
   border-radius: 15px;
   overflow: hidden;
-  display:flex;
-  justify-content:space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 #report-container {

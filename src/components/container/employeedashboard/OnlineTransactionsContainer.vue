@@ -7,18 +7,18 @@
     <h1 v-if="!route.query.report">Online transactions</h1>
     <h1 v-else>Online transactions summary</h1>
 
-    <Pagination  v-show="!route.query.report" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+    <Pagination v-show="!route.query.report" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
 
     <TransactionCategoryLinks v-show="!route.query.report" />
 
 
-    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
-      :accountsData="accountsData" :pages="pages" ref="user" />
+    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems"
+      :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" :pages="pages" ref="user" />
 
-    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
-      :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
-      :OnlineByCustomersCount="reportData.get('byCustomersCount')"
+    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')"
+      :minimumAmount="reportData.get('minimumAmount')" :maximumAmount="reportData.get('maximumAmount')"
+      :totalAmount="reportData.get('totalAmount')" :OnlineByCustomersCount="reportData.get('byCustomersCount')"
       :OnlineByEmployeesCount="reportData.get('byEmployeesCount')"
       :OnlineByCustomersAmount="reportData.get('byCustomersAmount')"
       :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')" :transactionsData="transactionsData" />

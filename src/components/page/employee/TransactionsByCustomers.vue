@@ -3,13 +3,11 @@ import AllCustomersTransactionsContainer from "../../container/employeedashboard
 </script>
 
 <template>
-   <div class="content">
-  <AllCustomersTransactionsContainer/>
+  <div class="content">
+    <AllCustomersTransactionsContainer />
   </div>
 </template>
 
 <style scoped>
-
-@import "../../../assets/transactionPage.css" 
-
+@import "../../../assets/transactionPage.css"
 </style>

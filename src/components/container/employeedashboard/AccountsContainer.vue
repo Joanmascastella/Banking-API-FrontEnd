@@ -153,8 +153,8 @@ h1 {
   overflow: hidden;
   padding-left: 5%;
   padding-right: 5%;
-  display:flex;
-  justify-content:space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 #filter-container h2 {
@@ -176,7 +176,7 @@ button {
   align-items: center;
 }
 
-#error-message {margin-top: 150px;}
-
-
+#error-message {
+  margin-top: 150px;
+}
 </style>

@@ -3,13 +3,12 @@ import AccountsWithLimitContainer from "../../container/employeedashboard/Accoun
 </script>
 
 <template>
-    <div class="content">
-  <AccountsWithLimitContainer/>
+  <div class="content">
+    <AccountsWithLimitContainer />
   </div>
 </template>
 
 <style scoped>
-
 h1 {
   text-align: center;
   margin-top: 20vh;
@@ -24,5 +23,4 @@ h1 {
   margin-left: 5%;
   margin-right: 5%;
 }
-
 </style>
