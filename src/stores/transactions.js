@@ -1,3 +1,5 @@
+// This setup store is based on the guide at https://pinia.vuejs.org/core-concepts/
+
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
@@ -39,6 +41,7 @@ export const transactions = defineStore('transactions', () => {
         }
 
         catch (error) {
+            alert(error.response.data)
             errorMessage.value = error.response.data;
 
         }
@@ -97,7 +100,7 @@ export const transactions = defineStore('transactions', () => {
     }
 
     async function retrieveTransactionsOfUser(userId) {
-       
+
         try {
             transacationsOfUser.value = await this.$axios.get(`/transactions/${userId}/history`);
         }
@@ -146,25 +149,25 @@ export const transactions = defineStore('transactions', () => {
         return await this.$axios.get('/transactions/search', { params });
     }
 
-    function getPaginatedItems(pages, list="allTransactions") {
+    function getPaginatedItems(pages, list = "allTransactions") {
         const start = (pages.actualPage - 1) * pages.perPage;
         const stop = start + pages.perPage;
         if (list == "allTransactions") {
             return transactions.value.data.slice(start, stop)
         }
-        else if (list == "ATMTransactions"){
+        else if (list == "ATMTransactions") {
             return ATMTransactions.value.data.slice(start, stop)
         }
-        else if (list == "transactionsByCustomers"){
+        else if (list == "transactionsByCustomers") {
             return transactionsByCustomers.value.data.slice(start, stop)
         }
-        else if (list == "transactionsByEmployees"){
+        else if (list == "transactionsByEmployees") {
             return transactionsByEmployees.value.data.slice(start, stop)
         }
-        else if (list == "onlineTransactions"){
+        else if (list == "onlineTransactions") {
             return OnlineTransactions.value.data.slice(start, stop)
         }
-       }
+    }
 
     return {
         retrieveAllTransactions,

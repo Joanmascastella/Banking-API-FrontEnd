@@ -1,3 +1,6 @@
+<!-- This component is based on the guide at https://vuejs.org/guide/essentials/reactivity-fundamentals.html#ref -->
+
+
 <template>
   <SubNavigation v-show="!accountStore.errorMessage"></SubNavigation>
 
@@ -104,8 +107,7 @@ h2 {
   align-items: center;
 }
 
-#error-message {margin-top: 150px;}
-
-
-
+#error-message {
+  margin-top: 150px;
+}
 </style>

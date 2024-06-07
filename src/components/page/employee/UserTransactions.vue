@@ -3,15 +3,13 @@ import UserTransactionsContainer from "../../container/employeedashboard/UserTra
 </script>
 
 <template>
-   <div class="content">
-  <UserTransactionsContainer/>
+  <div class="content">
+    <UserTransactionsContainer />
   </div>
 </template>
 
 
 <style scoped>
-
-
 .content {
   min-height: 100vh;
   display: flex;

@@ -1,3 +1,6 @@
+<!-- This component is based on the guide at https://vuejs.org/guide/essentials/reactivity-fundamentals.html#ref -->
+
+
 <template>
 
   <SubNavigation v-show="!transactionStore.errorMessage"></SubNavigation>
@@ -13,19 +16,20 @@
 
     <TransactionCategoryLinks v-show="!route.query.report" />
 
-    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :pages="pages"
-      :accountsData="accountsData" :transactionsData="transactionsData" ref="user" />
+    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems"
+      :ownersOfAccounts="ownersOfAccounts" :pages="pages" :accountsData="accountsData"
+      :transactionsData="transactionsData" ref="user" />
 
-    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
-      :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
-      :ATMWithdrawalsCount="reportData.get('ATMWithdrawalsCount')"
+    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')"
+      :minimumAmount="reportData.get('minimumAmount')" :maximumAmount="reportData.get('maximumAmount')"
+      :totalAmount="reportData.get('totalAmount')" :ATMWithdrawalsCount="reportData.get('ATMWithdrawalsCount')"
       :ATMDepositsCount="reportData.get('ATMDepositsCount')"
       :ATMWithdrawalsAmount="reportData.get('ATMWithdrawalsAmount')"
       :ATMDepositsAmount="reportData.get('ATMDepositsAmount')" :transactionsData="transactionsData" />
 
   </div>
   <div v-show="transactionStore.errorMessage" id="error-message">
-   {{ transactionStore.errorMessage }}
+    {{ transactionStore.errorMessage }}
   </div>
 </template>
 

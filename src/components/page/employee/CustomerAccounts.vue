@@ -3,13 +3,12 @@ import AccountsContainer from "../../container/employeedashboard/AccountsContain
 </script>
 
 <template>
-    <div class="content">
-  <AccountsContainer/>
+  <div class="content">
+    <AccountsContainer />
   </div>
 </template>
 
 <style scoped>
-
 h1 {
   text-align: center;
   margin-top: 20vh;
@@ -24,12 +23,4 @@ h1 {
   margin-left: 5%;
   margin-right: 5%;
 }
-
-
-/* I commented out this line because I added horizontal scrolling to the child component
-
-AccountsContainer{
-  max-width: 100%;
-} */
-
 </style>

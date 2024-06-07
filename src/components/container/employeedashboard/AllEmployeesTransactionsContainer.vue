@@ -1,3 +1,6 @@
+<!-- This component is based on the guide at https://vuejs.org/guide/essentials/reactivity-fundamentals.html#ref -->
+
+
 <template>
 
   <SubNavigation v-show="!transactionStore.errorMessage"></SubNavigation>
@@ -12,12 +15,12 @@
 
     <TransactionCategoryLinks v-show="!route.query.report" />
 
-    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
-      :accountsData="accountsData" :pages="pages" ref="user" />
+    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems"
+      :ownersOfAccounts="ownersOfAccounts" :accountsData="accountsData" :pages="pages" ref="user" />
 
-    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
-      :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
-      :transactionsData="transactionsData" />
+    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')"
+      :minimumAmount="reportData.get('minimumAmount')" :maximumAmount="reportData.get('maximumAmount')"
+      :totalAmount="reportData.get('totalAmount')" :transactionsData="transactionsData" />
 
 
   </div>

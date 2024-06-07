@@ -4,12 +4,10 @@ import ATMTransactionsContainer from "../../container/employeedashboard/ATMTrans
 
 <template>
   <div class="content">
-  <ATMTransactionsContainer/>
+    <ATMTransactionsContainer />
   </div>
 </template>
 
 <style scoped>
-
-@import "../../../assets/transactionPage.css" 
-
+@import "../../../assets/transactionPage.css"
 </style>

@@ -73,8 +73,8 @@ ul:first-of-type>li {
 
 @media only screen and (max-width:768px) {
 
-a {font-size: 16px;}
+  a {
+    font-size: 16px;
+  }
 }
 </style>
-
-

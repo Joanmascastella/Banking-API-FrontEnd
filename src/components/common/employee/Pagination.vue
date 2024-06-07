@@ -3,8 +3,8 @@
 
 const props = defineProps({
   pages: null,
-  pageQuery:null,
-  paginatedItems:null,
+  pageQuery: null,
+  paginatedItems: null,
 });
 
 function paginate(itemListing) {
@@ -14,8 +14,8 @@ function paginate(itemListing) {
 }
 
 defineExpose({
-props,
-paginate,
+  props,
+  paginate,
 })
 
 
@@ -24,12 +24,12 @@ paginate,
 <template>
   <div style="text-align: right" id="pagination">
     <button :disabled="pages.actualPage <= 1" @click="pages.actualPage--; $emit('newPage')">
-      &lt;	
+      &lt;
     </button>
-        Page {{ pages.actualPage }} of {{ pages.pagesCount }}
-        <button :disabled="pages.actualPage >= pages.pagesCount" @click="pages.actualPage++; $emit('newPage')">
-          &gt;	
-        </button>
+    Page {{ pages.actualPage }} of {{ pages.pagesCount }}
+    <button :disabled="pages.actualPage >= pages.pagesCount" @click="pages.actualPage++; $emit('newPage')">
+      &gt;
+    </button>
   </div>
 </template>
 

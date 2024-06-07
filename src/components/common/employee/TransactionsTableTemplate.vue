@@ -43,7 +43,7 @@ function getSelectedAccountPage(accounts, account, accountsPerPage = 2) {
 async function retrieveAccountData(transactions, accountsData) {
 
   await accountStore.retrieveAllAccounts();
-  
+
   for (let index = 0; index < transactions.length; index++) {
     let item = transactions[index];
     accountStore.getAccounts.filter((account) => {
