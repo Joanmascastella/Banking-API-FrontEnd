@@ -9,15 +9,15 @@
     <button class="subnavbtn"><a>Transactions summary</a></button>
     <div class="subnav-content">
       <router-link
-            :to="{ path: '/transactions', query: { report: 'true' }}"class="subnav-link" @click="$emit('summary')">Overall summary</router-link>
+            :to="{ path: '/transactions', query: { report: 'true' }}"class="subnav-link">Overall summary</router-link>
             <router-link
-            :to="{ path: '/transactions/ATM', query: { report: 'true' }}"class="subnav-link" @click="$emit('summary')">ATM</router-link>
+            :to="{ path: '/transactions/ATM', query: { report: 'true' }}"class="subnav-link">ATM</router-link>
             <router-link
-            :to="{ path: '/transactions/byCustomers', query: { report: 'true' }}"class="subnav-link" @click="$emit('summary')">By customers</router-link>
+            :to="{ path: '/transactions/byCustomers', query: { report: 'true' }}"class="subnav-link">By customers</router-link>
             <router-link
-            :to="{ path: '/transactions/byEmployees', query: { report: 'true' }}"class="subnav-link" @click="$emit('summary')">By employees</router-link>
+            :to="{ path: '/transactions/byEmployees', query: { report: 'true' }}"class="subnav-link" >By employees</router-link>
             <router-link
-            :to="{ path: '/transactions/online', query: { report: 'true' }}"class="subnav-link" @click="$emit('summary')">Online</router-link>
+            :to="{ path: '/transactions/online', query: { report: 'true' }}"class="subnav-link">Online</router-link>
     </div>
   </li> 
   </ul>

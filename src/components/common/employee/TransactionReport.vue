@@ -54,14 +54,6 @@ function loadOnlineReport(reportMap, customerTransactions, employeeTransactions)
 }
 
 
-function viewReport() {
-  document.getElementById("report-container").style.display = "flex";
-  document.getElementById("report-container").style.justifyContent = "space-around";
-  document.getElementById("transactions-table").style.display = "none";
-  document.getElementById("pagination").style.display = "none";
-
-}
-
 
 function getSelectedTransactionPage(transactions, transaction, transactionsPerPage = 2) {
 
@@ -122,7 +114,6 @@ defineExpose({
   loadReport,
   loadATMReport,
   loadOnlineReport,
-  viewReport,
   retrieveMinimumAmountTransaction,
   retrieveMaximumAmountTransaction,
 })
@@ -218,6 +209,8 @@ defineExpose({
   width: 100%;
   border-radius: 15px;
   overflow: hidden;
+  display:flex;
+  justify-content:space-around;
 }
 
 #report-container {

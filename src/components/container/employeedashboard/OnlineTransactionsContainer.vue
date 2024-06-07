@@ -1,6 +1,5 @@
 <template>
-  <SubNavigation v-show="!transactionStore.errorMessage" @summary="viewReport"></SubNavigation>
-
+  <SubNavigation v-show="!transactionStore.errorMessage"></SubNavigation>
 
 
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
@@ -8,16 +7,16 @@
     <h1 v-if="!route.query.report">Online transactions</h1>
     <h1 v-else>Online transactions summary</h1>
 
-    <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+    <Pagination  v-show="!route.query.report" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
 
-    <TransactionCategoryLinks v-if="!route.query.report" />
+    <TransactionCategoryLinks v-show="!route.query.report" />
 
 
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
       :accountsData="accountsData" :pages="pages" ref="user" />
 
-    <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
+    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
       :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
       :OnlineByCustomersCount="reportData.get('byCustomersCount')"
       :OnlineByEmployeesCount="reportData.get('byEmployeesCount')"
@@ -101,17 +100,9 @@ watch(() => route.query.transactionId, () => {
 })
 
 onMounted(() => {
-  document.getElementById("report-container").style.display = "none";
   load()
-  if (route.query.report) {
-    viewReport()
-  }
 })
 
-function viewReport() {
-  report.value.viewReport();
-
-}
 
 
 </script>
