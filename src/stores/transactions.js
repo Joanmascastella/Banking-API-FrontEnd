@@ -39,7 +39,7 @@ export const transactions = defineStore('transactions', () => {
         }
 
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
 
         }
     }
@@ -48,7 +48,7 @@ export const transactions = defineStore('transactions', () => {
             ATMTransactions.value = await this.$axios.get('/transactions/ATM');
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
     async function retrieveTransactionsByCustomers() {
@@ -56,7 +56,7 @@ export const transactions = defineStore('transactions', () => {
             transactionsByCustomers.value = await this.$axios.get('/transactions/byCustomers');
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
 
         }
 
@@ -67,7 +67,7 @@ export const transactions = defineStore('transactions', () => {
         }
         catch (error) {
 
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
 
         }
     }
@@ -77,14 +77,14 @@ export const transactions = defineStore('transactions', () => {
 
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
     async function retrieveOnlineTransactionsByEmployees() {
         try {
             OnlineTransactionsByEmployees.value = await this.$axios.get('/transactions/online/byEmployees');
         } catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
     async function retrieveOnlineTransactionsByCustomers() {
@@ -92,7 +92,7 @@ export const transactions = defineStore('transactions', () => {
             OnlineTransactionsByCustomers.value = await this.$axios.get('/transactions/online/byCustomers');
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
 
@@ -111,7 +111,7 @@ export const transactions = defineStore('transactions', () => {
             transactionsOfUserByEmployee.value = await this.$axios.get(`/transactions/customer/${userId}`);
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
 
@@ -120,7 +120,7 @@ export const transactions = defineStore('transactions', () => {
             ATMDepositsOfUser.value = await this.$axios.get(`/transactions/ATM/deposits/${userId}`);
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
 
@@ -129,7 +129,7 @@ export const transactions = defineStore('transactions', () => {
             ATMWithdrawalsOfUser.value = await this.$axios.get(`/transactions/ATM/withdrawals/${userId}`);
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
 
         }
     }
@@ -138,7 +138,7 @@ export const transactions = defineStore('transactions', () => {
             OnlineTransactionsOfUser.value = await this.$axios.get(`/transactions/online/${userId}`);
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
 
         }
     }

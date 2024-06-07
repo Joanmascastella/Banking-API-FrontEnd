@@ -24,8 +24,8 @@
       </div>
     </div>
   </div>
-  <div v-show="accountStore.errorMessage === 403">
-    You are not authorized to view this page
+  <div v-show="accountStore.errorMessage" id="error-message">
+    {{ accountStore.errorMessage }}
   </div>
 </template>
 <script setup>
@@ -176,6 +176,7 @@ button {
   align-items: center;
 }
 
+#error-message {margin-top: 150px;}
 
 
 </style>

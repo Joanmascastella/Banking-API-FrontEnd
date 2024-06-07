@@ -33,27 +33,6 @@
 </template>
 
 
-<script setup>
-
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-function viewAllTransactions() {
-if (router.currentRoute.value.name === 'transactions'){
-    router.go(0);
-}
-router.push({ path: '/transactions' });
-
-}
-
-defineExpose({
-  viewAllTransactions
-})
-
-
-</script>
-
 
 <style scoped>
 

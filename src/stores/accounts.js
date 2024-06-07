@@ -16,7 +16,7 @@ export const accounts = defineStore('accounts', () => {
             accounts.value = await this.$axios.get('/accounts/customers');
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
 
@@ -25,7 +25,7 @@ export const accounts = defineStore('accounts', () => {
             accountsWithLimit.value = await this.$axios.get('/accounts/byAbsoluteLimit?absoluteLimit=' + absoluteLimit);
         }
         catch (error) {
-            errorMessage.value = error.response.status;
+            errorMessage.value = error.response.data;
         }
     }
 
