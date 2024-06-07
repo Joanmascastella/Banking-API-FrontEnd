@@ -101,6 +101,10 @@
     computed: {
       queriedIban() {
         return this.$route.query.iban;
+    },
+    getHistory() {
+      const store = transactions();
+      return store.getHistory;
     }
    },
     created() {
@@ -110,8 +114,8 @@
       async fetchTransactions() {
         const store = transactions();
         try {
-          const response = await store.retrieveTransactionsOfUser(this.userId);
-          this.transactionss = response.data;
+          await store.retrieveTransactionsOfUser(this.userId);
+          this.transactionss = this.getHistory;
           this.displayedTransactions = this.transactionss.filter(transaction => 
           transaction.fromAccount === this.queriedIban || transaction.toAccount === this.queriedIban
         );

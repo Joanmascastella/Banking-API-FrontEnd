@@ -16,7 +16,7 @@ export const transactions = defineStore('transactions', () => {
     const ATMDepositsOfUser = ref([])
     const ATMWithdrawalsOfUser = ref([])
     const OnlineTransactionsOfUser = ref([])
-
+    const transacationsOfUser = ref([]);
 
     const getTransactions = computed(() => transactions.value.data)
     const getTransactionsByCustomers = computed(() => transactionsByCustomers.value.data)
@@ -29,6 +29,7 @@ export const transactions = defineStore('transactions', () => {
     const getATMDepositsOfUser = computed(() => ATMDepositsOfUser.value)
     const getATMWithdrawalsOfUser = computed(() => ATMWithdrawalsOfUser.value)
     const getOnlineTransactionsOfUser = computed(() => OnlineTransactionsOfUser.value)
+    const getHistory = computed(() => transacationsOfUser.value.data)
 
 
 
@@ -96,7 +97,13 @@ export const transactions = defineStore('transactions', () => {
     }
 
     async function retrieveTransactionsOfUser(userId) {
-        return await this.$axios.get(`/transactions/${userId}/history`);
+       
+        try {
+            transacationsOfUser.value = await this.$axios.get(`/transactions/${userId}/history`);
+        }
+        catch (error) {
+            errorMessage.value = error.response.status;
+        }
     }
 
     async function retrieveTransactionsOfUserByEmployee(userId) {
@@ -186,7 +193,8 @@ export const transactions = defineStore('transactions', () => {
         getATMDepositsOfUser,
         getATMWithdrawalsOfUser,
         getOnlineTransactionsOfUser,
-        getPaginatedItems
+        getPaginatedItems,
+        getHistory
     }
 
 
