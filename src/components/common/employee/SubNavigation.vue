@@ -28,7 +28,7 @@
 
   </li> 
   <li class="subnav">
-    <button class="subnavbtn"><a :href="'/accounts/customers?filter=true'"  @click="$emit('filter')"  style="color: white;" >Filter accounts</a></button>
+    <button class="subnavbtn"><a :href="'/accounts/customers?filter=true'"  style="color: white;" >Filter accounts</a></button>
   </li> 
   </ul>
 </template>

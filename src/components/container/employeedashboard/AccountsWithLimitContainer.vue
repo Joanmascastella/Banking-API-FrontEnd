@@ -16,8 +16,8 @@
     <AccountsContainer ref="accountManager"></AccountsContainer>
 
   </div>
-  <div v-show="accountStore.errorMessage === 403">
-    You are not authorized to view this page
+  <div v-show="accountStore.errorMessage" id="error-message">
+    {{ accountStore.errorMessage }}
   </div>
 
 </template>
@@ -103,6 +103,9 @@ h2 {
   justify-items: center;
   align-items: center;
 }
+
+#error-message {margin-top: 150px;}
+
 
 
 </style>

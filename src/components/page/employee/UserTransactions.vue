@@ -4,21 +4,12 @@ import UserTransactionsContainer from "../../container/employeedashboard/UserTra
 
 <template>
    <div class="content">
-    <img src="../../../assets/img/savings-account.png">
-    <h1>Transactions </h1>
   <UserTransactionsContainer/>
   </div>
 </template>
 
 
 <style scoped>
-
-h1 {
-  text-align: center;
-  margin-top: 10vh;
-  margin-bottom:1.5vh;
-
-}
 
 
 .content {

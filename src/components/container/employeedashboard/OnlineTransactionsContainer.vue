@@ -24,8 +24,8 @@
       :OnlineByEmployeesAmount="reportData.get('byEmployeesAmount')" :transactionsData="transactionsData" />
 
   </div>
-  <div v-show="transactionStore.errorMessage === 403">
-    You are not authorized to view this page
+  <div v-show="transactionStore.errorMessage" id="error-message">
+    {{ transactionStore.errorMessage }}
   </div>
 
 </template>

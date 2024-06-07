@@ -1,6 +1,9 @@
 <template>
 
 <div v-show="!transactionStore.errorMessage" id="transactionsContainer"> 
+
+   <h1>Transactions </h1>
+
     <h5>{{ ownerOfAccounts.get("user") }}</h5>
 
   <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage"
@@ -29,8 +32,8 @@
 
     <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownerOfAccounts" :accountsData="accountsData" :pages="pages" ref="user" />
 </div>
-<div v-show="transactionStore.errorMessage === 403"> 
-  You are not authorized to view this page
+<div v-show="transactionStore.errorMessage" id="error-message"> 
+  {{ transactionStore.errorMessage }}
 </div>
 </template>
 
@@ -43,21 +46,17 @@ import { users } from "../../../stores/users";
 import { useRoute, useRouter } from 'vue-router'
 import Pagination from '../../common/employee/Pagination.vue';
 
-
+const router = useRouter()
 const route = useRoute()
 const transactionsListing = ref([])
 const transactionStore = transactions();
-const obj = reactive({ transactionsListing })
 const userStore = users();
 const ownerOfAccounts = reactive(new Map());
 const accountsData = reactive(new Map());
 const user = ref(null)
-const userId = route.query.userId;
-const userData = reactive({ id: userId});
 let paginatedItems = ref([])
 const transactionsCount = ref(null)
 const pagination = ref(null)
-const router = useRouter()
 let viewATMDeposits = ref(false)
 let viewATMWithdrawals = ref(false)
 let viewOnlineTransfers= ref(false)
@@ -65,7 +64,7 @@ let viewOnlineTransfers= ref(false)
 
 
 const pages = reactive({
-  actualPage: 1,
+  actualPage: route.query.page ? route.query.page : 1,
   perPage: 2,
   pagesCount: computed(() =>
     Math.ceil(transactionsCount.value / pages.perPage)
@@ -78,10 +77,10 @@ async function load() {
   await userStore.retrieveAllUsers();
 
   transactionsListing.value = retrieveTransactionCategory()
-  transactionsCount.value = obj.transactionsListing.data.length;
-  user.value.retrieveAccountData(obj.transactionsListing.data, accountsData);
+  transactionsCount.value = transactionsListing.value.data.length;
+  user.value.retrieveAccountData(transactionsListing.value.data, accountsData);
 
-  let result = userStore.usersData.filter((user) => userData.id === user.id.toString());
+  let result = userStore.usersData.filter((user) => route.query.userId === user.id.toString());
   ownerOfAccounts.set("userId", result[0].id);
   ownerOfAccounts.set("user", result[0].firstName + result[0].lastName);
 
@@ -175,6 +174,13 @@ load()
 
 <style scoped>
 
+h1 {
+  text-align: center;
+  margin-top: 17vh;
+}
+
+
+
 .grid {
   min-width: 90vw;
   margin-bottom: 10px;
@@ -210,5 +216,8 @@ load()
   justify-items: center;
   align-items: center;
 }
+
+#error-message {margin-top: 150px;}
+
 
 </style>
