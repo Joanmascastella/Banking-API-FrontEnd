@@ -1,5 +1,5 @@
 <template>
-  <SubNavigation v-show="!accountStore.errorMessage && router.currentRoute.value.name === 'customerAccounts'">
+  <SubNavigation v-show="!accountStore.errorMessage">
   </SubNavigation>
 
   <div v-show="!accountStore.errorMessage" id="accountsContainer">
@@ -8,13 +8,13 @@
 
       <h1>Accounts</h1>
 
-      <Pagination v-if="!route.query.filter" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+      <Pagination v-show="!route.query.filter" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
         :paginatedItems="paginatedItems" />
 
-      <AccountsTable :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
+      <AccountsTable v-if="!route.query.filter" :accountListing="paginatedItems" :ownersOfAccounts="ownersOfAccounts"
         @update-totalLimit="updateTotalLimit" ref="user" />
 
-      <div id="filter-container">
+      <div v-show="route.query.filter" id="filter-container">
         <div>
           <h2> Filter by absolute limit</h2>
           <p>Find all accounts with an absolute limit less than or equal to a specific limit</p>
@@ -98,13 +98,6 @@ watch(() => route.query.page, () => {
 })
 
 
-function filterAccounts() {
-  document.getElementById("filter-container").style.display = "flex";
-  document.getElementById("filter-container").style.justifyContent = "space-around";
-  document.getElementById("accounts-table").style.display = "none";
-  document.getElementById("pagination-container").style.display = "none";
-}
-
 function listAccountsByAbsoluteLimit() {
 
   let limitTemplateRef = limit.value;
@@ -129,11 +122,8 @@ async function updateTotalLimit(updatedAccount) {
 
 
 onMounted(async () => {
-  document.getElementById("filter-container").style.display = "none";
   load()
-  if (route.query.filter) {
-    filterAccounts()
-  }
+
 
 })
 
@@ -163,6 +153,8 @@ h1 {
   overflow: hidden;
   padding-left: 5%;
   padding-right: 5%;
+  display:flex;
+  justify-content:space-around;
 }
 
 #filter-container h2 {

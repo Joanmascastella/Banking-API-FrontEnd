@@ -1,6 +1,6 @@
 <template>
 
-  <SubNavigation v-show="!transactionStore.errorMessage" @summary="viewReport"></SubNavigation>
+  <SubNavigation v-show="!transactionStore.errorMessage"></SubNavigation>
 
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
 
@@ -9,15 +9,15 @@
     <h1 v-else>Overall sumary</h1>
 
 
-    <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
+    <Pagination v-show="!route.query.report" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
 
-    <TransactionCategoryLinks v-if="!route.query.report" />
+    <TransactionCategoryLinks v-show="!route.query.report" />
 
-    <TransactionsTableTemplate :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :pages="pages"
+    <TransactionsTableTemplate v-show="!route.query.report" :transactions="paginatedItems" :ownersOfAccounts="ownersOfAccounts" :pages="pages"
       :accountsData="accountsData" :transactionsData="transactionsData" ref="user" />
 
-    <TransactionReport ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
+    <TransactionReport v-show="route.query.report" ref="report" :count="reportData.get('count')" :minimumAmount="reportData.get('minimumAmount')"
       :maximumAmount="reportData.get('maximumAmount')" :totalAmount="reportData.get('totalAmount')"
       :transactionsData="transactionsData" />
 
@@ -105,17 +105,11 @@ watch(() => route.query.transactionId, () => {
 
 
 onMounted(async () => {
-  document.getElementById("report-container").style.display = "none";
   load()
-  if (route.query.report) {
-    viewReport()
-  }
+ 
 })
 
-function viewReport() {
-  report.value.viewReport();
 
-}
 
 
 
