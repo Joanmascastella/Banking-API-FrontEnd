@@ -29,15 +29,15 @@
     },
     methods: {
       async fetchUserDetails() {
-        const customerStore = useCustomerGETAPICalls();
-        const response = await customerStore.getUserAccountDetails();
-        if (response.success) {
-          this.userDetails = customerStore.userData;
-          this.updateSelectedAccount();
-        } else {
-          console.error(response.message);
-        }
-      },
+      const customerStore = useCustomerGETAPICalls();
+      const response = await customerStore.getUserAccountDetails();
+      if (response.success) {
+        this.userDetails = customerStore.userData;
+        this.updateFromAccount(); 
+      } else {
+        console.error(response.message);
+      }
+    },
       updateSelectedAccount() {
         this.selectedAccount = this.userDetails.find(account => account.accountType === this.selectedAccountType);
       }
