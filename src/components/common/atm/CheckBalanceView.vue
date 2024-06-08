@@ -32,7 +32,7 @@
         const customerStore = useCustomerGETAPICalls();
         const response = await customerStore.getUserAccountDetails();
         if (response.success) {
-          this.userDetails = response.data;
+          this.userDetails = customerStore.userData;
           this.updateSelectedAccount();
         } else {
           console.error(response.message);
