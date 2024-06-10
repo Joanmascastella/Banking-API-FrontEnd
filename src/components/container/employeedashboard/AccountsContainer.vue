@@ -9,7 +9,7 @@
 
     <div v-show="router.currentRoute.value.name === 'customerAccounts'" id="accountsContainer">
 
-      <h1 style="color: black;">Accounts</h1>
+      <h1>Accounts</h1>
 
       <Pagination v-show="!route.query.filter" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
         :paginatedItems="paginatedItems" />
@@ -19,8 +19,8 @@
 
       <div v-show="route.query.filter" id="filter-container">
         <div>
-          <h2 style="color: black;"> Filter by absolute limit</h2>
-          <p style="color: black;">Find all accounts with an absolute limit less than or equal to a specific limit</p>
+          <h2> Filter by absolute limit</h2>
+          <p>Find all accounts with an absolute limit less than or equal to a specific limit</p>
           <input type="text" name="text" placeholder="€3000" aria-label="Text" ref="limit" />
           <button @click="listAccountsByAbsoluteLimit">List accounts</button>
         </div>

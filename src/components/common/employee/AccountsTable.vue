@@ -176,9 +176,7 @@ table td {
 
 }
 
-.th{
-  color: #000000;
-}
+
 
 .root {
   background: var(--root-color);

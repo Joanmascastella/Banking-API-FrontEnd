@@ -162,9 +162,6 @@ table td {
   background-color: white;
 }
 
-.th{
-  color: #000000;
-}
 
 button {
   font-size: medium;

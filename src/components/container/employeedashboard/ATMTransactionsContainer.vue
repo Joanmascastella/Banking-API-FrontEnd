@@ -8,8 +8,8 @@
 
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
 
-    <h1 v-if="!route.query.report" style="color: black;">ATM transactions</h1>
-    <h1 v-else style="color: black;">ATM transactions summary</h1>
+    <h1 v-if="!route.query.report">ATM transactions</h1>
+    <h1 v-else>ATM transactions summary</h1>
 
     <Pagination v-show="!route.query.report" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />

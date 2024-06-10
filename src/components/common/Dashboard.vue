@@ -1,7 +1,7 @@
 <template>
 
     <div class="content">
-        <h2 style="color: black;"> Dashboard</h2>
+        <h2> Dashboard</h2>
         <div class="grid">
 
             <div><img src="../../assets/img/users.png">

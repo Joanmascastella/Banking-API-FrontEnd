@@ -22,7 +22,7 @@ defineExpose({
 </script>
 
 <template>
-  <div style="text-align: right" id="pagination" color: black;>
+  <div style="text-align: right" id="pagination">
     <button :disabled="pages.actualPage <= 1" @click="pages.actualPage--; $emit('newPage')">
       &lt;
     </button>

@@ -5,9 +5,9 @@
 
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
 
-    <h1 style="color: black;">Transactions </h1>
+    <h1>Transactions </h1>
 
-    <h5 style="color: black;">{{ ownerOfAccounts.get("user") }}</h5>
+    <h5>{{ ownerOfAccounts.get("user") }}</h5>
 
     <Pagination ref="pagination" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
