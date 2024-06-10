@@ -6,9 +6,9 @@
 
   <div v-show="!accountStore.errorMessage" id="accountsContainer">
 
-    <h1>Accounts</h1>
+    <h1 style="color: black;">Accounts</h1>
 
-    <h3>with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
+    <h3 style="color: black;">with absolute limit less than or equal to €{{ route.query.absoluteLimit }}</h3>
 
     <Pagination :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />

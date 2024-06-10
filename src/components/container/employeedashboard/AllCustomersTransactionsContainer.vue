@@ -6,8 +6,8 @@
 
   <div v-show="!transactionStore.errorMessage" id="transactionsContainer">
 
-    <h1 v-if="!route.query.report">Transactions by customers</h1>
-    <h1 v-else>Transactions by customers summary</h1>
+    <h1 v-if="!route.query.report" style="color: black;">Transactions by customers</h1>
+    <h1 v-else style="color: black;">Transactions by customers summary</h1>
 
     <Pagination v-show="!route.query.report" :pages="pages" @newPage="displayNewPage" :pageQuery="pages.actualPage"
       :paginatedItems="paginatedItems" />
